@@ -5,16 +5,13 @@ import PropTypes from 'prop-types'
 const Button = styled.button`
     padding: 1rem;
     background-color: ${props => props.theme.palette.white[2]};
-    font-size: 1.4rem;
-    font-weight: bold;
-    letter-spacing: 1px;
-    border: 1px solid ${props => props.theme.palette.grayscale[2]};
-    box-shadow: 2px 2px ${props => props.theme.palette.grayscale[0]};
     text-transform: uppercase;
+    cursor: pointer;
 `
 
 const button = (props) => (
     <Button
+            className={props.className}
             disabled={props.disabled}
             // className={[classes.Button, classes[props.btnType]].join(' ')}
             onClick={props.clicked}
