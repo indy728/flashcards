@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Button from '../../Button/Button'
+import Button from '../../../Button/Button'
 
 const Wrapper = styled(Button)`
     font-size: 1.4rem;
@@ -12,14 +12,20 @@ const Wrapper = styled(Button)`
     :hover {
         background-color: ${props => props.theme.palette.secondary[2]};
         border: 1px solid ${props => props.theme.palette.white[2]};
-        transform: scale(1.1) translateY(-1rem);
-        transition: .2s all;
+        /* transform: scale(1.05) translateY(-1rem);
+        transition: .1s all; */
+    }
+
+    :active {
+        /* transform: scale(1) translateY(-.65rem); */
     }
 `
 
 const addAttribute = (props) => {
     return (
-        <Wrapper className="AddAttribute">
+        <Wrapper 
+            className="AddAttribute"
+            clicked={props.added}>
             {props.children}
         </Wrapper>
     )

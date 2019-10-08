@@ -9,14 +9,18 @@ const Wrapper = styled.div`
 `
 
 const buttonList = [
-    "Ingredient", "Glass", "Garnish", "Ice", "Instructions"
+    "ingredient", "glass", "garnish", "ice", "instructions", "picture"
 ]
 
 const attributes = (props) => {
     return (
         <Wrapper>
             {buttonList.map((btn, i) => (
-                <AddAttribute key={btn + i}>{btn}</AddAttribute>
+                <AddAttribute 
+                    key={btn + i}
+                    added={() => props.attributeAdded(btn)}>
+                    {btn}
+                </AddAttribute>
             ))}
         </Wrapper>
     )

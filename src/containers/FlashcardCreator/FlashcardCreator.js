@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import Input from '../../components/Input/Input'
-import Attributes from '../../components/Attributes/Attributes'
+import NewFlashcard from '../../components/NewFlashcard/NewFlashcard'
+import AttributeControls from '../../components/NewFlashcard/AttributeControls/AttributeControls'
 
 const Wrapper = styled.div`
     width: 80%;
@@ -13,31 +13,70 @@ const Wrapper = styled.div`
 
 class FlashcardCreator extends Component {
     state = {
-        attributes: [ 
-            {label: "Name", text: "Drink Name"},
-            {label: "Mix", text: "Mixing Instructions"},
-        ]
+        attributes: {
+            ingredient: {
+                quantity: 0,
+                type: "text",
+                text: "Ingredient Name"
+            },
+            glass: {
+                quantity: 0,
+                type: "select",
+                text: "Type of Glassware"
+            },
+            garnish: {
+                quantity: 0,
+                type: "text",
+                text: "Garnish"
+            },
+            ice: {
+                quantity: 0,
+                type: "select",
+                text: "Type of Ice"
+            },
+            instructions: {
+                quantity: 0,
+                type: "textarea",
+                text: "Instructions"
+            },
+            picture: {
+                quantity: 0,
+                type: "input",
+                text: "Picture"
+            },
+        }
     }
 
-    addAttributeHandler = () => {
-        const attributes = this.state.attributes
-        const newAttributes = attributes.push
+    // change to bool for some?
+    addAttributeHandler = (type) => {
+        const oldCount = this.state.attributes[type].quantity
+        const updatedCount = oldCount + 1
+        const updatedAttributes = {
+            ...this.state.attributes
+        }
+        updatedAttributes[type].quantity = updatedCount
+        this.setState({attributes: updatedAttributes})
+    }
+  
+    removeAttributeHandler = (type) => {
+        const oldCount = this.state.attributes[type]
+        const updatedCount = oldCount === 0 ? 0 : oldCount - 1
+        const updatedAttributes = {
+            ...this.state.attributes
+        }
+        updatedAttributes[type] = updatedCount
+        this.setState({attributes: updatedAttributes})
     }
 
     render() {
         return (
             <React.Fragment>
                 <Wrapper>
-                    <form>
-                        {this.state.attributes.map((attr, i) => (
-                            <Input
-                                label={attr.text}
-                                key={attr.label + i}/>
-                        ))}
-                        {/* <Input label="Drink Name" />
-                        <Input label="Mix" /> */}
-                    </form>
-                    <Attributes />
+                    <NewFlashcard attributes={this.state.attributes}/>
+                    <AttributeControls 
+                        attributeAdded={this.addAttributeHandler}
+                        attributeRemoved={this.removeAttributeHandler}
+                        />
                 </Wrapper>
             </React.Fragment>
         )
