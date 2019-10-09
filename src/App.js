@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
+import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import Layout from './hoc/Layout/Layout'
-import Flashcards from './containers/Flashcards/Flashcards'
 import FlashcardCreator from './containers/FlashcardCreator/FlashcardCreator'
+import Auth from './containers/Auth/Auth'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 
 import theme from './themes/default'
 
-createGlobalStyle`
+const GlobalStyle = createGlobalStyle`
 * { 
     -moz-box-sizing: border-box; 
     -webkit-box-sizing: border-box; 
@@ -39,11 +40,25 @@ createGlobalStyle`
 
 class App extends Component {
   render() {
+    let routes = (
+      <Switch>
+        {/* log in */}
+        <Route path="/auth" component={Auth} />
+        <Route path="/add_cocktail" component={FlashcardCreator} />
+        <Redirect to="/auth" />
+      </Switch>
+    )
+// {/* appendix */}
+// <Route path="/" exact component={FlashcardCreator} />
+// {/* quiz */}
+// <Route path="/" component={FlashcardCreator} />
+// {/* creator */}
+// <Route path="/" component={FlashcardCreator} />
     return (
       <ThemeProvider theme={theme}>
+        <GlobalStyle />
         <Layout>
-          <Flashcards />
-          <FlashcardCreator />
+          {routes}
         </Layout>
       </ThemeProvider>
     )
@@ -51,4 +66,4 @@ class App extends Component {
 
 }
 
-export default App;
+export default withRouter(App);

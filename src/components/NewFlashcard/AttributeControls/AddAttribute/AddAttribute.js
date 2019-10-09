@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Button from '../../../Button/Button'
+import Button from '../../../UI/Button/Button'
 
 const Wrapper = styled(Button)`
     font-size: 1.4rem;
