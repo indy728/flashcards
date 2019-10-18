@@ -35,7 +35,7 @@ const input = (props) => {
                         onChange={props.changed} />
 
     return (
-        <Wrapper>
+        <Wrapper className={props.className}>
             <Label>{props.label}</Label>
             {inputElement}
         </Wrapper>

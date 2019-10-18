@@ -3,6 +3,7 @@ import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import Layout from './hoc/Layout/Layout'
 import FlashcardCreator from './containers/FlashcardCreator/FlashcardCreator'
 import Auth from './containers/Auth/Auth'
+import IngredientCreator from './components/IngredientCreator/IngredientCreator'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 
 import theme from './themes/default'
@@ -45,6 +46,7 @@ class App extends Component {
         {/* log in */}
         <Route path="/auth" component={Auth} />
         <Route path="/add_cocktail" component={FlashcardCreator} />
+        <Route path="/add_ingredient" component={IngredientCreator} />
         <Redirect to="/auth" />
       </Switch>
     )

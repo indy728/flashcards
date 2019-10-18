@@ -2,18 +2,10 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Button from '../../components/UI/Button/Button'
 import Input from '../../components/UI/Input/Input'
+import ContentBlock from '../../components/UI/ContentBlock/ContentBlock'
 
-const Wrapper = styled.div`
+const Wrapper = styled(ContentBlock)`
     width: 50rem;
-    margin-top: 6rem;
-    background-color: ${props => props.theme.palette.grayscale[5]};
-    border: ${props => props.theme.palette.grayscale[2]};
-    box-shadow: 2px 2px ${props => props.theme.palette.grayscale[0]};
-    border-radius: 2px;
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    justify-content: center;
     padding: 3rem;
 `
 
@@ -28,6 +20,9 @@ const AuthForm = styled.form`
 
 const AuthInput = styled(Input)`
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `
 
 const AuthHeader = styled.h1`
@@ -38,6 +33,7 @@ const FormButton = styled(Button)`
     width: 18rem;
     font-size: 1.6rem;
     font-weight: bold;
+    margin-top: 2rem;
 `
 
 const SwitchButton = styled(Button)`
@@ -195,13 +191,13 @@ class Auth extends Component {
                 />
         ))
         return (
-            <Wrapper>
+            <Wrapper className="Auth">
                 <AuthHeader>
                     {this.state.isSignUp ? "SIGN UP" : "LOG IN"}
                 </AuthHeader>
                 <AuthForm onSubmit={this.submitHandler}>
                     {form}
-                    <FormButton>{this.state.isSignUp ? "SIGN UP" : "LOG IN"}</FormButton>
+                    <FormButton>SUBMIT</FormButton>
                 </AuthForm>
                 <SwitchButton
                     className="SwitchButton"

@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import NewFlashcard from '../../components/NewFlashcard/NewFlashcard'
 import AttributeControls from '../../components/NewFlashcard/AttributeControls/AttributeControls'
+import axios from '../../axios-flashcards'
+import Button from '../../components/UI/Button/Button'
 
 const Wrapper = styled.div`
     width: 80%;
@@ -47,6 +49,11 @@ class FlashcardCreator extends Component {
         }
     }
 
+    componentDidMount() {
+        axios.get('/ingredients.json')
+            .then(res => console.log(res.data))
+            .catch(er => console.log(er))
+    }
     // change to bool for some?
     addAttributeHandler = (type) => {
         const oldCount = this.state.attributes[type].quantity
@@ -66,6 +73,9 @@ class FlashcardCreator extends Component {
         }
         updatedAttributes[type] = updatedCount
         this.setState({attributes: updatedAttributes})
+    }
+
+    addIngredientHandler = () => {
     }
 
     render() {
