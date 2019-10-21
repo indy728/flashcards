@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 import Button from '../../components/UI/Button/Button'
 import Input from '../../components/UI/Input/Input'
 import ContentBlock from '../../components/UI/ContentBlock/ContentBlock'
+import * as actions from '../../store/actions'
+import { updateObject } from '../../shared/utility'
 
 const Wrapper = styled(ContentBlock)`
     width: 50rem;
@@ -160,11 +163,39 @@ class Auth extends Component {
         isSignUp: false
     }
 
+    // updates auth app with user entry, changes value, checks validity
+    inputChangedHandler = (event, controlName) => {
+        let controls = this.state.loginControls
+        if (this.state.isSignUp) controls = this.state.signUpControls
+        const updatedControls = updateObject(controls, {
+            [controlName]: updateObject(controls[controlName], {
+                value: event.target.value,
+                // valid: this.checkValidity(event.target.value, this.state.loginControls[controlName].validation),
+                touched: true
+            })
+        })
+        if (this.state.isSignUp) {
+            this.setState({signUpControls: updatedControls})
+        } else {
+            this.setState({loginControls: updatedControls})
+        }
+    }
+
     switchAuthModeHandler = () => {
         this.setState(prevState => {
             return {
                 isSignUp: !prevState.isSignUp}
             })
+    }
+
+    submitHandler = event => {
+        // prevent reloading of page on submit
+        event.preventDefault()
+        this.props.onAuth(
+                this.state.loginControls.email.value,
+                this.state.loginControls.password.value,
+                this.state.isSignUp
+            )
     }
 
     render() {
@@ -187,7 +218,7 @@ class Auth extends Component {
                 invalid={!formElement.config.valid}
                 shouldValidate={formElement.config.validation}
                 touched={formElement.config.touched}
-                // changed={(event) => this.inputChangedHandler(event, formElement.id)} 
+                changed={(event) => this.inputChangedHandler(event, formElement.id)} 
                 />
         ))
         return (
@@ -195,7 +226,8 @@ class Auth extends Component {
                 <AuthHeader>
                     {this.state.isSignUp ? "SIGN UP" : "LOG IN"}
                 </AuthHeader>
-                <AuthForm onSubmit={this.submitHandler}>
+                <AuthForm 
+                    onSubmit={this.submitHandler}>
                     {form}
                     <FormButton>SUBMIT</FormButton>
                 </AuthForm>
@@ -209,4 +241,19 @@ class Auth extends Component {
     }
 }
 
-export default Auth
+const mapStateToProps = state => {
+    return {
+        loading: state.loading,
+        error: state.error,
+        isAuthenticated: state.token !== null,
+        authRedirectPath: state.authRedirectPath
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onAuth: (email, password, isSignUp) => dispatch(actions.auth(email, password, isSignUp))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Auth)
