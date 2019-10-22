@@ -16,13 +16,16 @@ const Wrapper = styled.ul`
     }
 `
 
-const navigationItems = (props) => {
+const navigationItems = props => {
     return (
         <Wrapper>
             <NavigationItem link="/">Appendix</NavigationItem>
             <NavigationItem link="/">Quiz</NavigationItem>
             <NavigationItem link="/add_cocktail">Add New Drink</NavigationItem>
-            <NavigationItem link="/auth">Log In</NavigationItem>
+            {props.isAuthenticated
+                ? <NavigationItem link="/logout">Log Out</NavigationItem>
+                : <NavigationItem link="/auth">Log In</NavigationItem>
+            }
         </Wrapper>
     )
 }

@@ -193,13 +193,13 @@ class Auth extends Component {
         event.preventDefault()
         let controls = this.state.loginControls
         if (this.state.isSignUp) controls = this.state.signUpControls
-
         const submitInfo = {
             email: controls.email.value,
             password: controls.password.value,
             isSignUp: this.state.isSignUp,
             userInfo: null
         }
+        // use the below object to push user info to firebase
         if (this.state.isSignUp) {
             submitInfo.userInfo = {
                 email: controls.email.value,

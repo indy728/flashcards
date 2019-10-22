@@ -33,7 +33,7 @@ const toolbar = (props) => {
                 clicked={props.toggle} />
             <Logo />
             <NavWrapper>
-                <NavigationItems />
+                <NavigationItems isAuthenticated={props.isAuthenticated} />
             </NavWrapper>
         </Wrapper>
     )
