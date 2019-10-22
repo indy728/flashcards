@@ -92,8 +92,8 @@ class Auth extends Component {
                     length: {
                         absMin: 5,
                         absMax: 22,
-                        chars: 'alnum'
-                    }
+                    },
+                    chars: 'alnum',
                 },
                 valid: false,
                 touched: false,
@@ -191,11 +191,23 @@ class Auth extends Component {
     submitHandler = event => {
         // prevent reloading of page on submit
         event.preventDefault()
-        this.props.onAuth(
-                this.state.loginControls.email.value,
-                this.state.loginControls.password.value,
-                this.state.isSignUp
-            )
+        let controls = this.state.loginControls
+        if (this.state.isSignUp) controls = this.state.signUpControls
+
+        const submitInfo = {
+            email: controls.email.value,
+            password: controls.password.value,
+            isSignUp: this.state.isSignUp,
+            userInfo: null
+        }
+        if (this.state.isSignUp) {
+            submitInfo.userInfo = {
+                email: controls.email.value,
+                username: controls.username.value,
+                company: controls.companyAccessCode.value
+            }
+        }
+        this.props.onAuth(submitInfo)
     }
 
     render() {
@@ -252,7 +264,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: (email, password, isSignUp) => dispatch(actions.auth(email, password, isSignUp))
+        onAuth: (submitInfo) => dispatch(actions.auth(submitInfo))
     }
 }
 
