@@ -1,5 +1,4 @@
 import axios from 'axios'
-import axiosFlashcards from '../../axios-flashcards'
 import * as actionTypes from './actionTypes'
 
 // Use this function to set 'loading' state and potentially promp Spinner

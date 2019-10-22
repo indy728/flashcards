@@ -5,7 +5,6 @@ import Spinner from '../UI/Spinner/Spinner'
 import styled from 'styled-components'
 import Button from '../UI/Button/Button'
 import IngredientTierForm from './IngredientTierForm/IngredientTierForm'
-import { updateObject } from '../../shared/utility'
 
 const AddElementForm = styled.form`
     width: 80%;

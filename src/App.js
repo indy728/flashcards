@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import Layout from './hoc/Layout/Layout'
 import FlashcardCreator from './containers/FlashcardCreator/FlashcardCreator'
 import Auth from './containers/Auth/Auth'
+import HomePage from './containers/HomePage/HomePage'
 import IngredientCreator from './components/IngredientCreator/IngredientCreator'
 import Logout from './containers/Auth/Logout/Logout'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
@@ -60,9 +61,8 @@ class App extends Component {
         <Route path="/logout" exact component={Logout} />
         <Route path="/add_cocktail" component={FlashcardCreator} />
         <Route path="/add_ingredient" component={IngredientCreator} />
-        {/* <Route path="/" exact component={UserHome}/> */}
-        <Route path="/" exact component={IngredientCreator}/>
-        <Redirect to="/add_ingredient" />
+        <Route path="/" exact component={HomePage}/>
+        <Redirect to="/" />
       </Switch>
       )
     }

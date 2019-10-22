@@ -13,8 +13,8 @@ const Label = styled.label`
 
 const Input = styled.input`
     outline: none;
-    border: 1px solid #ccc;
-    background-color: white;
+    border: 1px solid ${props => props.invalid ? "red" : "#ccc"};
+    background-color: ${props => props.invalid ? "rgb(250, 157, 157)" : "white"};
     font: inherit;
     padding: 6px 10px;
     display: block;
@@ -32,6 +32,7 @@ const input = (props) => {
     inputElement = <Input 
                         {...props.elementConfig}
                         value={props.value}
+                        invalid={props.invalid && props.touched}
                         onChange={props.changed} />
 
     return (

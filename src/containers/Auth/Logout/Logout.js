@@ -11,8 +11,7 @@ class Logout extends Component {
 
     render() {
         return (
-            // <Redirect to='/'/>
-            <React.Fragment></React.Fragment>
+            <Redirect to='/'/>
         )
     }
 }

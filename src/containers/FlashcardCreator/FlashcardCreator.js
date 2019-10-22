@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import NewFlashcard from '../../components/NewFlashcard/NewFlashcard'
 import AttributeControls from '../../components/NewFlashcard/AttributeControls/AttributeControls'
 import axios from '../../axios-flashcards'
-import Button from '../../components/UI/Button/Button'
 
 const Wrapper = styled.div`
     width: 80%;

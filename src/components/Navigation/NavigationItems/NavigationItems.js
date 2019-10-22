@@ -17,16 +17,26 @@ const Wrapper = styled.ul`
 `
 
 const navigationItems = props => {
-    return (
+    let navItems = (
         <Wrapper>
-            <NavigationItem link="/">Appendix</NavigationItem>
-            <NavigationItem link="/">Quiz</NavigationItem>
+            <NavigationItem link="/appendix">Appendix</NavigationItem>
+            <NavigationItem link="/quiz">Quiz</NavigationItem>
             <NavigationItem link="/add_cocktail">Add New Drink</NavigationItem>
-            {props.isAuthenticated
-                ? <NavigationItem link="/logout">Log Out</NavigationItem>
-                : <NavigationItem link="/auth">Log In</NavigationItem>
-            }
+            <NavigationItem link="/logout">Log Out</NavigationItem>
         </Wrapper>
+    )
+    if (!props.isAuthenticated) {
+        navItems = (
+            <Wrapper>
+                <NavigationItem link="/auth">Log In</NavigationItem>
+            </Wrapper>
+        )
+    }
+
+    return (
+        <React.Fragment>
+            {navItems}
+        </React.Fragment>
     )
 }
 

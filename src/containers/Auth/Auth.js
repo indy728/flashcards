@@ -53,6 +53,7 @@ class Auth extends Component {
                 elementConfig: {
                     type: 'email',
                     placeholder: 'Your Email',
+                    autocomplete: 'email',
                 },
                 value: '',
                 validation: {
@@ -66,6 +67,7 @@ class Auth extends Component {
                 elementConfig: {
                     type: 'password',
                     placeholder: 'Password',
+                    autocomplete: 'current-password',
                 },
                 value: '',
                 validation: {
@@ -84,7 +86,8 @@ class Auth extends Component {
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeholder: 'Choose a Username'
+                    placeholder: 'Choose a Username',
+                    autocomplete: 'username',
                 },
                 value: '',
                 validation: {
@@ -103,6 +106,7 @@ class Auth extends Component {
                 elementConfig: {
                     type: 'email',
                     placeholder: 'Your Email',
+                    autocomplete: 'email',
                 },
                 value: '',
                 validation: {
@@ -116,6 +120,7 @@ class Auth extends Component {
                 elementConfig: {
                     type: 'password',
                     placeholder: 'Password',
+                    autocomplete: 'new-password',
                 },
                 value: '',
                 validation: {
@@ -133,6 +138,7 @@ class Auth extends Component {
                 elementConfig: {
                     type: 'password',
                     placeholder: 'Re-enter Password',
+                    autocomplete: 'verify-password',
                 },
                 value: '',
                 validation: {
@@ -163,6 +169,27 @@ class Auth extends Component {
         isSignUp: false
     }
 
+    checkValidity = (value, rules) => {
+        let isValid = true;
+        
+        if (!rules) return true
+        
+        if (rules.required) {
+            isValid = value.trim() !== '' && isValid;
+        }
+        
+        if (rules.length) {
+            isValid = value.length >= rules.length.absMin && value.length <= rules.length.absMax && isValid
+        }
+
+        // TO DO
+        // way more validation stuff
+
+        console.log('[Auth.js] checkValidity() isValid', isValid)
+        
+        return isValid
+    }
+
     // updates auth app with user entry, changes value, checks validity
     inputChangedHandler = (event, controlName) => {
         let controls = this.state.loginControls
@@ -170,7 +197,7 @@ class Auth extends Component {
         const updatedControls = updateObject(controls, {
             [controlName]: updateObject(controls[controlName], {
                 value: event.target.value,
-                // valid: this.checkValidity(event.target.value, this.state.loginControls[controlName].validation),
+                valid: this.checkValidity(event.target.value, controls[controlName].validation),
                 touched: true
             })
         })
@@ -223,6 +250,7 @@ class Auth extends Component {
         let form = formElementsArray.map(formElement => (
             <AuthInput 
                 key={formElement.id}
+                autocomplete={formElement.config.elementConfig.autocomplete || ''}
                 className="AuthInput"
                 elementType={formElement.config.elementType}
                 elementConfig={formElement.config.elementConfig}
@@ -268,4 +296,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(Auth)
+export default connect(mapStateToProps, mapDispatchToProps)(Auth)
