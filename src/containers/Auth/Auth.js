@@ -166,7 +166,8 @@ class Auth extends Component {
                 touched: false
             },
         },
-        isSignUp: false
+        isSignUp: false,
+        formIsValid: false
     }
 
     checkValidity = (value, rules) => {
@@ -185,15 +186,21 @@ class Auth extends Component {
         // TO DO
         // way more validation stuff
 
-        console.log('[Auth.js] checkValidity() isValid', isValid)
-        
         return isValid
+    }
+
+    updateControlsAndFormValidity = (updatedControls, formIsValid) => {
+        if (this.state.isSignUp) {
+            this.setState({signUpControls: updatedControls, formIsValid: formIsValid})
+        } else {
+            this.setState({loginControls: updatedControls, formIsValid: formIsValid})
+        }
     }
 
     // updates auth app with user entry, changes value, checks validity
     inputChangedHandler = (event, controlName) => {
-        let controls = this.state.loginControls
-        if (this.state.isSignUp) controls = this.state.signUpControls
+        let controls = {...this.state.loginControls}
+        if (this.state.isSignUp) controls = {...this.state.signUpControls}
         const updatedControls = updateObject(controls, {
             [controlName]: updateObject(controls[controlName], {
                 value: event.target.value,
@@ -201,14 +208,27 @@ class Auth extends Component {
                 touched: true
             })
         })
-        if (this.state.isSignUp) {
-            this.setState({signUpControls: updatedControls})
-        } else {
-            this.setState({loginControls: updatedControls})
+
+        let formIsValid = true
+        for (let inputIdentifier in controls) {
+            formIsValid = controls[inputIdentifier].valid && formIsValid
         }
+
+        this.updateControlsAndFormValidity(updatedControls, formIsValid)
     }
 
     switchAuthModeHandler = () => {
+        let updatedControls = {...this.state.loginControls}
+        if (this.state.isSignUp) updatedControls = {...this.state.signUpControls}
+        
+        for (let controlName in updatedControls) {
+            updatedControls[controlName].value = ''
+            updatedControls[controlName].valid = false
+            updatedControls[controlName].touched = false
+        }
+
+        this.updateControlsAndFormValidity(updatedControls, false)
+
         this.setState(prevState => {
             return {
                 isSignUp: !prevState.isSignUp}
@@ -269,7 +289,7 @@ class Auth extends Component {
                 <AuthForm 
                     onSubmit={this.submitHandler}>
                     {form}
-                    <FormButton>SUBMIT</FormButton>
+                    <FormButton disabled={!this.state.formIsValid}>SUBMIT</FormButton>
                 </AuthForm>
                 <SwitchButton
                     className="SwitchButton"

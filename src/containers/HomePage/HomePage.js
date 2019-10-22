@@ -4,11 +4,15 @@ import { connect } from 'react-redux'
 import ContentBlock from '../../components/UI/ContentBlock/ContentBlock'
 
 const Wrapper = styled(ContentBlock)`
-    width: 80rem;
+    width: 80%;
     display: flex;
     flex-flow: column;
     justify-content: center;
     padding: 3rem;
+
+    /* @media (min-width: 900px) {
+        width: 80rem;
+    } */
 `
 
 const Intro = styled.div`
@@ -39,14 +43,14 @@ class HomePage extends Component {
 
         const funcCompList = functionalComponents.map(component => {
             return (
-                <FunctionalComponents>
+                <FunctionalComponents key={component}>
                     {component}
                 </FunctionalComponents>
             )
         })
         return (
             <React.Fragment>
-                <Wrapper>
+                <Wrapper className="HomePage">
                     <Intro>
                         <h1>Welcome, subject id {this.props.userId}! And congratulations!</h1>
                         <h2>Now that you are logged in, you can do <span style={{"fontWeight": "bold"}}>{functionalComponents.length}</span> things:</h2>

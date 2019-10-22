@@ -46,38 +46,29 @@ const GlobalStyle = createGlobalStyle`
 class App extends Component {
 
   componentDidMount() {
+    // On reaching this page, App checks for local tokens in storage
+    // and clears localStorage if it has been too long
     this.props.onTryAutoSignIn()
   }
 
   render() {
     let routes = (
       <Switch>
-        {/* log in */}
         <Route path="/auth" component={Auth} />
-        {/* <Route path="/add_cocktail" component={FlashcardCreator} />
-        <Route path="/add_ingredient" component={IngredientCreator} /> */}
         <Redirect to="/auth" />
       </Switch>
     )
-
     if (this.props.isAuthenticated) {
       routes = (
         <Switch>
-        {/* log in */}
-        <Route path="/logout" exact component={Logout} />
-        <Route path="/add_cocktail" component={FlashcardCreator} />
-        <Route path="/add_ingredient" component={IngredientCreator} />
-        <Route path="/" exact component={HomePage}/>
-        <Redirect to="/" />
-      </Switch>
+          <Route path="/logout" exact component={Logout} />
+          <Route path="/add_cocktail" component={FlashcardCreator} />
+          <Route path="/add_ingredient" component={IngredientCreator} />
+          <Route path="/" exact component={HomePage}/>
+          <Redirect to="/" />
+        </Switch>
       )
     }
-// {/* appendix */}
-// <Route path="/" exact component={FlashcardCreator} />
-// {/* quiz */}
-// <Route path="/" component={FlashcardCreator} />
-// {/* creator */}
-// <Route path="/" component={FlashcardCreator} />
     return (
       <ThemeProvider theme={theme}>
         <GlobalStyle />
@@ -87,7 +78,6 @@ class App extends Component {
       </ThemeProvider>
     )
   }
-
 }
 
 const mapStateToProps = state => {

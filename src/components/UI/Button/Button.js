@@ -11,10 +11,8 @@ const Button = styled.button`
 
 const button = (props) => (
     <Button
-            className={props.className}
-            disabled={props.disabled}
-            // className={[classes.Button, classes[props.btnType]].join(' ')}
-            onClick={props.clicked}
+        {...props}
+        onClick={props.clicked}
         >
             {props.children}
     </Button>

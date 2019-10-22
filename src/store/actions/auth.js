@@ -27,7 +27,6 @@ export const authFail = error => {
 export const auth = (authInfo) => {
     return dispatch => {
         dispatch(authStart())
-        console.log(authInfo)
         const authData = {
             email: authInfo.email,
             password: authInfo.password,
