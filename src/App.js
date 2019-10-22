@@ -10,6 +10,7 @@ import Logout from './containers/Auth/Logout/Logout'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 
 import theme from './themes/default'
+import { authCheckState } from './store/actions';
 
 const GlobalStyle = createGlobalStyle`
 * { 
@@ -43,6 +44,11 @@ const GlobalStyle = createGlobalStyle`
 `
 
 class App extends Component {
+
+  componentDidMount() {
+    this.props.onTryAutoSignIn()
+  }
+
   render() {
     let routes = (
       <Switch>
@@ -90,4 +96,10 @@ const mapStateToProps = state => {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(App));
+const mapDispatchToProps = dispatch => {
+  return {
+    onTryAutoSignIn: () => dispatch(authCheckState())
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
