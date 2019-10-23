@@ -2,8 +2,8 @@ import * as actionTypes from '../actions/actionTypes'
 import { updateObject } from '../../shared/utility'
 
 const initialState = {
-    token: null,
-    userId: null,
+    username: null,
+    email: null,
     error: null,
     loading: false,
     authRedirectPath: "/"
@@ -15,8 +15,8 @@ const authStart = (state) => {
 
 const authSuccess = (state, action) => {
     return updateObject(state, {
-        token: action.token,
-        userId: action.userId,
+        username: action.username,
+        email: action.email,
         error: null,
         loading: false,
     })

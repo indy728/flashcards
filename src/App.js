@@ -49,6 +49,15 @@ class App extends Component {
     // On reaching this page, App checks for local tokens in storage
     // and clears localStorage if it has been too long
     this.props.onTryAutoSignIn()
+    // Firebase.database().ref('/check').set({
+    //   "test1": "1",
+    //   "test2": {
+    //     "t1": 1,
+    //     "t2": 2
+    //   }
+    // })
+    // const checkRef = Firebase.database().ref('check')
+    // checkRef.on('value', snap => console.log(snap.val()))
   }
 
   render() {
@@ -82,7 +91,7 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: state.token
+    isAuthenticated: state.email
   }
 }
 
