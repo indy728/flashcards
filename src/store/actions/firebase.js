@@ -1,4 +1,4 @@
-import firebase from 'firebase'
+import app from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
 
@@ -13,9 +13,9 @@ const config = {
     measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
-firebase.initializeApp(config)
+app.initializeApp(config)
 
-export const firebaseAuth = firebase.auth()
+export const firebaseAuth = app.auth()
 
 firebaseAuth.onAuthStateChanged(user => {
     if (user) {
@@ -28,4 +28,4 @@ firebaseAuth.onAuthStateChanged(user => {
     }
 })
 
-export const database = firebase.database()
+export const database = app.database()
