@@ -28,15 +28,19 @@ export const auth = (authInfo) => {
     return dispatch => {
         dispatch(authStart())
         if (authInfo.isSignUp) {
-            firebaseAuth.signInWithEmailAndPassword(authInfo.email, authInfo.password)
+            firebaseAuth.createUserWithEmailAndPassword(authInfo.email, authInfo.password)
                 .then(res => {
                     const user = res.user
-                    const userObj = {
-                        name: user.displayName,
-                        email: user.email,
-                        photo: user.photoURL,
-                    }
-                    console.log(userObj)
+                    // TO DOs
+                    // Fix this shit below
+                    // 
+                    // user.updateProfile({displayName: authInfo.username})
+                    //     .then(res => {
+                    //         console.log('[actions/auth] signUp update success', res)
+                    //     })
+                    //     .catch(er => {
+                    //         console.log('[actions/auth] signUp update fail')
+                    //     })
                     dispatch(authSuccess(res.user.displayName, res.user.email))
                 })
                 .catch(er => {

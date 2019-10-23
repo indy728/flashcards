@@ -52,7 +52,7 @@ class HomePage extends Component {
             <React.Fragment>
                 <Wrapper className="HomePage">
                     <Intro>
-                        <h1>Welcome, subject id {this.props.userId}! And congratulations!</h1>
+                        <h1>Welcome, subject id {this.props.username}! And congratulations!</h1>
                         <h2>Now that you are logged in, you can do <span style={{"fontWeight": "bold"}}>{functionalComponents.length}</span> things:</h2>
                     </Intro>
                     {funcCompList}
@@ -64,7 +64,7 @@ class HomePage extends Component {
 
 const mapStateToProps = state => {
     return {
-        userId: state.userId
+        userId: state.username
     }
 }
 

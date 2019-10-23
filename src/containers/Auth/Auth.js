@@ -211,7 +211,7 @@ class Auth extends Component {
 
         let formIsValid = true
         for (let inputIdentifier in controls) {
-            formIsValid = controls[inputIdentifier].valid && formIsValid
+            formIsValid = updatedControls[inputIdentifier].valid && formIsValid
         }
 
         this.updateControlsAndFormValidity(updatedControls, formIsValid)
