@@ -30,7 +30,7 @@ export const auth = (authInfo) => {
         if (authInfo.isSignUp) {
             firebaseAuth.createUserWithEmailAndPassword(authInfo.email, authInfo.password)
                 .then(res => {
-                    const user = res.user
+                    // const user = res.user
                     // TO DOs
                     // Fix this shit below
                     // 
