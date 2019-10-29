@@ -38,11 +38,15 @@ class Layout extends Component {
             <React.Fragment>
                 <Toolbar
                     isAuthenticated={this.props.isAuthenticated}
-                    toggle={this.state.showSideDrawer ? this.sideDrawerClosedHandler : this.sideDrawerToggleHandler}
+                    sideDrawer={this.state.showSideDrawer}
+                    // toggle={this.state.showSideDrawer ? this.sideDrawerClosedHandler : this.sideDrawerToggleHandler}
+                    toggle={this.sideDrawerToggleHandler}
                     />
                 <SideDrawer
                     open={this.state.showSideDrawer}
-                    close={this.sideDrawerClosedHandler} />
+                    close={this.sideDrawerClosedHandler}
+                    isAuthenticated={this.props.isAuthenticated}
+                     />
                 <Main>
                     {this.props.children}
                 </Main>

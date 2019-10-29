@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import NavigationItems from '../NavigationItems/NavigationItems'
-import Logo from '../../Logo/Logo'
 import DrawerToggle from '../SideDrawer/DrawerToggle/DrawerToggle'
 
 const Wrapper = styled.header`
@@ -21,6 +20,8 @@ const Wrapper = styled.header`
 `
 
 const NavWrapper = styled.nav`
+    display: ${props => props.display ? "inherit" : "none"};
+
     @media (max-width: 499px) {
         display: none
     }
@@ -31,9 +32,8 @@ const toolbar = (props) => {
         <Wrapper>
             <DrawerToggle 
                 clicked={props.toggle} />
-            <Logo />
-            <NavWrapper>
-                <NavigationItems isAuthenticated={props.isAuthenticated} />
+            <NavWrapper display={!props.sideDrawer}>
+                <NavigationItems isAuthenticated={props.isAuthenticated} sideDrawer={props.sideDrawer} />
             </NavWrapper>
         </Wrapper>
     )

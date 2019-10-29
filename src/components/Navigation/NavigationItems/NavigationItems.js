@@ -6,22 +6,19 @@ const Wrapper = styled.ul`
     margin: 0;
     padding: 0;
     list-style: none;
-    display: flex;
-    flex-flow: column;
+    display:  ${props => props.sideDrawer ? "none" : "flex"};
+    flex-flow: row;
     align-items: center;
     height: 100%;
-
-    @media (min-width: 500px) {
-        flex-flow: row;
-    }
 `
 
 const navigationItems = props => {
+    console.log(props.sideDrawer)
+
     let navItems = (
-        <Wrapper>
+        <Wrapper sideDrawer={props.sideDrawer} >
             <NavigationItem link="/appendix">Appendix</NavigationItem>
             <NavigationItem link="/quiz">Quiz</NavigationItem>
-            <NavigationItem link="/add_cocktail">Add New Drink</NavigationItem>
             <NavigationItem link="/logout">Log Out</NavigationItem>
         </Wrapper>
     )
