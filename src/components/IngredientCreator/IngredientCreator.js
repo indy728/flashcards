@@ -39,7 +39,7 @@ class IngredientCreator extends Component {
     render() {
         let window = <Spinner />
         if (!this.state.loading) {
-            const ingredientObj = this.state.ingredients
+            const ingredientObj = {...this.state.ingredients}
             const ingredientTypes = Object.keys(ingredientObj)
             // const ingredientTypes = []
             // for (let key in ingredientsObj) {

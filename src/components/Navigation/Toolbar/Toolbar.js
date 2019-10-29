@@ -20,7 +20,7 @@ const Wrapper = styled.header`
 `
 
 const NavWrapper = styled.nav`
-    display: ${props => props.display ? "inherit" : "none"};
+    display: ${props => props.show ? "inherit" : "none"};
 
     @media (max-width: 499px) {
         display: none
@@ -32,8 +32,11 @@ const toolbar = (props) => {
         <Wrapper>
             <DrawerToggle 
                 clicked={props.toggle} />
-            <NavWrapper display={!props.sideDrawer}>
-                <NavigationItems isAuthenticated={props.isAuthenticated} sideDrawer={props.sideDrawer} />
+            <NavWrapper show={!props.sideDrawer}>
+                <NavigationItems
+                    isAuthenticated={props.isAuthenticated}
+                    components={props.components}
+                    sideDrawer={props.sideDrawer} />
             </NavWrapper>
         </Wrapper>
     )

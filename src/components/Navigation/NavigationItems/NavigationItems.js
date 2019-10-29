@@ -13,27 +13,24 @@ const Wrapper = styled.ul`
 `
 
 const navigationItems = props => {
-    console.log(props.sideDrawer)
-
-    let navItems = (
-        <Wrapper sideDrawer={props.sideDrawer} >
-            <NavigationItem link="/appendix">Appendix</NavigationItem>
-            <NavigationItem link="/quiz">Quiz</NavigationItem>
-            <NavigationItem link="/logout">Log Out</NavigationItem>
-        </Wrapper>
-    )
-    if (!props.isAuthenticated) {
-        navItems = (
-            <Wrapper>
-                <NavigationItem link="/auth">Log In</NavigationItem>
-            </Wrapper>
+    const components = {...props.components}
+    const componentKeys = Object.keys(components)
+        .filter(key => components[key].usage === "basic" && props.isAuthenticated === components[key].isAuth)
+    
+    const navItems = componentKeys.map(key => {
+        return (
+            <NavigationItem
+                key={components[key].key}
+                link={components[key].link}>
+                {components[key].title}
+            </NavigationItem>
         )
-    }
+    })
 
     return (
-        <React.Fragment>
+        <Wrapper>
             {navItems}
-        </React.Fragment>
+        </Wrapper>
     )
 }
 

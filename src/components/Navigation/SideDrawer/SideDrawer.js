@@ -53,8 +53,24 @@ const SidebarLogo = styled.div`
     align-items: center;
     justify-content: center;
 `
+// Creates sub-objects based on category
+const objReducer = (obj, keys, filter) => {
+    const reducedObj = keys.filter(key => obj[key].usage === filter)
+        .reduce((newObj, key) => {
+            newObj[key] = obj[key]
+            return newObj
+        }, {})
+        return reducedObj
+}
 
 const sideDrawer = (props) => {
+    const components = {...props.components}
+    // Matches available components based on authentication
+    const componentKeys = Object.keys(components)
+        .filter(key => props.isAuthenticated === components[key].isAuth)
+    const basics = objReducer(components, componentKeys, "basic")
+    const creators = objReducer(components, componentKeys, "creator")
+
     return (
         <React.Fragment>
             <Backdrop show={props.open} clicked={props.close} />
@@ -65,14 +81,16 @@ const sideDrawer = (props) => {
                     </SidebarLogo>
                 </SidebarSection>
                 <SidebarSection>
-                    <nav>
-                        <SideDrawerNavItems
-                            isAuthenticated={props.isAuthenticated}
-                            sideDrawer={props.open} />
-                    </nav>
+                    <SideDrawerNavItems
+                        isAuthenticated={props.isAuthenticated}
+                        components={basics}
+                        sideDrawer={props.open} />
                 </SidebarSection>
                 <SidebarSection>
-
+                    <SideDrawerNavItems
+                        isAuthenticated={props.isAuthenticated}
+                        components={creators}
+                        sideDrawer={props.open} />
                 </SidebarSection>
             </Wrapper>
         </React.Fragment>

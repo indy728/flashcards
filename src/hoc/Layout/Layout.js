@@ -16,7 +16,59 @@ const Main = styled.main`
 
 class Layout extends Component {
     state = {
-        showSideDrawer: false
+        components: {
+            authentication: {
+                key: "auth",
+                link: "/auth",
+                title: "Log In",
+                usage: "basic",
+                isAuth: false,
+            },
+            home: {
+                key: "home",
+                link: "/",
+                title: "Profile",
+                usage: "basic",
+                isAuth: true,
+            },
+            quiz: {
+                key: "quiz",
+                link: "/quiz",
+                title: "Quiz",
+                usage: "basic",
+                isAuth: true,
+            },
+            appendix: {
+                key: "appendix",
+                link: "/appendix",
+                title: "Appendix",
+                usage: "basic",
+                isAuth: true,
+                                                                
+            },
+            logout: {
+                key: "logout",
+                link: "/logout",
+                title: "Log Out",
+                usage: "basic",
+                isAuth: true,
+            },
+            addCocktail: {
+                key: "addCocktail",
+                link: "/add_cocktail",
+                title: "Add A Cocktail",
+                usage: "creator",
+                isAuth: true,
+            },
+            addIngredient: {
+                key: "addIngredient",
+                link: "/add_ingredient",
+                title: "Add An Ingredient",
+                usage: "creator",
+                isAuth: true,
+            },
+        },
+        showSideDrawer: false,
     }
 
     sideDrawerClosedHandler = () => {
@@ -38,14 +90,15 @@ class Layout extends Component {
             <React.Fragment>
                 <Toolbar
                     isAuthenticated={this.props.isAuthenticated}
+                    components={this.state.components}
                     sideDrawer={this.state.showSideDrawer}
-                    // toggle={this.state.showSideDrawer ? this.sideDrawerClosedHandler : this.sideDrawerToggleHandler}
                     toggle={this.sideDrawerToggleHandler}
                     />
                 <SideDrawer
+                    isAuthenticated={this.props.isAuthenticated}
+                    components={this.state.components}
                     open={this.state.showSideDrawer}
                     close={this.sideDrawerClosedHandler}
-                    isAuthenticated={this.props.isAuthenticated}
                      />
                 <Main>
                     {this.props.children}

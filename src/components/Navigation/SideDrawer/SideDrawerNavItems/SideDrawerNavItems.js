@@ -17,34 +17,22 @@ const Wrapper = styled.ul`
 `
 
 const navigationItems = props => {
-    console.log(props.sideDrawer)
-
-    let navItems = (
-        <React.Fragment>
-            <Wrapper >
-                <NavigationItem link="/">Home</NavigationItem>
-                <NavigationItem link="/appendix">Appendix</NavigationItem>
-                <NavigationItem link="/quiz">Quiz</NavigationItem>
-                <NavigationItem link="/logout">Log Out</NavigationItem>
-            </Wrapper>
-            <Wrapper>
-                <NavigationItem link="/add_cocktail">Add New Drink</NavigationItem>
-                <NavigationItem link="/">Add Ingredient</NavigationItem>
-            </Wrapper>
-        </React.Fragment>
-    )
-    if (!props.isAuthenticated) {
-        navItems = (
-            <Wrapper>
-                <NavigationItem link="/auth">Log In</NavigationItem>
-            </Wrapper>
+    const components = {...props.components}
+    const componentKeys = Object.keys(components)
+    const navItems = componentKeys.map(key => {
+        return (
+            <NavigationItem
+                key={components[key].key}
+                link={components[key].link}>
+                {components[key].title}
+            </NavigationItem>
         )
-    }
+    })
 
     return (
-        <React.Fragment>
+        <nav>
             {navItems}
-        </React.Fragment>
+        </nav>
     )
 }
 
