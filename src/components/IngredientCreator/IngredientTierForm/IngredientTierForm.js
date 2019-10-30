@@ -10,7 +10,7 @@ const Wrapper = styled.div`
 const ingredientTierForm = (props) => {
     let editButtons = props.list.map(item => {
         return (
-            <IngredientTierItem>{item}</IngredientTierItem>
+            <IngredientTierItem key={item}>{item}</IngredientTierItem>
         )
     })
     return (

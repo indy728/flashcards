@@ -52,7 +52,7 @@ const Wrapper = styled.li`
 
 const navigationItem = (props) => {
     return (
-        <Wrapper>
+        <Wrapper className={props.className}>
             <NavLink
                 to={props.link}
                 exact

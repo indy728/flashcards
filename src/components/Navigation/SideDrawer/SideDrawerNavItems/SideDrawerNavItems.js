@@ -9,11 +9,45 @@ const Wrapper = styled.ul`
     display: flex;
     flex-flow: column;
     align-items: center;
-    height: 100%;
+    /* height: 100%; */
+    width: 100%;
 
     /* @media (min-width: 500px) {
         flex-flow: row;
     } */
+`
+
+const NavItem = styled(NavigationItem)`
+    margin: 0;
+    width: 100%;
+    color: ${props => props.theme.palette.primary[2]};
+    padding: 1rem .5rem;
+    
+    a {
+        color: ${props => props.theme.palette.primary[2]};
+        text-decoration: none;
+        width: 100%;
+        box-sizing: border-box;
+        display: block;
+        border-bottom: 4px solid transparent;
+        padding: 1rem .5rem;
+        text-align: center;
+    }
+
+    a:hover {
+        color: ${props => props.theme.palette.white[2]};
+    }
+            
+    a:hover,
+    a:active {
+    }
+
+    a.active {
+        color: ${props => props.theme.palette.primary[0]};
+        background-color: ${props => props.theme.palette.secondary[3]};
+        border-bottom: none;
+        cursor: default;
+    }
 `
 
 const navigationItems = props => {
@@ -21,17 +55,20 @@ const navigationItems = props => {
     const componentKeys = Object.keys(components)
     const navItems = componentKeys.map(key => {
         return (
-            <NavigationItem
+            <NavItem
+                className="Sidedrawer__NavItem"
                 key={components[key].key}
                 link={components[key].link}>
                 {components[key].title}
-            </NavigationItem>
+            </NavItem>
         )
     })
 
     return (
         <nav>
-            {navItems}
+            <Wrapper>
+                {navItems}
+            </Wrapper>
         </nav>
     )
 }
