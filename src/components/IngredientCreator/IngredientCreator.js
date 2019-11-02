@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import Button from '../UI/Button/Button'
 import IngredientTierForm from './IngredientTierForm/IngredientTierForm'
 import { database } from '../../store/actions/firebase'
-import { loadPartialConfig } from '@babel/core'
 
 
 const AddElementForm = styled.form`
@@ -18,15 +17,24 @@ const AddElementForm = styled.form`
     align-items: center;
 `
 
+const IngredientDropDownSection = styled.div`
+    width: 80%;
+    height: 5rem;
+    margin: .5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+
 class IngredientCreator extends Component {
     state = {
         ingredients: null,
-        tiers:[
-            'ingredients',
-            'categories',
-            'products'
-        ],
-        selector: [],
+        // tiers:[
+        //     'ingredients',
+        //     'categories',
+        //     'products'
+        // ],
+        selector: ['ingredients'],
         tierLevel: 0,
         loading: true,
         editor: ''
@@ -40,39 +48,68 @@ class IngredientCreator extends Component {
         //     .catch(er => console.log(er));
         const rootRef = database.ref()
         const ings = rootRef.child('ingredients')
-        const spirits = ings.child('spirits')
+
         ings.once('value', snap => {
             this.setState({ingredients: snap.val(), loading: false})
-        
         })
-        .then(() => {
-            console.log(this.state.ingredients)})
     }
 
-    selectChangedHandler = (event, selectIdentifier) => {
-        console.log(event.target.value)
-        this.setState({editor: event.target.value})
-        let selector = [...this.state.selector]
-        selector.push(event.target.value)
-        this.setState({selector: selector})
-        console.log(selector)
-        console.log(this.state.selector)
+    selectChangedHandler = (event) => {
+        const selection = event.target.value
+        let tierLevel = this.state.tierLevel
+        const selector = [...this.state.selector]
+        const index = selector.indexOf(event.target.name)
+
+        if (index < tierLevel) {
+            const newSelector = [selector.slice(0, tierLevel + 1)]
+            this.setState({selector: newSelector, tierLevel: index})
+        } else {
+            if (tierLevel === 2) {
+                selector[2] = selection
+                this.setState({selector: selector})
+            } else {
+                selector.push(selection)
+                tierLevel = tierLevel + 1
+                this.setState({selector: selector, tierLevel: tierLevel})
+            }
+        }
     }
 
-    objectFormCreator = (obj, tier) => {
-        const newObj = {...obj}
-        const objKeys = Object.keys(newObj)
-        const options = objKeys.map(key => <option key={key} value={key}>{key}</option>)
+    objectFormCreator = () => {
+        const ingredients = {...this.state.ingredients}
         const forms = []
-        while (tier >= 0) {
-            forms.unshift(
-                <select name={this.state.tiers[tier]} onChange={this.selectChangedHandler}>
-                    <option hidden>-- select an option--</option>
-                    {options}
-                    <option value="edit">Edit ingredient list</option>
-                </select>
+        const tierLevel = this.state.tierLevel
+        const selector = [...this.state.selector]
+
+        for (let tier = 0 ; tier <= tierLevel ; tier++) {
+            let obj = null
+
+            switch(tier) {
+                case (0):
+                    obj = ingredients
+                    break
+                case (1):
+                    obj = ingredients[selector[1]]
+                    break
+                case (2):
+                    obj = ingredients[selector[1]][selector[2]]
+                    break
+                default:
+                    obj = null
+            }
+
+            const optionKeys = Object.keys(obj)
+            const options = optionKeys.map(key => <option key={key} value={key}>{key}</option>)
+
+            forms.push(
+                <IngredientDropDownSection>
+                    <select name={this.state.selector[tierLevel]} onChange={this.selectChangedHandler}>
+                        <option hidden>-- select an option--</option>
+                        {options}
+                        {/* <option value="edit">Edit ingredient list</option> */}
+                    </select>
+                </IngredientDropDownSection>
             )
-            tier = tier - 1
         }
         return forms
     }
@@ -80,7 +117,8 @@ class IngredientCreator extends Component {
     render() {
         let window = <Spinner />
         if (!this.state.loading) {
-            const ingredientForm = this.objectFormCreator(this.state.ingredients, this.state.tierLevel)
+            const ingredientForm = this.objectFormCreator()
+            // const ingredientForm = this.objectFormCreator(this.state.ingredients, this.state.tierLevel)
             
             // let editor = null
             // if (this.state.editor === 'edit') {
@@ -89,16 +127,14 @@ class IngredientCreator extends Component {
             // }
             window = (
                 <ContentBlock>
+                    {ingredientForm}
                     <AddElementForm>
-                        {ingredientForm}
                         <Button
                             clicked={this.addIngredientHandler}>SUBMIT</Button>
                         {/* {editor} */}
                     </AddElementForm>
                 </ContentBlock>
             )
-            console.log(this.state.ingredients);
-            
         }
         return (
             <React.Fragment>

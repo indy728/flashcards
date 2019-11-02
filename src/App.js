@@ -74,7 +74,7 @@ class App extends Component {
           <Route path="/add_cocktail" component={FlashcardCreator} />
           <Route path="/add_ingredient" component={IngredientCreator} />
           <Route path="/" exact component={HomePage}/>
-          <Redirect to="/" />
+          <Redirect to="/add_ingredient" />
         </Switch>
       )
     }
