@@ -41,8 +41,7 @@ class IngredientCreator extends Component {
         selector: ['ingredients'],
         tier: 0,
         loading: true,
-        addProduct: false,
-        editList: false,
+        formType: 'select',
         ingredientControls: {
             ingredient: {
                 elementType: 'input',
@@ -118,24 +117,13 @@ class IngredientCreator extends Component {
         const selector = [...this.state.selector]
         const index = selector.indexOf(event.target.name)
 
-        if (event.target.value === 'add') {
+        if (event.target.value === 'add' || event.target.value === 'edit') {
             this.setState({
-                addProduct: true,
-                editList: false,
+                formType: event.target.value,
                 tier: index,
             })
             return
         }
-        if (event.target.value === 'edit') {
-            this.setState({
-                addProduct: false,
-                editList: true,
-                tier: index,
-            })
-            return
-        }
-
-
         if (index < tier) {
             const newSelector = [selector.slice(0, index + 1)]
             newSelector.push(selection)
@@ -251,7 +239,7 @@ class IngredientCreator extends Component {
         let window = <Spinner />
         if (!this.state.loading) {
             const formMenus = this.objectFormCreator()
-            // const newItemForm = this.addContentCreator()
+            
 
             const formElementsArray = []
             const formElementsObj = {...this.state.ingredientControls}
@@ -262,36 +250,39 @@ class IngredientCreator extends Component {
                     config: formElementsObj[key],
                 })
             }
-            let form = formElementsArray.map(formElement => {
-                if (this.state.tier > 0 && formElement.id === 'ingredient') {
-                    // const ingredientControls = {...this.state.ingredientControls}
-                    // const newIngredientControls = updateObject(ingredientControls, {
-                    //     ingredient: updateObject(ingredientControls['ingredient'], {
-                    //         value: this.state.selector[1],
-                    //         valid: true,
-                    //         touched: true
-                    //     })
-                    // })
-                    // this.setState({ingredientControls: newIngredientControls})
-                    return null
-                }
-                if (this.state.tier > 1 && formElement.id === 'category') return null
-                console.log(this.state.ingredientControls.ingredient)
-                return (
-                    <AddElementInput 
-                        key={formElement.id}
-                        autocomplete={formElement.config.elementConfig.autocomplete || ''}
-                        className="AddElementInput"
-                        elementType={formElement.config.elementType}
-                        elementConfig={formElement.config.elementConfig}
-                        value={formElement.config.value}
-                        invalid={!formElement.config.valid}
-                        shouldValidate={formElement.config.validation}
-                        touched={formElement.config.touched}
-                        changed={(event) => this.inputChangedHandler(event, formElement.id)} 
-                        />
+            let newItemForm = null
+            
+            if (this.state.formType === 'add') {
+                let form = formElementsArray.map(formElement => {
+                    if (this.state.tier > 0 && formElement.id === 'ingredient') return null
+                    if (this.state.tier > 1 && formElement.id === 'category') return null
+                    console.log(this.state.ingredientControls.ingredient)
+                    return (
+                        <AddElementInput 
+                            key={formElement.id}
+                            autocomplete={formElement.config.elementConfig.autocomplete || ''}
+                            className="AddElementInput"
+                            elementType={formElement.config.elementType}
+                            elementConfig={formElement.config.elementConfig}
+                            value={formElement.config.value}
+                            invalid={!formElement.config.valid}
+                            shouldValidate={formElement.config.validation}
+                            touched={formElement.config.touched}
+                            changed={(event) => this.inputChangedHandler(event, formElement.id)} 
+                            />
+                    )
+                })
+                newItemForm = (
+                    <AddElementForm>
+                        {form}
+                        <Button
+                            clicked={this.addIngredientHandler}>SUBMIT</Button>
+                        {/* {editor} */}
+                    </AddElementForm>
                 )
-            })
+            }
+
+            
             
             // let editor = null
             // if (this.state.editor === 'edit') {
@@ -301,12 +292,7 @@ class IngredientCreator extends Component {
             window = (
                 <ContentBlock>
                     {formMenus}
-                    <AddElementForm>
-                        {form}
-                        <Button
-                            clicked={this.addIngredientHandler}>SUBMIT</Button>
-                        {/* {editor} */}
-                    </AddElementForm>
+                    {newItemForm}
                 </ContentBlock>
             )
         }
