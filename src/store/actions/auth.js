@@ -55,7 +55,7 @@ export const auth = (authInfo) => {
                         email: user.email,
                         photo: user.photoURL,
                     }
-                    console.log(userObj)
+                    // console.log(userObj)
                     dispatch(authSuccess(res.user.displayName, res.user.email))
                 })
                 .catch(er => {
@@ -87,7 +87,6 @@ export const authCheckState = () => {
         firebaseAuth.onAuthStateChanged(user => {
             if (user) {
                 dispatch(authSuccess(user.displayName, user.email))
-                console.log(user)
             } else {
                 // dispatch(logout())
             }

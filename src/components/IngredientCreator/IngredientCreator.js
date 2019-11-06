@@ -99,12 +99,13 @@ class IngredientCreator extends Component {
                 valid: false,
                 touched: false
             }
-        }
+        },
+        formIsValid: false,
+        rootRef: database.ref()
     }
 
     componentDidMount() {
-        const rootRef = database.ref()
-        const ings = rootRef.child('ingredients')
+        const ings = this.state.rootRef.child('ingredients')
 
         ings.once('value', snap => {
             this.setState({ingredients: snap.val(), loading: false})
@@ -130,6 +131,7 @@ class IngredientCreator extends Component {
             console.log(newSelector)
             this.setState({
                 selector: newSelector,
+                formType: 'selector',
                 tier: index,
                 addProduct: false,
                 editList: false
@@ -139,14 +141,17 @@ class IngredientCreator extends Component {
                 selector[2] = selection
                 this.setState({
                     selector: selector,
+                    formType: 'add',
                     addProduct: false,
                     editList: false
                 })
             } else {
+
                 selector.push(selection)
                 tier = tier + 1
                 this.setState({
                     selector: selector,
+                    formType: 'selector',
                     tier: tier,
                     addProduct: false,
                     editList: false
@@ -161,9 +166,7 @@ class IngredientCreator extends Component {
         const tier = this.state.tier
         const selector = [...this.state.selector]
 
-        console.log(this.state.tier)
-
-        for (let i = 0 ; i <= tier && i < 2 ; i++) {
+        for (let i = 0 ; i <= tier && i < 3 ; i++) {
             let obj = null
 
             switch(i) {
@@ -219,6 +222,9 @@ class IngredientCreator extends Component {
 
     inputChangedHandler = (event, controlName) => {
         let controls = {...this.state.ingredientControls}
+        let formIsValid = true
+        let i = 0
+
         const updatedControls = updateObject(controls, {
             [controlName]: updateObject(controls[controlName], {
                 value: event.target.value,
@@ -226,13 +232,26 @@ class IngredientCreator extends Component {
                 touched: true
             })
         })
-
-        let formIsValid = true
-        for (let inputIdentifier in controls) {
-            formIsValid = updatedControls[inputIdentifier].valid && formIsValid
+        for (let inputIdentifier in updatedControls) {
+            if (this.state.tier <= i) {
+                formIsValid = updatedControls[inputIdentifier].valid && formIsValid
+            }
+            i = i + 1
         }
+        this.setState({ingredientControls: updatedControls, formIsValid: formIsValid})
+    }
 
-        this.updateControlsAndFormValidity(updatedControls, formIsValid)
+    addIngredientHandler = (event) => {
+        event.preventDefault()
+
+        let addRef = this.state.rootRef.child('ingredients')
+
+        if (this.state.tier === 1) {
+            addRef = addRef.child(this.state.selector[1])
+        } else if (this.state.tier === 2) {
+            addRef = addRef.child(this.state.selector[1]).child(this.state.selector[2])
+        }
+        console.log(this.state.ingredientControls)
     }
 
     render() {
@@ -256,7 +275,6 @@ class IngredientCreator extends Component {
                 let form = formElementsArray.map(formElement => {
                     if (this.state.tier > 0 && formElement.id === 'ingredient') return null
                     if (this.state.tier > 1 && formElement.id === 'category') return null
-                    console.log(this.state.ingredientControls.ingredient)
                     return (
                         <AddElementInput 
                             key={formElement.id}
@@ -273,22 +291,15 @@ class IngredientCreator extends Component {
                     )
                 })
                 newItemForm = (
-                    <AddElementForm>
+                    <AddElementForm onSubmit={this.addIngredientHandler}>
                         {form}
                         <Button
-                            clicked={this.addIngredientHandler}>SUBMIT</Button>
-                        {/* {editor} */}
+                            disabled={!this.state.formIsValid}>
+                                SUBMIT
+                        </Button>
                     </AddElementForm>
                 )
             }
-
-            
-            
-            // let editor = null
-            // if (this.state.editor === 'edit') {
-            //     editor = <IngredientTierForm
-            //         list={ingredientTypes} />
-            // }
             window = (
                 <ContentBlock>
                     {formMenus}

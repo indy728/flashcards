@@ -19,12 +19,12 @@ export const firebaseAuth = app.auth()
 
 firebaseAuth.onAuthStateChanged(user => {
     if (user) {
-        console.log(user)
+        // console.log(user)
         // firebase.auth().signOut()
         //     .then(() => console.log('signout success'))
         //     .catch(er => console.log(er))
     } else {
-        console.log('no user')
+        // console.log('no user')
     }
 })
 
