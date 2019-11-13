@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import Button from '../UI/Button/Button'
 import Input from '../UI/Input/Input'
 import IngredientTierForm from './IngredientTierForm/IngredientTierForm'
-import { database } from '../../store/actions/firebase'
 import { updateObject } from '../../shared/utility'
 import * as actions from '../../store/actions'
 
@@ -20,15 +19,6 @@ const AddElementForm = styled.form`
     align-items: center;
 `
 
-const IngredientDropDownSection = styled.div`
-    width: 80%;
-    height: 5rem;
-    margin: .5rem 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`
-
 const AddElementInput = styled(Input)`
     width: 100%;
     display: flex;
@@ -38,10 +28,8 @@ const AddElementInput = styled(Input)`
 
 class IngredientCreator extends Component {
     state = {
-        // ingredients: null,
         selector: ['ingredients'],
         tier: 0,
-        // loading: true,
         formType: 'select',
         ingredientControls: {
             ingredient: {
@@ -102,16 +90,6 @@ class IngredientCreator extends Component {
             }
         },
         formIsValid: false,
-        rootRef: database.ref()
-    }
-
-    reloadIngredients = () => {
-        const ings = this.state.rootRef.child('ingredients')
-
-        ings.once('value', snap => {
-            this.setState({ingredients: snap.val(), loading: false})
-        })
-        console.log(this.state)
     }
 
     componentDidMount() {
@@ -119,13 +97,9 @@ class IngredientCreator extends Component {
     }
 
     selectChangedHandler = (event) => {
-        // this.reloadIngredients()
-
         const selection = event.target.value
-        let tier = this.state.tier
         const selector = [...this.state.selector]
         const index = selector.indexOf(event.target.name)
-        console.log(index, tier)
 
         if (event.target.value === 'add' || event.target.value === 'edit') {
             this.setState({
@@ -135,7 +109,7 @@ class IngredientCreator extends Component {
             })
             return
         }
-        if (index < tier) {
+        if (index < this.state.tier) {
             const newSelector = selector.slice(0, index + 1)
             newSelector.push(selection)
             console.log(newSelector)
@@ -147,67 +121,45 @@ class IngredientCreator extends Component {
                 editList: false
             })
         } else {
-            // if (tier === 2) {
-            //     console.log('here')
-            //     selector[2] = selection
-            //     this.setState({
-            //         selector: selector,
-            //         formType: 'add',
-            //         addProduct: false,
-            //         editList: false
-            //     })
-            //     console.log(this.state.formType)
-            // } else {
-                selector.push(selection)
-                this.setState({
-                    selector: selector,
-                    formType: 'select',
-                    tier: tier + 1,
-                    addProduct: false,
-                    editList: false
-                })
-            // }
+            selector.push(selection)
+            this.setState({
+                selector: selector,
+                formType: 'select',
+                tier: this.state.tier + 1,
+                addProduct: false,
+                editList: false
+            })
         }
     }
 
     objectFormCreator = () => {
         const ingredients = {...this.props.ingredients}
-        console.log(this.props.ingredient)
         const dropdowns = []
-        const tier = this.state.tier
-        const selector = [...this.state.selector]
-        console.log(tier, selector)
 
-        for (let i = 0 ; i <= tier && i < 3 ; i++) {
+        for (let i = 0 ; i <= this.state.tier && i < 3 ; i++) {
             let obj = null
+            let optionKeys = null
+            let name = this.state.selector[i]
 
             switch(i) {
                 case (0):
                     obj = ingredients
+                    optionKeys = Object.keys(obj)
                     break
                 case (1):
-                    obj = ingredients[selector[1]]
+                    obj = ingredients[this.state.selector[1]]
+                    optionKeys = Object.keys(obj)
                     break
                 default:
                     obj = null
             }
-
-            let options = null
-            
-            if (i < 2) {
-                const optionKeys = Object.keys(obj)
-                options = optionKeys.map(key => <option key={key} value={key}>{key}</option>)
-            }
-
             dropdowns.push(
-                <IngredientDropDownSection key={i} >
-                    <select name={this.state.selector[i]} onChange={this.selectChangedHandler}>
-                        <option hidden>-- select an option--</option>
-                        {options}
-                        <option value="add">Add New Item to {this.state.selector[i]}</option>
-                        <option value="edit">Edit ingredient list</option>
-                    </select>
-                </IngredientDropDownSection>
+                <IngredientTierForm
+                    key={i}
+                    name={name}
+                    changed={this.selectChangedHandler}
+                    options={optionKeys}>
+                </IngredientTierForm>
             )
         }
         return dropdowns
@@ -253,14 +205,21 @@ class IngredientCreator extends Component {
         this.setState({ingredientControls: updatedControls, formIsValid: formIsValid})
     }
 
+    // THE FUNCTION BELOW DOESN'T WORK WITH UPDATE OBJECT AND IDK WHY
     clearInputs = () => {
         let updatedControls = {...this.state.ingredientControls}
         for (let control in updatedControls) {
-            updateObject(updatedControls[control], {
-                value: '',
-                valid: false,
-                touched: false
-            })
+            console.log(updatedControls[control])
+            updatedControls[control].value = ''
+            updatedControls[control].valid = false
+            updatedControls[control].touched = false
+            // updateObject(updatedControls[control], {
+            //     value: '',
+            //     valid: false,
+            //     touched: false
+            // })
+            console.log(updatedControls[control])
+
         }
         this.setState({ingredientControls: updatedControls, tier: 0, formType: 'select', formIsValid: false})
     }
@@ -276,7 +235,6 @@ class IngredientCreator extends Component {
         const categoryObj = {[category]: productObj}
         const ingredientObj = {[ingredient]: categoryObj}
         const databaseRefArray = ['ingredients', ingredient, category]
-        
         let node = {}
 
         if (tier === 1) {
@@ -286,7 +244,6 @@ class IngredientCreator extends Component {
         } else {
             node = updateObject(this.props.ingredients, ingredientObj)
         }
-
         this.props.onAddIngredient(node, databaseRefArray, tier)
         this.clearInputs()
     }
@@ -295,8 +252,6 @@ class IngredientCreator extends Component {
         let window = <Spinner />
         if (!this.props.loading) {
             const formMenus = this.objectFormCreator()
-            
-
             const formElementsArray = []
             const formElementsObj = {...this.state.ingredientControls}
            
