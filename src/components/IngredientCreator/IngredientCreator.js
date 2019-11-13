@@ -104,59 +104,68 @@ class IngredientCreator extends Component {
         rootRef: database.ref()
     }
 
-    componentDidMount() {
+    reloadIngredients = () => {
         const ings = this.state.rootRef.child('ingredients')
 
         ings.once('value', snap => {
             this.setState({ingredients: snap.val(), loading: false})
         })
+        console.log(this.state)
+    }
+
+    componentDidMount() {
+        this.reloadIngredients()
     }
 
     selectChangedHandler = (event) => {
+        // this.reloadIngredients()
+
         const selection = event.target.value
         let tier = this.state.tier
         const selector = [...this.state.selector]
         const index = selector.indexOf(event.target.name)
+        console.log(index, tier)
 
         if (event.target.value === 'add' || event.target.value === 'edit') {
             this.setState({
+                selector: selector.slice(0, index + 1),
                 formType: event.target.value,
                 tier: index,
             })
             return
         }
         if (index < tier) {
-            const newSelector = [selector.slice(0, index + 1)]
+            const newSelector = selector.slice(0, index + 1)
             newSelector.push(selection)
             console.log(newSelector)
             this.setState({
                 selector: newSelector,
-                formType: 'selector',
-                tier: index,
+                // formType: 'select',
+                tier: newSelector.length - 1,
                 addProduct: false,
                 editList: false
             })
         } else {
-            if (tier === 2) {
-                selector[2] = selection
-                this.setState({
-                    selector: selector,
-                    formType: 'add',
-                    addProduct: false,
-                    editList: false
-                })
-            } else {
-
+            // if (tier === 2) {
+            //     console.log('here')
+            //     selector[2] = selection
+            //     this.setState({
+            //         selector: selector,
+            //         formType: 'add',
+            //         addProduct: false,
+            //         editList: false
+            //     })
+            //     console.log(this.state.formType)
+            // } else {
                 selector.push(selection)
-                tier = tier + 1
                 this.setState({
                     selector: selector,
-                    formType: 'selector',
-                    tier: tier,
+                    formType: 'select',
+                    tier: tier + 1,
                     addProduct: false,
                     editList: false
                 })
-            }
+            // }
         }
     }
 
@@ -165,6 +174,7 @@ class IngredientCreator extends Component {
         const dropdowns = []
         const tier = this.state.tier
         const selector = [...this.state.selector]
+        console.log(tier, selector)
 
         for (let i = 0 ; i <= tier && i < 3 ; i++) {
             let obj = null
@@ -241,17 +251,44 @@ class IngredientCreator extends Component {
         this.setState({ingredientControls: updatedControls, formIsValid: formIsValid})
     }
 
+    clearInputs = () => {
+        let updatedControls = {...this.state.ingredientControls}
+        for (let control in updatedControls) {
+            updateObject(updatedControls[control], {
+                value: '',
+                valid: false,
+                touched: false
+            })
+        }
+        this.setState({ingredientControls: updatedControls, formIsValid: false})
+    }
+
     addIngredientHandler = (event) => {
         event.preventDefault()
 
+        const controls = this.state.ingredientControls
+        const tier = this.state.tier
+        const ingredient = tier >= 1 ? this.state.selector[1] : controls.ingredient.value
+        const category = tier === 2 ? this.state.selector[2] : controls.category.value
+        const productObj = {[controls.product.value]: controls.value.value}
+        const categoryObj = {[category]: productObj}
+        const ingredientObj = {[ingredient]: categoryObj}
+        
         let addRef = this.state.rootRef.child('ingredients')
+        let node = {}
 
         if (this.state.tier === 1) {
-            addRef = addRef.child(this.state.selector[1])
+            addRef = addRef.child(ingredient)
+            node = updateObject(this.state.ingredients[ingredient], categoryObj)
         } else if (this.state.tier === 2) {
-            addRef = addRef.child(this.state.selector[1]).child(this.state.selector[2])
+            addRef = addRef.child(ingredient).child(category)
+            node = updateObject(this.state.ingredients[ingredient][category], productObj)
+        } else {
+            node = updateObject(this.state.ingredients, ingredientObj)
         }
-        console.log(this.state.ingredientControls)
+
+        addRef.update(node)
+        this.clearInputs()
     }
 
     render() {
