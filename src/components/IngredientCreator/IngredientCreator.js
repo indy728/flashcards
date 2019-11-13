@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import axios from '../../axios-flashcards'
+import { connect } from 'react-redux'
 import ContentBlock from '../UI/ContentBlock/ContentBlock'
 import Spinner from '../UI/Spinner/Spinner'
 import styled from 'styled-components'
@@ -8,6 +8,7 @@ import Input from '../UI/Input/Input'
 import IngredientTierForm from './IngredientTierForm/IngredientTierForm'
 import { database } from '../../store/actions/firebase'
 import { updateObject } from '../../shared/utility'
+import * as actions from '../../store/actions'
 
 
 const AddElementForm = styled.form`
@@ -37,10 +38,10 @@ const AddElementInput = styled(Input)`
 
 class IngredientCreator extends Component {
     state = {
-        ingredients: null,
+        // ingredients: null,
         selector: ['ingredients'],
         tier: 0,
-        loading: true,
+        // loading: true,
         formType: 'select',
         ingredientControls: {
             ingredient: {
@@ -114,7 +115,7 @@ class IngredientCreator extends Component {
     }
 
     componentDidMount() {
-        this.reloadIngredients()
+        this.props.onInitIngredients()
     }
 
     selectChangedHandler = (event) => {
@@ -170,7 +171,8 @@ class IngredientCreator extends Component {
     }
 
     objectFormCreator = () => {
-        const ingredients = {...this.state.ingredients}
+        const ingredients = {...this.props.ingredients}
+        console.log(this.props.ingredient)
         const dropdowns = []
         const tier = this.state.tier
         const selector = [...this.state.selector]
@@ -260,7 +262,7 @@ class IngredientCreator extends Component {
                 touched: false
             })
         }
-        this.setState({ingredientControls: updatedControls, formIsValid: false})
+        this.setState({ingredientControls: updatedControls, tier: 0, formType: 'select', formIsValid: false})
     }
 
     addIngredientHandler = (event) => {
@@ -273,27 +275,25 @@ class IngredientCreator extends Component {
         const productObj = {[controls.product.value]: controls.value.value}
         const categoryObj = {[category]: productObj}
         const ingredientObj = {[ingredient]: categoryObj}
+        const databaseRefArray = ['ingredients', ingredient, category]
         
-        let addRef = this.state.rootRef.child('ingredients')
         let node = {}
 
-        if (this.state.tier === 1) {
-            addRef = addRef.child(ingredient)
-            node = updateObject(this.state.ingredients[ingredient], categoryObj)
-        } else if (this.state.tier === 2) {
-            addRef = addRef.child(ingredient).child(category)
-            node = updateObject(this.state.ingredients[ingredient][category], productObj)
+        if (tier === 1) {
+            node = updateObject(this.props.ingredients[ingredient], categoryObj)
+        } else if (tier === 2) {
+            node = updateObject(this.props.ingredients[ingredient][category], productObj)
         } else {
-            node = updateObject(this.state.ingredients, ingredientObj)
+            node = updateObject(this.props.ingredients, ingredientObj)
         }
 
-        addRef.update(node)
+        this.props.onAddIngredient(node, databaseRefArray, tier)
         this.clearInputs()
     }
 
     render() {
         let window = <Spinner />
-        if (!this.state.loading) {
+        if (!this.props.loading) {
             const formMenus = this.objectFormCreator()
             
 
@@ -352,4 +352,19 @@ class IngredientCreator extends Component {
     }
 }
 
-export default IngredientCreator
+const mapStateToProps = state => {
+    return {
+        ingredients: state.ingredients.ingredients,
+        loading: state.ingredients.loading,
+        error: state.ingredients.error
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onInitIngredients: () => dispatch(actions.fetchIngredients()),
+        onAddIngredient: (ingredientNode, dbRefArray, tier) => dispatch(actions.addIngredient(ingredientNode, dbRefArray, tier))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(IngredientCreator)

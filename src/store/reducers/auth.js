@@ -9,7 +9,7 @@ const initialState = {
     authRedirectPath: "/"
 }
 
-const authStart = (state) => {
+const authStart = state => {
     return updateObject(state, {error: null, loading: true})
 }
 

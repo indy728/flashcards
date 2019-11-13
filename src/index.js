@@ -2,20 +2,26 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import { createStore, applyMiddleware, compose } from 'redux'
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
 // thunk allows you to apply synchronous updates by dispatching an action
 import thunk from 'redux-thunk'
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import authReducer from './store/reducers/auth'
+import ingredientsReducer from './store/reducers/ingredients'
 
 require('dotenv').config()
+
+const rootReducer = combineReducers({
+    auth: authReducer,
+    ingredients: ingredientsReducer
+})
 
 const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 
 const store = createStore(
-    authReducer,
+    rootReducer,
     composeEnhancers(
         applyMiddleware(
             thunk
