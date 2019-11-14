@@ -2,12 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
-    width: 80%;
+    width: 80rem;
     margin-top: 6rem;
     background-color: ${props => props.theme.palette.grayscale[5]};
-    border: ${props => props.theme.palette.grayscale[2]};
-    box-shadow: 2px 2px ${props => props.theme.palette.grayscale[0]};
-    border-radius: 2px;
+    border: 1px solid ${props => props.theme.palette.primary[2]};
+    box-shadow: 1px 1px ${props => props.theme.palette.grayscale[0]};
+    border-radius: 1px;
     display: flex;
     flex-flow: column;
     align-items: center;

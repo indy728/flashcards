@@ -58,8 +58,8 @@ export const auth = (authInfo) => {
                     // console.log(userObj)
                     dispatch(authSuccess(res.user.displayName, res.user.email))
                 })
-                .catch(er => {
-                    dispatch(authFail(er.response.data.error))
+                .catch(error => {
+                    dispatch(authFail(error))
                 })
         }
     }
@@ -68,7 +68,7 @@ export const auth = (authInfo) => {
 export const logout = () => {
     console.log('[logout]')
     firebaseAuth.signOut()
-        .then(res=> console.log('[actions/auth] logout: signout success', res))
+        .then(() => console.log('[actions/auth] logout: signout success'))
         .catch(er => console.log('[actions/auth] er:', er))
     return {
         type: actionTypes.AUTH_LOGOUT
@@ -88,7 +88,7 @@ export const authCheckState = () => {
             if (user) {
                 dispatch(authSuccess(user.displayName, user.email))
             } else {
-                // dispatch(logout())
+                dispatch(logout())
             }
         })
     }

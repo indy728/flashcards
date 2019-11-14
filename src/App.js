@@ -32,6 +32,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
+    @import url('https://fonts.googleapis.com/css?family=Lobster|Lora|Montserrat:700|Swanky+and+Moo+Moo|Ubuntu&display=swap');
     background-color: rgba(147, 180, 194, 0.336);
     font-family: ${props => props.theme.fonts.primary};
   }
@@ -91,7 +92,7 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: state.email !== null
+    isAuthenticated: state.auth.email !== null
   }
 }
 

@@ -5,6 +5,8 @@ import Spinner from '../UI/Spinner/Spinner'
 import styled from 'styled-components'
 import Button from '../UI/Button/Button'
 import Input from '../UI/Input/Input'
+import Header from '../UI/Header/Header'
+
 import IngredientTierForm from './IngredientTierForm/IngredientTierForm'
 import { updateObject } from '../../shared/utility'
 import * as actions from '../../store/actions'
@@ -294,6 +296,7 @@ class IngredientCreator extends Component {
             }
             window = (
                 <ContentBlock>
+                    <Header>Add A New Ingredient</Header>
                     {formMenus}
                     {newItemForm}
                 </ContentBlock>

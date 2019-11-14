@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import ContentBlock from '../../components/UI/ContentBlock/ContentBlock'
 
 const Wrapper = styled(ContentBlock)`
-    width: 80%;
     display: flex;
     flex-flow: column;
     justify-content: center;
@@ -39,7 +38,7 @@ const FunctionalComponents = styled.div`
 class HomePage extends Component {
 
     render() {
-        const functionalComponents = ["Logout"]
+        const functionalComponents = ["Logout", "Add Ingredient"]
 
         const funcCompList = functionalComponents.map(component => {
             return (

@@ -2,24 +2,25 @@ import React from 'react'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
-    width: 100%;
-    height: 4rem;
-    text-align: center;
-    text-transform: uppercase;
-    font-size: 2rem;
+    width: 80%;
+    height: 8rem;
+    margin: 5px 0;
+    font-size: 4rem;
     font-weight: bold;
     font-family: ${props => props.theme.fonts.header};
-    /* display: flex;
+    display: flex;
     align-items: center;
-    justify-content: center; */
+    justify-content: center;
+    text-transform: uppercase;
 `
 
-const ingredientTierHeader = (props) => {
+const header = props => {
     return (
-        <Wrapper>
+        <Wrapper
+            className={props.className}>
             {props.children}
         </Wrapper>
     )
 }
 
-export default ingredientTierHeader
+export default header

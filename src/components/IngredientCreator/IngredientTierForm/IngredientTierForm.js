@@ -22,13 +22,9 @@ const IngredientSelect = styled(Select)`
     border-radius: 0;
     border: 2px solid black;
     font-size: 1.6rem;
+    font-weight: bold;
     text-align-last: center;
     text-transform: uppercase;
-
-    option {
-        width: 20rem;
-        text-align-last: center;
-    }
 `
 
 const ingredientTierForm = (props) => {
