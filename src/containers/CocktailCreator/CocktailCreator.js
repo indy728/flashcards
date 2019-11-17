@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
+import ContentBlock from '../../components/UI/ContentBlock/ContentBlock'
+import Header from '../../components/UI/Header/Header'
+import Dashboard from '../../components/Dashboard/Dashboard'
 import NewFlashcard from '../../components/NewFlashcard/NewFlashcard'
 import AttributeControls from '../../components/NewFlashcard/AttributeControls/AttributeControls'
-import axios from '../../axios-flashcards'
+import * as actions from '../../store/actions'
 
 const Wrapper = styled.div`
     width: 80%;
@@ -49,9 +53,7 @@ class FlashcardCreator extends Component {
     }
 
     componentDidMount() {
-        axios.get('/ingredients.json')
-            .then(res => console.log(res.data))
-            .catch(er => console.log(er))
+        if (!this.props.ingredients) this.props.onInitIngredients()
     }
     // change to bool for some?
     addAttributeHandler = (type) => {
@@ -80,16 +82,30 @@ class FlashcardCreator extends Component {
     render() {
         return (
             <React.Fragment>
-                <Wrapper>
-                    <NewFlashcard attributes={this.state.attributes}/>
+                <ContentBlock>
+                    <Header>Add A New Cocktail</Header>
+                    <Dashboard />
+                    {/* <NewFlashcard attributes={this.state.attributes}/>
                     <AttributeControls 
                         attributeAdded={this.addAttributeHandler}
                         attributeRemoved={this.removeAttributeHandler}
-                        />
-                </Wrapper>
+                        /> */}
+                </ContentBlock>
             </React.Fragment>
         )
     }
 }
 
-export default FlashcardCreator
+const mapStateToProps = state => {
+    return {
+        ingredients: state.ingredients.ingredients
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onInitIngredients: () => dispatch(actions.fetchIngredients())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FlashcardCreator)

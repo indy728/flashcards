@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux'
 import Layout from './hoc/Layout/Layout'
-import FlashcardCreator from './containers/FlashcardCreator/FlashcardCreator'
+import CocktailCreator from './containers/CocktailCreator/CocktailCreator'
 import Auth from './containers/Auth/Auth'
 import HomePage from './containers/HomePage/HomePage'
 import IngredientCreator from './components/IngredientCreator/IngredientCreator'
@@ -72,10 +72,10 @@ class App extends Component {
       routes = (
         <Switch>
           <Route path="/logout" exact component={Logout} />
-          <Route path="/add_cocktail" component={FlashcardCreator} />
+          <Route path="/add_cocktail" component={CocktailCreator} />
           <Route path="/add_ingredient" component={IngredientCreator} />
           <Route path="/" exact component={HomePage}/>
-          <Redirect to="/add_ingredient" />
+          <Redirect to="/add_cocktail" />
         </Switch>
       )
     }

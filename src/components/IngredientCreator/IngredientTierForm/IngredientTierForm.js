@@ -41,7 +41,7 @@ const ingredientTierForm = (props) => {
                 name={props.name}
                 changed={props.changed}
                 className="ingredient-select">
-                        <option hidden>-- select an option--</option>
+                        <option hidden>-- select an option --</option>
                         {options}
                         <option value="add">Add A New Item to {props.name}</option>
                         <option value="edit">Edit ingredient list</option>

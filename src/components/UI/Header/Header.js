@@ -5,7 +5,7 @@ const Wrapper = styled.div`
     width: 80%;
     height: 8rem;
     margin: 5px 0;
-    font-size: 4rem;
+    font-size: 3.6rem;
     font-weight: bold;
     font-family: ${props => props.theme.fonts.header};
     display: flex;
