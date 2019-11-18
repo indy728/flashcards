@@ -84,7 +84,8 @@ class FlashcardCreator extends Component {
             <React.Fragment>
                 <ContentBlock>
                     <Header>Add A New Cocktail</Header>
-                    <Dashboard />
+                    <Dashboard 
+                        ingredients={this.props.ingredients}/>
                     {/* <NewFlashcard attributes={this.state.attributes}/>
                     <AttributeControls 
                         attributeAdded={this.addAttributeHandler}
