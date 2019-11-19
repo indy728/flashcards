@@ -11,7 +11,8 @@ const Main = styled.main`
     display: flex;
     align-items: center;
     flex-direction: column;
-    background: ${props => props.theme.palette.secondary[3]};
+    /* background: ${props => props.theme.palette.secondary[5]}; */
+    background: ${props => props.theme.palette.white[1]};
 `
 
 class Layout extends Component {

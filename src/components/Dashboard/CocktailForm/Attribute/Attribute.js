@@ -12,12 +12,21 @@ const Wrapper = styled.div`
 `
 
 const newAttribute = props => {
+    let button = null
+
+    if (props.remove) {
+        button = (
+            <Button
+                clicked={() => props.removeAttribute(props.index)}>
+                REMOVE
+            </Button>
+        )
+    }
+
     return (
         <Wrapper>
             <AttributeInput {...props}/>
-            <Button>
-                REMOVE
-            </Button>
+            {button}
         </Wrapper>
     )
 }

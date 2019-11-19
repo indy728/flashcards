@@ -51,22 +51,15 @@ class dashboardControls extends Component {
         }
 
         this.setState({ingredient: ingredient, categories: categories})
-        console.log(this.state)
     }
 
     buttonSelectedHandler = (section, value) => {
-        console.log(this.state[section])
-        console.log(value)
-        console.log(this.state[section] === value)
         return (this.state[section] === value)
     }
     
     render() {
         const ingredients = {...this.props.ingredients}
         const ingsKeys = Object.keys(ingredients)
-        console.log('[DashboardControls] ingredients:', ingredients)
-        console.log('[DashboardControls] ingsKeys:', ingsKeys)
-        console.log('[DashboardControls] state:', this.state)
         const ingredientControls = ingsKeys.map(ing => (
             <Button
                 key={ing}
@@ -80,15 +73,22 @@ class dashboardControls extends Component {
         let categoryControlsSection = null;
         if (this.state.categories) {
             const catKeys = Object.keys(ingredients[this.state.ingredient])
-            const categoryControls = catKeys.map(cat => (
-                <Button
-                    key={cat}
-                    value={cat}
-                    >
-                    {/* selected={cat => this.buttonSelectedHandler('category', cat)}> */}
-                    {cat}
-            </Button>
-            ))
+            const categoryControls = catKeys.map(cat => {
+                const clickedObj = {
+                    key: cat,
+                    label: cat,
+                    type: 'ingredient'
+                }
+
+                return (
+                    <Button
+                        key={cat}
+                        value={cat}
+                        clicked={()=> this.props.addAttribute(clickedObj)}>
+                        {cat}
+                    </Button>
+                )
+            })
             categoryControlsSection = (
                 <DashboardControlSection>
                     {categoryControls}

@@ -14,8 +14,11 @@ const Wrapper = styled.div`
 const dashboard = props => {
     return (
         <Wrapper>
-            <DashboardControls {...props} />
-            <CocktailForm />
+            <DashboardControls 
+                ingredients={props.ingredients}
+                addAttribute={props.addAttribute} />
+            <CocktailForm 
+                {...props}/>
         </Wrapper>
     )
 }
