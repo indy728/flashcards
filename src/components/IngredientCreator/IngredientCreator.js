@@ -117,7 +117,6 @@ class IngredientCreator extends Component {
             console.log(newSelector)
             this.setState({
                 selector: newSelector,
-                // formType: 'select',
                 tier: newSelector.length - 1,
                 addProduct: false,
                 editList: false
@@ -207,21 +206,14 @@ class IngredientCreator extends Component {
         this.setState({ingredientControls: updatedControls, formIsValid: formIsValid})
     }
 
-    // THE FUNCTION BELOW DOESN'T WORK WITH UPDATE OBJECT AND IDK WHY
     clearInputs = () => {
         let updatedControls = {...this.state.ingredientControls}
         for (let control in updatedControls) {
-            console.log(updatedControls[control])
-            updatedControls[control].value = ''
-            updatedControls[control].valid = false
-            updatedControls[control].touched = false
-            // updateObject(updatedControls[control], {
-            //     value: '',
-            //     valid: false,
-            //     touched: false
-            // })
-            console.log(updatedControls[control])
-
+            updatedControls[control] = updateObject(updatedControls[control], {
+                value: '',
+                valid: false,
+                touched: false
+            })
         }
         this.setState({ingredientControls: updatedControls, tier: 0, formType: 'select', formIsValid: false})
     }
@@ -296,6 +288,7 @@ class IngredientCreator extends Component {
             }
             window = (
                 <ContentBlock>
+                    <button onClick={this.clearInputs}>clear inputs</button>
                     <Header>Add A New Ingredient</Header>
                     {formMenus}
                     {newItemForm}

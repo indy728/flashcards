@@ -1,77 +1,20 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import styled from 'styled-components'
 import ContentBlock from '../../components/UI/ContentBlock/ContentBlock'
 import Header from '../../components/UI/Header/Header'
 import Dashboard from '../../components/Dashboard/Dashboard'
+import { updateObject } from '../../shared/utility'
 import * as actions from '../../store/actions'
 
-const Wrapper = styled.div`
-    width: 80%;
-    background: ${props => props.theme.palette.grayscale[5]};
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-`
+const attributesInit = {
+    key: 'drinkName',
+    label: 'Drink Name',
+    type: 'name'
+}
 
-class FlashcardCreator extends Component {
+class CocktailCreator extends Component {
     state = {
-        // attributes: {
-        //     drinkName: {
-        //         quantity: 0,
-        //         type: "text",
-        //         text: "Ingredient Name"
-        //     },
-        //     ingredient: {
-        //         quantity: 0,
-        //         type: "text",
-        //         text: "Ingredient Name"
-        //     },
-        //     glass: {
-        //         quantity: 0,
-        //         type: "select",
-        //         text: "Type of Glassware"
-        //     },
-        //     garnish: {
-        //         quantity: 0,
-        //         type: "text",
-        //         text: "Garnish"
-        //     },
-        //     ice: {
-        //         quantity: 0,
-        //         type: "select",
-        //         text: "Type of Ice"
-        //     },
-        //     instructions: {
-        //         quantity: 0,
-        //         type: "textarea",
-        //         text: "Instructions"
-        //     },
-        //     picture: {
-        //         quantity: 0,
-        //         type: "input",
-        //         text: "Picture"
-        //     },
-        // },
         attributes: [],
-        // attributes: {
-        //     drinkName: {
-        //         label: 'Drink Name',
-        //         elementType: 'input',
-        //         elementConfig: {
-        //             type: 'text',
-        //             placeholder: '',
-        //             autocomplete: '',
-        //         },
-        //         value: '',
-        //         removeable: false,
-        //         validation: {
-        //             required: true,
-        //         },
-        //         valid: false,
-        //         touched: false
-        //     },
-        // },
         drinkControls: {
             name: {
                 label: '',
@@ -82,6 +25,7 @@ class FlashcardCreator extends Component {
                     autocomplete: '',
                 },
                 value: '',
+                quantity: false,
                 removeable: false,
                 validation: {
                     required: true,
@@ -98,6 +42,7 @@ class FlashcardCreator extends Component {
                     autocomplete: '',
                 },
                 value: '',
+                quantity: true,
                 removeable: true,
                 validation: {
                     required: true,
@@ -114,6 +59,7 @@ class FlashcardCreator extends Component {
                     autocomplete: '',
                 },
                 value: '',
+                quantity: false,
                 removeable: true,
                 validation: {
                     required: true,
@@ -126,18 +72,14 @@ class FlashcardCreator extends Component {
 
     componentDidMount() {
         if (!this.props.ingredients) this.props.onInitIngredients()
-        let attributesInit = {
-            key: 'drinkName',
-            label: 'Drink Name',
-            type: 'name'
-        }
         this.addAttributeHandler(attributesInit)
     }
-    // change to bool for some?
+
     addAttributeHandler = (attrObj) => {
         const attributes = [...this.state.attributes]
         const newAttribute = {}
         const controls = {...this.state.drinkControls[attrObj.type]}
+
         controls.label = attrObj.label
         newAttribute[attrObj.key] = controls
         attributes.push(newAttribute)
@@ -146,14 +88,38 @@ class FlashcardCreator extends Component {
   
     removeAttributeHandler = (index) => {
         const attributes = [...this.state.attributes]
-        console.log(index)
-        console.log(attributes)
+
         attributes.splice(index, 1)
-        console.log(attributes)
         this.setState({attributes: attributes})
     }
 
-    addIngredientHandler = () => {
+    inputChangedHandler = (event, controlIndex) => {
+        let controls = {...this.state.attributes[controlIndex]}
+        let formIsValid = true
+        let i = 0
+
+        console.log(controls)
+        console.log(controlIndex)
+        // const updatedControls = updateObject(controls, {
+        //     [controlName]: updateObject(controls[controlName], {
+        //         value: event.target.value,
+        //         valid: this.checkValidity(event.target.value, controls[controlName].validation),
+        //         touched: true
+        //     })
+        // })
+        // for (let inputIdentifier in updatedControls) {
+        //     if (this.state.tier <= i) {
+        //         formIsValid = updatedControls[inputIdentifier].valid && formIsValid
+        //     }
+        //     i = i + 1
+        // }
+        // this.setState({ingredientControls: updatedControls, formIsValid: formIsValid})
+    }
+
+    clearAttributes = () => {
+        this.setState({attributes: []}, () => {
+            this.addAttributeHandler(attributesInit)
+        })
     }
 
     render() {
@@ -165,7 +131,8 @@ class FlashcardCreator extends Component {
                         ingredients={this.props.ingredients}
                         attributes={this.state.attributes}
                         addAttribute={this.addAttributeHandler}
-                        removeAttribute={this.removeAttributeHandler}/>
+                        removeAttribute={this.removeAttributeHandler}
+                        inputChanged={this.inputChangedHandler} />
                     {/* <NewFlashcard attributes={this.state.attributes}/>
                     <AttributeControls 
                         attributeAdded={this.addAttributeHandler}
@@ -189,4 +156,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FlashcardCreator)
+export default connect(mapStateToProps, mapDispatchToProps)(CocktailCreator)

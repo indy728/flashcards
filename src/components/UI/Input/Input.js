@@ -18,18 +18,19 @@ const Input = styled.input`
     font: inherit;
     padding: 6px 10px;
     display: block;
-    width: 80%;
+    box-sizing: border-box;
 
     :focus {
-    outline: none;
-    background-color: #ccc;
+        outline: none;
+        background-color: #ccc;
     }
 `
 
 const input = (props) => {
     let inputElement = null
 
-    inputElement = <Input 
+    inputElement = <Input
+                        className={props.className}
                         {...props.elementConfig}
                         value={props.value}
                         invalid={props.invalid && props.touched}
