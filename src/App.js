@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux'
 import Layout from './hoc/Layout/Layout'
+import asyncComponent from './hoc/asyncComponent/asyncComponent'
 import CocktailCreator from './containers/CocktailCreator/CocktailCreator'
-import Auth from './containers/Auth/Auth'
 import HomePage from './containers/HomePage/HomePage'
 import IngredientCreator from './components/IngredientCreator/IngredientCreator'
 import Logout from './containers/Auth/Logout/Logout'
@@ -44,6 +44,8 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
+const asyncAuth = asyncComponent(() => import('./containers/Auth/Auth'))
+
 class App extends Component {
 
   componentDidMount() {
@@ -62,9 +64,11 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.props.isAuthenticated)
+
     let routes = (
       <Switch>
-        <Route path="/auth" component={Auth} />
+        <Route path="/auth" component={asyncAuth} />
         <Redirect to="/auth" />
       </Switch>
     )

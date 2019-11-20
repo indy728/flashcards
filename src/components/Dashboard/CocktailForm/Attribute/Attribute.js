@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Button from '../../../UI/Button/Button'
 import AttributeInput from './AttributeInput/AttributeInput'
+import Autocomplete from '../../../../hoc/Autocomplete/Autocomplete'
 
 const Wrapper = styled.div`
     width: 100%;
@@ -78,6 +79,9 @@ const newAttribute = props => {
     }
 
     console.log(props.index)
+
+    // const suggestions = Object.keys(props.ingredients[props.category])
+    // console.log(suggestions)
 
     return (
         <Wrapper>

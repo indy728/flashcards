@@ -35,6 +35,8 @@ class CocktailCreator extends Component {
             },
             ingredient: {
                 label: '',
+                ingredient: '',
+                category: '',
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
@@ -81,6 +83,7 @@ class CocktailCreator extends Component {
         const controls = {...this.state.drinkControls[attrObj.type]}
 
         controls.label = attrObj.label
+        controls.ingredient = attrObj.ingredient
         newAttribute[attrObj.key] = controls
         attributes.push(newAttribute)
         this.setState({attributes: attributes})

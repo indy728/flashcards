@@ -77,6 +77,7 @@ class dashboardControls extends Component {
                 const clickedObj = {
                     key: cat,
                     label: cat,
+                    ingredient: this.state.ingredient,
                     type: 'ingredient'
                 }
 

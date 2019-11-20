@@ -8,14 +8,24 @@ const Wrapper = styled.div`
 `
 
 const cocktailForm = props => {
-    const attributes = {...props.attributes}
+    const { attributes, ingredients } = props
     const attributeKeys = Object.keys(attributes)
     const transformedAttributes = attributeKeys.map(key => {
         const attrObj = attributes[key]
         for (let i in attrObj) {
+            console.log(attrObj)
+            console.log(i)
+            const { ingredient, label } = attrObj[i]
+            if ( ingredient && label) {
+                console.log(ingredients)
+                console.log(label)
+                console.log(ingredients[ingredient][label])
+            }
+
             return (
                 <Attribute
                     className={i}
+                    category={i}
                     header={attrObj[i].label}
                     quantity={attrObj[i].quantity}
                     remove={attrObj[i].removeable}
