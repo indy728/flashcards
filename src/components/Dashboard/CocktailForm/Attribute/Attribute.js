@@ -47,6 +47,8 @@ const BottomDiv = styled.div`
 const QtyDiv = styled.div`
     width: 80%;
     display: flex;
+    align-items: center;
+    justify-content: flex-start;
 `
 
 const RemoveDiv = styled.div`
@@ -54,6 +56,7 @@ const RemoveDiv = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-end;
+
 `
 
 const newAttribute = props => {

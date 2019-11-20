@@ -8,7 +8,7 @@ const Wrapper = styled.div`
     padding: 0 1.5rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
 
     div:not(:last-child) {
         border-bottom: 1px solid ${props => props.theme.palette.grayscale[2]};
