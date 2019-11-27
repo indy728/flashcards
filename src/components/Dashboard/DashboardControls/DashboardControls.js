@@ -27,6 +27,13 @@ const DashboardControlSection = styled.div`
     }
 `
 
+const IngredientControl = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`
+
 class dashboardControls extends Component {
     state = {
         ingredient: '',
@@ -60,14 +67,24 @@ class dashboardControls extends Component {
     render() {
         const ingredients = {...this.props.ingredients}
         const ingsKeys = Object.keys(ingredients)
+        // const ingredientControls = ingsKeys.map(ing => (
+        //     <Button
+        //         key={ing}
+        //         value={ing}
+        //         selected={this.buttonSelectedHandler('ingredient', ing)}
+        //         clicked={() => this.categorySelectHandler(ing)}>
+        //         {ing}
+        //     </Button>
+        // ))
         const ingredientControls = ingsKeys.map(ing => (
-            <Button
+            <IngredientControl
                 key={ing}
                 value={ing}
                 selected={this.buttonSelectedHandler('ingredient', ing)}
-                clicked={() => this.categorySelectHandler(ing)}>
-                {ing}
-            </Button>
+                onClick={() => this.categorySelectHandler(ing)}>
+                <span>{ing}</span>
+                <span>+</span>
+            </IngredientControl>
         ))
     
         let categoryControlsSection = null;

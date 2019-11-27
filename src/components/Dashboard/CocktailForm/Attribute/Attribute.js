@@ -3,10 +3,10 @@ import styled from 'styled-components'
 import Button from '../../../UI/Button/Button'
 import AttributeInput from './AttributeInput/AttributeInput'
 import Autocomplete from '../../../../hoc/Autocomplete/Autocomplete'
+import DropDown from '../../../UI/DropDown/DropDown'
 
 const Wrapper = styled.div`
     width: 100%;
-    height: 8rem;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -59,6 +59,10 @@ const RemoveDiv = styled.div`
 
 `
 
+const qtyArray = [
+    'oz', 'dash(es)'
+]
+
 const newAttribute = props => {
     let button = null
     let qty = <QtyDiv />
@@ -75,6 +79,9 @@ const newAttribute = props => {
         qty = (
             <QtyDiv>
                 <div>Quantity:</div>
+                <DropDown 
+                    title='Select Quantity'
+                    list={qtyArray} />
                 <div><select><option>placeholder</option></select></div>
                 <div><select><option>placeholder</option></select></div>
             </QtyDiv>

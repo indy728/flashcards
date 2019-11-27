@@ -95,7 +95,9 @@ class IngredientCreator extends Component {
     }
 
     componentDidMount() {
-        this.props.onInitIngredients()
+        if (this.props.ingredients === null) {
+            this.props.onInitIngredients()
+        }
     }
 
     selectChangedHandler = (event) => {
@@ -134,26 +136,25 @@ class IngredientCreator extends Component {
     }
 
     objectFormCreator = () => {
-        const ingredients = {...this.props.ingredients}
+        const { selector, tier } = this.state
+        const { ingredients } = this.props
         const dropdowns = []
 
-        for (let i = 0 ; i <= this.state.tier && i < 3 ; i++) {
-            let obj = null
-            let optionKeys = null
-            let name = this.state.selector[i]
-
-            switch(i) {
-                case (0):
-                    obj = ingredients
-                    optionKeys = Object.keys(obj)
-                    break
-                case (1):
-                    obj = ingredients[this.state.selector[1]]
-                    optionKeys = Object.keys(obj)
-                    break
-                default:
-                    obj = null
+        const pickObj = (obj, currentTier, maxTier) => {
+            if (currentTier < maxTier) {
+                currentTier = currentTier + 1
+                return pickObj(obj[selector[currentTier]], currentTier, maxTier)
             }
+            else {
+                return obj
+            }
+        }
+
+        for (let i = 0 ; i <= tier; i++) {
+            let name = selector[i]
+
+            let optionKeys = Object.keys(pickObj(ingredients, 0, i))
+
             dropdowns.push(
                 <IngredientTierForm
                     key={i}

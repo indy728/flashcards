@@ -64,8 +64,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.props.isAuthenticated)
-
     let routes = (
       <Switch>
         <Route path="/auth" component={asyncAuth} />
