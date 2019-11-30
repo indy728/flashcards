@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import Button from '../../UI/Button/Button'
+import Sprite from '../../UI/Sprite/Sprite'
 
 const Wrapper = styled.div`
     width: 25rem;
     border-right: 1px solid ${props => props.theme.palette.grayscale[2]};
-    padding: 0 1.5rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-
+/* 
     div:not(:last-child) {
         border-bottom: 1px solid ${props => props.theme.palette.grayscale[2]};
-    }
+    } */
 `
 
 const DashboardControlSection = styled.div`
@@ -27,11 +27,19 @@ const DashboardControlSection = styled.div`
     }
 `
 
-const IngredientControl = styled.div`
+const ControlWrapper = styled.div`
     width: 100%;
+    height: 2.4rem;
+    padding: 0 0.8rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-radius: 3px;
+    background-color: ${props => props.theme.palette.white[2]};
+    
+    :hover {
+        background-color: ${props => props.theme.palette.white[1]};
+    }
 `
 
 class dashboardControls extends Component {
@@ -76,16 +84,44 @@ class dashboardControls extends Component {
         //         {ing}
         //     </Button>
         // ))
-        const ingredientControls = ingsKeys.map(ing => (
-            <IngredientControl
-                key={ing}
-                value={ing}
-                selected={this.buttonSelectedHandler('ingredient', ing)}
-                onClick={() => this.categorySelectHandler(ing)}>
-                <span>{ing}</span>
-                <span>+</span>
-            </IngredientControl>
-        ))
+        const ingredientControls = ingsKeys.map(ing => {
+            const catKeys = Object.keys(ingredients[ing])
+            const categoryControls = catKeys.map(cat => {
+                const clickedObj = {
+                    key: cat,
+                    label: cat,
+                    ingredient: ing,
+                    type: 'ingredient'
+                }
+
+                return (
+                    <ControlWrapper
+                        key={cat}
+                        value={cat}
+                        clicked={()=> this.props.addAttribute(clickedObj)}>
+                        {cat}
+                    </ControlWrapper>
+                )
+            })
+            return (
+                <div>
+                    <ControlWrapper
+                        key={ing}
+                        value={ing}
+                        // selected={this.buttonSelectedHandler('ingredient', ing)}
+                        onClick={() => this.categorySelectHandler(ing)}>
+                        <span>{ing}</span>
+                        <Sprite
+                            height="1.6rem"
+                            spriteName="chevron-right"
+                            className="dashboard__sprite"/>
+                    </ControlWrapper>
+                    <div>
+                        {categoryControls}
+                    </div>
+                </div>
+            )
+        })
     
         let categoryControlsSection = null;
         if (this.state.categories) {
@@ -116,8 +152,9 @@ class dashboardControls extends Component {
         
         return (
             <Wrapper>
-                <DashboardControlSection>{ingredientControls}</DashboardControlSection>
-                {categoryControlsSection}
+                {/* <DashboardControlSection>{ingredientControls}</DashboardControlSection>
+                {categoryControlsSection} */}
+                {ingredientControls}
             </Wrapper>
         )
     }

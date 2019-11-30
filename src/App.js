@@ -14,27 +14,31 @@ import { authCheckState } from './store/actions';
 
 const GlobalStyle = createGlobalStyle`
 * { 
-    -moz-box-sizing: border-box; 
-    -webkit-box-sizing: border-box; 
-      box-sizing: border-box; 
+    margin: 0;
+    padding: 0;
   }
 
   *,
   *::after,
   *::before {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    box-sizing: inherit;
+    -moz-box-sizing: inherit; 
+    -webkit-box-sizing: inherit;
   }
-
+  
   html {
+    box-sizing: border-box;
     font-size: 62.5%; 
   }
 
   body {
     @import url('https://fonts.googleapis.com/css?family=Lobster|Lora|Montserrat:700|Swanky+and+Moo+Moo|Ubuntu&display=swap');
-    background-color: rgba(147, 180, 194, 0.336);
     font-family: ${props => props.theme.fonts.primary};
+    background-image: ${props => `linear-gradient(to right bottom, ` + props.theme.palette.primary[3] + `, ` + props.theme.palette.primary[0] + `)`};
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    min-height: 100vh;
   }
 
   h1, h2, h3, h4, h5, h6 {

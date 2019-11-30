@@ -1,18 +1,28 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import Toolbar from '../../components/Navigation/Toolbar/Toolbar'
+import Header from '../../components/Navigation/Header/Header'
 import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer'
 
 const Main = styled.main`
     min-height: 100vh;
-    margin-top: 6rem;
     width: 100%;
     display: flex;
     align-items: center;
     flex-direction: column;
     /* background: ${props => props.theme.palette.secondary[3]}; */
     background: ${props => props.theme.palette.white[1]};
+`
+
+const Content = styled.div`
+`
+
+const Container = styled.div`
+    max-width: 120rem;
+    margin: 8rem auto;
+    box-shadow: ${props => props.theme.shadow.container};
+
+    min-height: 50rem;
 `
 
 class Layout extends Component {
@@ -89,21 +99,27 @@ class Layout extends Component {
     render() {
         return (
             <React.Fragment>
-                <Toolbar
-                    isAuthenticated={this.props.isAuthenticated}
-                    components={this.state.components}
-                    sideDrawer={this.state.showSideDrawer}
-                    toggle={this.sideDrawerToggleHandler}
-                    />
-                <SideDrawer
-                    isAuthenticated={this.props.isAuthenticated}
-                    components={this.state.components}
-                    open={this.state.showSideDrawer}
-                    close={this.sideDrawerClosedHandler}
-                     />
-                <Main>
-                    {this.props.children}
-                </Main>
+                <body>
+                    <Container>
+                        <Header
+                            isAuthenticated={this.props.isAuthenticated}
+                            components={this.state.components}
+                            sideDrawer={this.state.showSideDrawer}
+                            toggle={this.sideDrawerToggleHandler}
+                            />
+                        <SideDrawer
+                            isAuthenticated={this.props.isAuthenticated}
+                            components={this.state.components}
+                            open={this.state.showSideDrawer}
+                            close={this.sideDrawerClosedHandler}
+                            />
+                        {/* <Content> */}
+                            <Main>
+                                {this.props.children}
+                            </Main>
+                        {/* </Content> */}
+                    </Container>
+                </body>
             </React.Fragment>
         )
     }

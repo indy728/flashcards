@@ -5,7 +5,7 @@ import Logo from '../../../Logo/Logo'
 const Wrapper = styled.div`
     width: 10rem;
     height: 100%;
-    box-sizing: border-box;
+    margin-left: 2rem;
     display: flex;
     flex-direction: row;
     align-items: center;

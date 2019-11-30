@@ -141,18 +141,12 @@ class IngredientCreator extends Component {
         const dropdowns = []
 
         const pickObj = (obj, currentTier, maxTier) => {
-            if (currentTier < maxTier) {
-                currentTier = currentTier + 1
-                return pickObj(obj[selector[currentTier]], currentTier, maxTier)
-            }
-            else {
-                return obj
-            }
+            if (currentTier < maxTier) return pickObj(obj[selector[currentTier + 1]], currentTier + 1, maxTier)
+            else return obj
         }
 
         for (let i = 0 ; i <= tier; i++) {
             let name = selector[i]
-
             let optionKeys = Object.keys(pickObj(ingredients, 0, i))
 
             dropdowns.push(

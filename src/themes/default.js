@@ -22,6 +22,10 @@ theme.palette = {
 
 theme.reversePalette = reversePalette(theme.palette)
 
+theme.shadow = {
+    container: '0 2rem 6rem rgab(0,0,0,.3)'
+}
+
 theme.fonts = {
     primary: "'Lora', serif",
     header: "'Montserrat', sans-serif",

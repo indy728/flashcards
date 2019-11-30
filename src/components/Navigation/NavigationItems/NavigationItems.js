@@ -3,13 +3,14 @@ import styled from 'styled-components'
 import NavigationItem from './NavigationItem/NavigationItem'
 
 const Wrapper = styled.ul`
-    margin: 0;
-    padding: 0;
     list-style: none;
     display:  ${props => props.sideDrawer ? "none" : "flex"};
-    flex-flow: row;
+    align-self: stretch;
     align-items: center;
-    height: 100%;
+
+    > * {
+        height: 100%;
+    }
 `
 
 const navigationItems = props => {
