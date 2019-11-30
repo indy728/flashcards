@@ -2,11 +2,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import Header from '../../components/Navigation/Header/Header'
-import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer'
+import SideNav from '../../components/Navigation/SideNav/SideNav'
 
 const Main = styled.main`
-    min-height: 100vh;
-    width: 100%;
+    flex: 1;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -15,14 +14,14 @@ const Main = styled.main`
 `
 
 const Content = styled.div`
+    display: flex;
+    
 `
 
 const Container = styled.div`
     max-width: 120rem;
     margin: 8rem auto;
     box-shadow: ${props => props.theme.shadow.container};
-
-    min-height: 50rem;
 `
 
 class Layout extends Component {
@@ -79,47 +78,45 @@ class Layout extends Component {
                 isAuth: true,
             },
         },
-        showSideDrawer: false,
+        showSideNav: false,
     }
 
-    sideDrawerClosedHandler = () => {
-        this.setState({showSideDrawer: false})
+    sideNavClosedHandler = () => {
+        this.setState({showSideNav: false})
     }
 
-    sideDrawerOpenHandler = () => {
-        this.setState({showSideDrawer: true})
+    sideNavOpenHandler = () => {
+        this.setState({showSideNav: true})
     }
 
-    sideDrawerToggleHandler = () => {
+    sideNavToggleHandler = () => {
         this.setState((prevState) => {
-            return {showSideDrawer: !prevState.showSideDrawer}
+            return {showSideNav: !prevState.showSideNav}
         })
     }
 
     render() {
         return (
             <React.Fragment>
-                <body>
-                    <Container>
-                        <Header
+                <Container>
+                    <Header
+                        isAuthenticated={this.props.isAuthenticated}
+                        components={this.state.components}
+                        sideNav={this.state.showSideNav}
+                        toggle={this.sideNavToggleHandler}
+                        />
+                    <Content>
+                        <SideNav
                             isAuthenticated={this.props.isAuthenticated}
                             components={this.state.components}
-                            sideDrawer={this.state.showSideDrawer}
-                            toggle={this.sideDrawerToggleHandler}
+                            open={this.state.showSideNav}
+                            close={this.sideNavClosedHandler}
                             />
-                        <SideDrawer
-                            isAuthenticated={this.props.isAuthenticated}
-                            components={this.state.components}
-                            open={this.state.showSideDrawer}
-                            close={this.sideDrawerClosedHandler}
-                            />
-                        {/* <Content> */}
-                            <Main>
-                                {this.props.children}
-                            </Main>
-                        {/* </Content> */}
-                    </Container>
-                </body>
+                        <Main>
+                            {this.props.children}
+                        </Main>
+                    </Content>
+                </Container>
             </React.Fragment>
         )
     }

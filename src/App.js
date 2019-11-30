@@ -34,7 +34,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     @import url('https://fonts.googleapis.com/css?family=Lobster|Lora|Montserrat:700|Swanky+and+Moo+Moo|Ubuntu&display=swap');
     font-family: ${props => props.theme.fonts.primary};
-    background-image: ${props => `linear-gradient(to right bottom, ` + props.theme.palette.primary[3] + `, ` + props.theme.palette.primary[0] + `)`};
+    background-image: ${props => `linear-gradient(to right bottom, ${props.theme.palette.grayscale[5]}, ${props.theme.palette.grayscale[0]})`};
     background-size: cover;
     background-repeat: no-repeat;
 
@@ -88,9 +88,11 @@ class App extends Component {
     return (
       <ThemeProvider theme={theme}>
         <GlobalStyle />
-        <Layout>
-          {routes}
-        </Layout>
+        <body>
+          <Layout>
+            {routes}
+          </Layout>
+        </body>
       </ThemeProvider>
     )
   }

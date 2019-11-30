@@ -8,6 +8,7 @@ const Wrapper = styled.li`
     width: 100%;
     font-size: 2rem;
     color: ${props => props.theme.palette.white[0]};
+    border-bottom: 4px solid transparent;
                 
     :hover,
     :active {
@@ -20,7 +21,8 @@ const Wrapper = styled.li`
         text-decoration: none;
         width: 100%;
         display: block;
-        border-bottom: 4px solid transparent;
+        transform: translateY(2px);
+        /* border-bottom: 4px solid transparent; */
     }
 
     a.active {

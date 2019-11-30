@@ -3,25 +3,16 @@ import styled from 'styled-components'
 import NavigationItem from '../../NavigationItems/NavigationItem/NavigationItem'
 
 const Wrapper = styled.ul`
-    margin: 0;
-    padding: 0;
     list-style: none;
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    /* height: 100%; */
     width: 100%;
-
-    /* @media (min-width: 500px) {
-        flex-flow: row;
-    } */
+    padding: 1.5rem 0;
 `
 
 const NavItem = styled(NavigationItem)`
-    margin: 0;
     width: 100%;
     color: ${props => props.theme.palette.primary[2]};
-    padding: 1rem .5rem;
+    border-bottom: none;
+    padding: 1rem 0;
     
     a {
         color: ${props => props.theme.palette.primary[2]};
@@ -29,23 +20,18 @@ const NavItem = styled(NavigationItem)`
         width: 100%;
         box-sizing: border-box;
         display: block;
-        border-bottom: 4px solid transparent;
-        padding: 1rem .5rem;
-        text-align: center;
+        padding: 1rem 0;
     }
 
-    a:hover {
-        color: ${props => props.theme.palette.white[2]};
-    }
-            
-    a:hover,
-    a:active {
+    :hover,
+    :active {
+        background-color: inherit;
+        border-bottom: none;
     }
 
     a.active {
         color: ${props => props.theme.palette.primary[0]};
         background-color: ${props => props.theme.palette.secondary[3]};
-        border-bottom: none;
         cursor: default;
     }
 `

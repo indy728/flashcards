@@ -2,47 +2,46 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Logo from '../../Logo/Logo'
-import SideDrawerNavItems from '../SideDrawer/SideDrawerNavItems/SideDrawerNavItems'
+import SideNavItems from './SideNavItems/SideNavItems'
 import Backdrop from '../../UI/Backdrop/Backdrop'
 
 const Wrapper = styled.div`
     position: fixed;
     width: 40rem;
-    max-width: 70%;
-    height: 100%;
     left: 0;
     top: 0;
     z-index: 200;
     background-color: ${props => props.theme.palette.white[2]};
-    padding: 2rem 2rem;
     box-sizing: border-box;
     transition: transform 0.3s ease-out;
 
     transform: ${props => props.open ? "translateX(0)" : "translateX(-100%)"};
 
-    @media (max-width: 500px) {
+    /* @media (max-width: 500px) {
         width: 28rem;
         max-width: 100%;
+    } */
+    @media (min-width: 500px) {
+        flex: 0 0 18%;
+        position: relative;
+        transform: translateX(0);
     }
 `
 
 const SidebarSection = styled.div`
     /* height: 20%; */
-    width: 100%;
+    /* width: 100%; */
     /* margin-bottom: 3rem; */
     position: relative;
+    display: ${props => props.hidden ? 'none' : 'inherit'};
 
     :not(:first-child) {
-        padding-top: 1.5rem;
-        
-        :hover {
-            background-color: ${props => props.theme.palette.white[1]};
-        }
+        /* padding-top: 1.5rem; */
     }
 
     :not(:last-child) {
-        padding-bottom: 1.5rem;
-        border-bottom: 2px solid ${props => props.theme.palette.primary[2]}
+        /* padding-bottom: 1.5rem; */
+        border-bottom: 1px dotted ${props => props.theme.palette.primary[2]}
     }
 `
 
@@ -63,7 +62,7 @@ const objReducer = (obj, keys, filter) => {
         return reducedObj
 }
 
-const sideDrawer = (props) => {
+const sideNav = (props) => {
     const components = {...props.components}
     // Matches available components based on authentication
     const componentKeys = Object.keys(components)
@@ -75,31 +74,31 @@ const sideDrawer = (props) => {
         <React.Fragment>
             <Backdrop show={props.open} clicked={props.close} />
             <Wrapper open={props.open} onClick={props.close}>
-                <SidebarSection>
+                <SidebarSection hidden={!props.open}>
                     <SidebarLogo>
                         <Logo />
                     </SidebarLogo>
                 </SidebarSection>
                 <SidebarSection>
-                    <SideDrawerNavItems
+                    <SideNavItems
                         isAuthenticated={props.isAuthenticated}
                         components={basics}
-                        sideDrawer={props.open} />
+                        sideNav={props.open} />
                 </SidebarSection>
                 <SidebarSection>
-                    <SideDrawerNavItems
+                    <SideNavItems
                         isAuthenticated={props.isAuthenticated}
                         components={creators}
-                        sideDrawer={props.open} />
+                        sideNav={props.open} />
                 </SidebarSection>
             </Wrapper>
         </React.Fragment>
     )
 }
 
-sideDrawer.propTypes = {
+sideNav.propTypes = {
     open: PropTypes.bool,
     close: PropTypes.func
 }
 
-export default sideDrawer
+export default sideNav

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import NavigationItems from '../NavigationItems/NavigationItems'
-import DrawerToggle from '../SideDrawer/DrawerToggle/DrawerToggle'
+import DrawerToggle from '../SideNav/DrawerToggle/DrawerToggle'
 
 const Wrapper = styled.header`
     height: 7rem;
@@ -10,7 +10,7 @@ const Wrapper = styled.header`
     position: fixed;
     top: 0;
     left: 0; */
-    background-color: ${props => props.theme.palette.grayscale[5]};
+    background-color: ${props => props.theme.palette.primary[3]};
     border-bottom: ${props => props.theme.palette.grayscale[1]};
     display: flex;
     justify-content: space-between;

@@ -3,14 +3,12 @@ import styled from 'styled-components'
 import Logo from '../../../Logo/Logo'
 
 const Wrapper = styled.div`
-    width: 10rem;
     height: 100%;
     margin-left: 2rem;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    cursor: pointer;
 `
 
 const Hamburger = styled.div`
@@ -22,6 +20,7 @@ const Hamburger = styled.div`
     align-items: center;
     padding: 1.3rem 0;
     box-sizing: border-box;
+    cursor: pointer;
 
     div {
         width: 90%;
@@ -29,16 +28,15 @@ const Hamburger = styled.div`
         background-color: ${props => props.theme.palette.white[1]};
     }
 
-    /* @media (min-width: 500px) {
+    @media (min-width: 500px) {
         display: none;
-    } */
-
+    }
 `
 
 const drawerToggle = (props) => {
     return (
-        <Wrapper onClick={props.clicked}>
-            <Hamburger>
+        <Wrapper>
+            <Hamburger onClick={props.clicked}>
                 <div />
                 <div />
                 <div />
