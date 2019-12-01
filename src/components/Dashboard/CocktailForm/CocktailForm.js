@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Attribute from './Attribute/Attribute'
 
+import Flashcard from '../../Flashcard/Flashcard'
+
 const Wrapper = styled.div`
     width: 55rem;
     padding: 4rem;
@@ -40,6 +42,7 @@ const cocktailForm = props => {
     return (
         <Wrapper>
             {transformedAttributes}
+            <Flashcard />
         </Wrapper>
     )
 }
