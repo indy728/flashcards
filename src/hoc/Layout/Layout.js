@@ -77,6 +77,13 @@ class Layout extends Component {
                 usage: "creator",
                 isAuth: true,
             },
+            flashcards: {
+                key: "flashcards",
+                link: "/flashcards",
+                title: "Flashcards",
+                usage: "basic",
+                isAuth: true,
+            },
         },
         showSideNav: false,
     }

@@ -33,10 +33,10 @@ const header = (props) => {
             <DrawerToggle 
                 clicked={props.toggle} />
             {/* <NavWrapper show={!props.sideDrawer}> */}
-                <NavigationItems
+                {/* <NavigationItems
                     isAuthenticated={props.isAuthenticated}
                     components={props.components}
-                    sideDrawer={props.sideDrawer} />
+                    sideDrawer={props.sideDrawer} /> */}
             {/* </NavWrapper> */}
         </Wrapper>
     )

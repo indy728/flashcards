@@ -49,6 +49,7 @@ const GlobalStyle = createGlobalStyle`
 `
 
 const asyncAuth = asyncComponent(() => import('./containers/Auth/Auth'))
+const asyncFlashcards = asyncComponent(() => import('./containers/Flashcards/Flashcards'))
 
 class App extends Component {
 
@@ -80,8 +81,9 @@ class App extends Component {
           <Route path="/logout" exact component={Logout} />
           <Route path="/add_cocktail" component={CocktailCreator} />
           <Route path="/add_ingredient" component={IngredientCreator} />
+          <Route path="/flashcards" component={asyncFlashcards} />
           <Route path="/" exact component={HomePage}/>
-          <Redirect to="/add_cocktail" />
+          <Redirect to="/flashcards" />
         </Switch>
       )
     }
