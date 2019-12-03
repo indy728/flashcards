@@ -33,7 +33,7 @@ const controlsInit = {
     elementConfig: {
         type: 'text',
         placeholder: '',
-        example: '',
+        // example: '',
         autocomplete: '',
     },
     value: '',
@@ -157,33 +157,30 @@ class IngredientCreator extends Component {
         const setFormControls = (controlArray) => {
             let formControls = {}
             for (let control in controlArray) {
-                let obj = controlArray[control]
-                let { name, placeholder, example } = obj
+                const { name, placeholder, example } = controlArray[control]
                 formControls = updateObject(formControls, {
                     [name]: updateObject(controlsInit, {
                         elementConfig: updateObject(controlsInit.elementConfig, {
-                            placeholder,
-                            example
+                            placeholder: placeholder + ` (i.e.: '${example}')`
                         })
                     })
                 })
-                console.log(formControls)
             }
+            console.log(formControls)
             return formControls
         }
 
         if (tier === 2) {
-            const formControls = setFormControls(this.state.productControls)
-            console.log(formControls)
             this.setState({
-                formControls,
+                formControls: setFormControls(this.state.productControls),
                 formType: 'add'
             })
         } else if (event.target.value === 'add' || event.target.value === 'edit') {
             const groupControls = [ ...this.state.groupControls ]
+
             groupControls.splice(0, tier)
-            const formControls = setFormControls(groupControls)
             this.setState({
+                formControls: setFormControls(groupControls),
                 selector: selector.slice(0, index + 1),
                 formType: event.target.value,
                 // tier: index,
@@ -320,7 +317,7 @@ class IngredientCreator extends Component {
         if (!this.props.loading) {
             const formMenus = this.objectFormCreator()
             const formElementsArray = []
-            const formElementsObj = {...this.state.ingredientControls}
+            const formElementsObj = {...this.state.formControls}
            
             for (let key in formElementsObj) {
                 formElementsArray.push({
@@ -331,10 +328,7 @@ class IngredientCreator extends Component {
             let newItemForm = null
             
             if (this.state.formType === 'add') {
-                let form = formElementsArray.map(formElement => {
-                    if (this.state.tier > 0 && formElement.id === 'ingredient') return null
-                    if (this.state.tier > 1 && formElement.id === 'category') return null
-                    return (
+                let form = formElementsArray.map(formElement => (
                         <AddElementInput 
                             key={formElement.id}
                             autocomplete={formElement.config.elementConfig.autocomplete || ''}
@@ -348,7 +342,7 @@ class IngredientCreator extends Component {
                             changed={(event) => this.inputChangedHandler(event, formElement.id)} 
                             />
                     )
-                })
+                )
                 newItemForm = (
                     <AddElementForm onSubmit={this.addIngredientHandler}>
                         {form}
