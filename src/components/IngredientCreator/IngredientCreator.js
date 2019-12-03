@@ -28,12 +28,60 @@ const AddElementInput = styled(Input)`
     align-items: center;
 `
 
+const controlsInit = {
+    elementType: 'input',
+    elementConfig: {
+        type: 'text',
+        placeholder: '',
+        example: '',
+        autocomplete: '',
+    },
+    value: '',
+    validation: {
+        required: true,
+    },
+    valid: false,
+    touched: false
+}
+
 class IngredientCreator extends Component {
     state = {
         selector: ['ingredients'],
-        tier: 0,
+        // tier: 0,
         formType: 'select',
-        ingredientControls: {
+        formControls: { },
+        groupControls: [
+            { 
+                name: 'ingredient',
+                placeholder: 'New Ingredient Name',
+                example: 'spirit'
+            },
+            { 
+                name: 'category',
+                placeholder: 'New Category Name',
+                example: 'gin'
+            },
+        // ],
+        // newIngredientControls: [
+            { 
+                name: 'tag',
+                placeholder: 'New Item Tag',
+                example: 'londonDry'
+            },
+            { 
+                name: 'name',
+                placeholder: 'New Item Name',
+                example: 'London Dry Gin'
+            },
+        ],
+        productControls: [
+                {
+                    name: 'product',
+                    placeholder: 'Product Name',
+                    example: 'Beefeater'
+                }
+        ],
+        jjj: {
             ingredient: {
                 elementType: 'input',
                 elementConfig: {
@@ -101,47 +149,77 @@ class IngredientCreator extends Component {
     }
 
     selectChangedHandler = (event) => {
+        const { selector } = this.state
+        const tier = selector.length - 1
         const selection = event.target.value
-        const selector = [...this.state.selector]
         const index = selector.indexOf(event.target.name)
 
-        if (event.target.value === 'add' || event.target.value === 'edit') {
+        const setFormControls = (controlArray) => {
+            let formControls = {}
+            for (let control in controlArray) {
+                let obj = controlArray[control]
+                let { name, placeholder, example } = obj
+                formControls = updateObject(formControls, {
+                    [name]: updateObject(controlsInit, {
+                        elementConfig: updateObject(controlsInit.elementConfig, {
+                            placeholder,
+                            example
+                        })
+                    })
+                })
+                console.log(formControls)
+            }
+            return formControls
+        }
+
+        if (tier === 2) {
+            const formControls = setFormControls(this.state.productControls)
+            console.log(formControls)
+            this.setState({
+                formControls,
+                formType: 'add'
+            })
+        } else if (event.target.value === 'add' || event.target.value === 'edit') {
+            const groupControls = [ ...this.state.groupControls ]
+            groupControls.splice(0, tier)
+            const formControls = setFormControls(groupControls)
             this.setState({
                 selector: selector.slice(0, index + 1),
                 formType: event.target.value,
-                tier: index,
+                // tier: index,
             })
-            return
-        }
-        if (index < this.state.tier) {
+        } else if (index < tier) {
             const newSelector = selector.slice(0, index + 1)
             newSelector.push(selection)
-            console.log(newSelector)
             this.setState({
                 selector: newSelector,
-                tier: newSelector.length - 1,
-                addProduct: false,
-                editList: false
+                
+                // tier: newSelector.length - 1,
+                // addProduct: false,
+                // editList: false
             })
         } else {
             selector.push(selection)
             this.setState({
                 selector: selector,
                 formType: 'select',
-                tier: this.state.tier + 1,
-                addProduct: false,
-                editList: false
+                // tier: this.state.tier + 1,
+                // addProduct: false,
+                // editList: false
             })
         }
     }
 
     objectFormCreator = () => {
-        const { selector, tier } = this.state
+        const { selector } = this.state
+        const tier = selector.length - 1
         const { ingredients } = this.props
         const dropdowns = []
 
         const pickObj = (obj, currentTier, maxTier) => {
-            if (currentTier < maxTier) return pickObj(obj[selector[currentTier + 1]], currentTier + 1, maxTier)
+            if (currentTier < maxTier) {
+                return pickObj(obj[selector[currentTier + 1]], currentTier + 1, maxTier)
+            }
             else return obj
         }
 
@@ -215,9 +293,9 @@ class IngredientCreator extends Component {
 
     addIngredientHandler = (event) => {
         event.preventDefault()
-
         const controls = this.state.ingredientControls
         const tier = this.state.tier
+
         const ingredient = tier >= 1 ? this.state.selector[1] : controls.ingredient.value
         const category = tier === 2 ? this.state.selector[2] : controls.category.value
         const productObj = {[controls.product.value]: controls.value.value}
