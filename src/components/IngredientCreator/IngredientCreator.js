@@ -49,7 +49,7 @@ class IngredientCreator extends Component {
         selector: ['ingredients'],
         // tier: 0,
         formType: 'select',
-        formControls: { },
+        formControls: {},
         groupControls: [
             { 
                 name: 'ingredient',
@@ -61,8 +61,6 @@ class IngredientCreator extends Component {
                 placeholder: 'New Category Name',
                 example: 'gin'
             },
-        // ],
-        // newIngredientControls: [
             { 
                 name: 'tag',
                 placeholder: 'New Item Tag',
@@ -75,70 +73,12 @@ class IngredientCreator extends Component {
             },
         ],
         productControls: [
-                {
-                    name: 'product',
-                    placeholder: 'Product Name',
-                    example: 'Beefeater'
-                }
-        ],
-        jjj: {
-            ingredient: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'text',
-                    placeholder: 'Add Your Ingredient',
-                    autocomplete: '',
-                },
-                value: '',
-                validation: {
-                    required: true,
-                },
-                valid: false,
-                touched: false
-            },
-            category: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'text',
-                    placeholder: 'Add Your Category',
-                    autocomplete: '',
-                },
-                value: '',
-                validation: {
-                    required: true,
-                },
-                valid: false,
-                touched: false
-            },
-            product: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'text',
-                    placeholder: 'Add Your Product or Instruction',
-                    autocomplete: '',
-                },
-                value: '',
-                validation: {
-                    required: true,
-                },
-                valid: false,
-                touched: false
-            },
-            value: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'text',
-                    placeholder: 'Add a type or value',
-                    autocomplete: '',
-                },
-                value: '',
-                validation: {
-                    required: true,
-                },
-                valid: false,
-                touched: false
+            {
+                name: 'product',
+                placeholder: 'Product Name',
+                example: 'Beefeater'
             }
-        },
+        ],
         formIsValid: false,
     }
 
@@ -166,11 +106,10 @@ class IngredientCreator extends Component {
                     })
                 })
             }
-            console.log(formControls)
             return formControls
         }
 
-        if (tier === 2) {
+        if (tier > 2) {
             this.setState({
                 formControls: setFormControls(this.state.productControls),
                 formType: 'add'
@@ -178,19 +117,19 @@ class IngredientCreator extends Component {
         } else if (event.target.value === 'add' || event.target.value === 'edit') {
             const groupControls = [ ...this.state.groupControls ]
 
-            groupControls.splice(0, tier)
+            groupControls.splice(0, Math.min(index, tier))
             this.setState({
                 formControls: setFormControls(groupControls),
                 selector: selector.slice(0, index + 1),
                 formType: event.target.value,
-                // tier: index,
             })
         } else if (index < tier) {
             const newSelector = selector.slice(0, index + 1)
             newSelector.push(selection)
             this.setState({
                 selector: newSelector,
-                
+                formControls: {},
+                formType: 'select'
                 // tier: newSelector.length - 1,
                 // addProduct: false,
                 // editList: false
@@ -198,7 +137,8 @@ class IngredientCreator extends Component {
         } else {
             selector.push(selection)
             this.setState({
-                selector: selector,
+                selector,
+                formControls: {},
                 formType: 'select',
                 // tier: this.state.tier + 1,
                 // addProduct: false,
@@ -209,15 +149,16 @@ class IngredientCreator extends Component {
 
     objectFormCreator = () => {
         const { selector } = this.state
-        const tier = selector.length - 1
         const { ingredients } = this.props
+        const tier = selector.length - 1
         const dropdowns = []
 
         const pickObj = (obj, currentTier, maxTier) => {
             if (currentTier < maxTier) {
                 return pickObj(obj[selector[currentTier + 1]], currentTier + 1, maxTier)
+            } else {
+                return obj
             }
-            else return obj
         }
 
         for (let i = 0 ; i <= tier; i++) {
@@ -256,7 +197,7 @@ class IngredientCreator extends Component {
     }
 
     inputChangedHandler = (event, controlName) => {
-        let controls = {...this.state.ingredientControls}
+        let controls = {...this.state.formControls}
         let formIsValid = true
         let i = 0
 
@@ -273,7 +214,7 @@ class IngredientCreator extends Component {
             }
             i = i + 1
         }
-        this.setState({ingredientControls: updatedControls, formIsValid: formIsValid})
+        this.setState({formControls: updatedControls, formIsValid: formIsValid})
     }
 
     clearInputs = () => {
@@ -290,25 +231,59 @@ class IngredientCreator extends Component {
 
     addIngredientHandler = (event) => {
         event.preventDefault()
-        const controls = this.state.ingredientControls
-        const tier = this.state.tier
 
-        const ingredient = tier >= 1 ? this.state.selector[1] : controls.ingredient.value
-        const category = tier === 2 ? this.state.selector[2] : controls.category.value
-        const productObj = {[controls.product.value]: controls.value.value}
-        const categoryObj = {[category]: productObj}
-        const ingredientObj = {[ingredient]: categoryObj}
-        const databaseRefArray = ['ingredients', ingredient, category]
-        let node = {}
-
-        if (tier === 1) {
-            node = updateObject(this.props.ingredients[ingredient], categoryObj)
-        } else if (tier === 2) {
-            node = updateObject(this.props.ingredients[ingredient][category], productObj)
-        } else {
-            node = updateObject(this.props.ingredients, ingredientObj)
+        const { formControls, selector } = this.state
+        const { ingredients } = this.props
+        const tier = selector.length - 1
+        const dbRefArray = [...selector]
+        const controlArray = Object.keys(formControls)
+        const newItem = {
+            [formControls.tag.value]: {
+                name: formControls.name.value
+            }
         }
-        this.props.onAddIngredient(node, databaseRefArray, tier)
+
+        for (let control in controlArray) {
+            dbRefArray.push(formControls[controlArray[control]].value)
+        }
+
+        const setObj = (obj, i, selector, tier) => {
+            if (i > tier) {
+                return setObj({ [selector[i]]: obj}, i - 1, selector, tier)
+            } else {
+                return obj
+            }
+        }
+
+        const addIngredientObject = setObj(newItem, 2, dbRefArray, tier)
+        console.log(addIngredientObject)
+        // const ingredient = tier >= 1 ? selector[1] : formControls.ingredient.value
+        // const category = tier === 2 ? selector[2] : formControls.category.value
+        // const productObj = {[formControls.product.value]: formControls.value.value}
+        // const categoryObj = {[category]: productObj}
+        // const ingredientObj = {[ingredient]: categoryObj}
+        // const databaseRefArray = ['ingredients', ingredient, category]
+        let node = ingredients
+
+        const setNode = (i, tier, selector, node) => {
+            if (i < tier) {
+                node = node[selector[i + 1]]
+                return setNode(i + 1, tier, selector, node)
+            } else {
+                return node
+            }
+        }
+
+        node = updateObject(setNode(0, tier, dbRefArray, node), addIngredientObject)
+        console.log(node)
+        // if (tier === 1) {
+        //     node = updateObject(this.props.ingredients[ingredient], categoryObj)
+        // } else if (tier === 2) {
+        //     node = updateObject(this.props.ingredients[ingredient][category], productObj)
+        // } else {
+        //     node = updateObject(this.props.ingredients, ingredientObj)
+        // }
+        // this.props.onAddIngredient(node, dbRefArray, tier)
         this.clearInputs()
     }
 

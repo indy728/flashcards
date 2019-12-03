@@ -90,11 +90,9 @@ class App extends Component {
     return (
       <ThemeProvider theme={theme}>
         <GlobalStyle />
-        <body>
           <Layout>
             {routes}
           </Layout>
-        </body>
       </ThemeProvider>
     )
   }
