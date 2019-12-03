@@ -23,13 +23,23 @@ export const addIngredientFail = (error) => {
 export const addIngredient = (ingredientNode, databaseRefArray, tier) => {
     return dispatch => {
         dispatch(addIngredientStart())
-        console.log(ingredientNode, databaseRefArray)
+
+        if ([0, 1, 2].indexOf(tier) === -1) {
+            return dispatch(addIngredientFail('Add Ingredients Failed At Array Length'))
+        }
+
         const rootRef = database.ref()
         let nodeRef = null
-        if (tier === 0) nodeRef = rootRef.child(databaseRefArray[0])
-        else if (tier === 1) nodeRef = rootRef.child(databaseRefArray[0]).child(databaseRefArray[1])
-        else if (tier === 2) nodeRef = rootRef.child(databaseRefArray[0]).child(databaseRefArray[1]).child(databaseRefArray[2])
-        else return dispatch(addIngredientFail('Add Ingredients Failed At Array Length'))
+        const setRef = (i, tier, ref, dbRefArray) => {
+            if (i <= tier) {
+                ref = ref.child(dbRefArray[i])
+                return setRef(i + 1, tier, ref, dbRefArray)
+            } else {
+                return ref
+            }
+        }
+        
+        nodeRef = setRef(0, tier, rootRef, databaseRefArray)
         nodeRef.update(ingredientNode, error => {
             if (error) {
                 return dispatch(addIngredientFail(error))

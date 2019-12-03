@@ -130,9 +130,6 @@ class IngredientCreator extends Component {
                 selector: newSelector,
                 formControls: {},
                 formType: 'select'
-                // tier: newSelector.length - 1,
-                // addProduct: false,
-                // editList: false
             })
         } else {
             selector.push(selection)
@@ -140,9 +137,6 @@ class IngredientCreator extends Component {
                 selector,
                 formControls: {},
                 formType: 'select',
-                // tier: this.state.tier + 1,
-                // addProduct: false,
-                // editList: false
             })
         }
     }
@@ -242,11 +236,6 @@ class IngredientCreator extends Component {
                 name: formControls.name.value
             }
         }
-
-        for (let control in controlArray) {
-            dbRefArray.push(formControls[controlArray[control]].value)
-        }
-
         const setObj = (obj, i, selector, tier) => {
             if (i > tier) {
                 return setObj({ [selector[i]]: obj}, i - 1, selector, tier)
@@ -255,14 +244,12 @@ class IngredientCreator extends Component {
             }
         }
 
+        for (let control in controlArray) {
+            dbRefArray.push(formControls[controlArray[control]].value.toLowerCase())
+        }
+
+
         const addIngredientObject = setObj(newItem, 2, dbRefArray, tier)
-        console.log(addIngredientObject)
-        // const ingredient = tier >= 1 ? selector[1] : formControls.ingredient.value
-        // const category = tier === 2 ? selector[2] : formControls.category.value
-        // const productObj = {[formControls.product.value]: formControls.value.value}
-        // const categoryObj = {[category]: productObj}
-        // const ingredientObj = {[ingredient]: categoryObj}
-        // const databaseRefArray = ['ingredients', ingredient, category]
         let node = ingredients
 
         const setNode = (i, tier, selector, node) => {
@@ -273,17 +260,16 @@ class IngredientCreator extends Component {
                 return node
             }
         }
+    
+        node = setNode(0, tier, dbRefArray, node)
 
-        node = updateObject(setNode(0, tier, dbRefArray, node), addIngredientObject)
-        console.log(node)
-        // if (tier === 1) {
-        //     node = updateObject(this.props.ingredients[ingredient], categoryObj)
-        // } else if (tier === 2) {
-        //     node = updateObject(this.props.ingredients[ingredient][category], productObj)
-        // } else {
-        //     node = updateObject(this.props.ingredients, ingredientObj)
-        // }
-        // this.props.onAddIngredient(node, dbRefArray, tier)
+        if (Object.keys(node).indexOf(Object.keys(addIngredientObject)[0].toLowerCase()) === -1) {
+            node = updateObject(node, addIngredientObject)
+            this.props.onAddIngredient(node, dbRefArray, tier)
+        } else {
+            console.log('Duplicate of something')
+        }
+        
         this.clearInputs()
     }
 
