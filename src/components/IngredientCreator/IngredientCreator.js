@@ -192,6 +192,7 @@ class IngredientCreator extends Component {
 
     inputChangedHandler = (event, controlName) => {
         let controls = {...this.state.formControls}
+        const tier = this.state.selector.length - 1
         let formIsValid = true
         let i = 0
 
@@ -203,7 +204,7 @@ class IngredientCreator extends Component {
             })
         })
         for (let inputIdentifier in updatedControls) {
-            if (this.state.tier <= i) {
+            if (tier <= i) {
                 formIsValid = updatedControls[inputIdentifier].valid && formIsValid
             }
             i = i + 1
@@ -212,7 +213,7 @@ class IngredientCreator extends Component {
     }
 
     clearInputs = () => {
-        let updatedControls = {...this.state.ingredientControls}
+        let updatedControls = {...this.state.formControls}
         for (let control in updatedControls) {
             updatedControls[control] = updateObject(updatedControls[control], {
                 value: '',
@@ -220,7 +221,7 @@ class IngredientCreator extends Component {
                 touched: false
             })
         }
-        this.setState({ingredientControls: updatedControls, tier: 0, formType: 'select', formIsValid: false})
+        this.setState({formControls: updatedControls, formType: 'select', formIsValid: false})
     }
 
     addIngredientHandler = (event) => {
@@ -248,7 +249,6 @@ class IngredientCreator extends Component {
             dbRefArray.push(formControls[controlArray[control]].value.toLowerCase())
         }
 
-
         const addIngredientObject = setObj(newItem, 2, dbRefArray, tier)
         let node = ingredients
 
@@ -266,11 +266,18 @@ class IngredientCreator extends Component {
         if (Object.keys(node).indexOf(Object.keys(addIngredientObject)[0].toLowerCase()) === -1) {
             node = updateObject(node, addIngredientObject)
             this.props.onAddIngredient(node, dbRefArray, tier)
+            this.setState({
+                selector: ['ingredients'],
+                formType: 'select',
+                formControls: {},
+                formIsValid: false
+            })
         } else {
+            //  NEED A POPUP WARNING HERE
             console.log('Duplicate of something')
+            this.clearInputs()
         }
         
-        this.clearInputs()
     }
 
     render() {

@@ -126,6 +126,7 @@ class CocktailCreator extends Component {
     }
 
     render() {
+        console.log('creator')
         return (
             <React.Fragment>
                 <ContentBlock>

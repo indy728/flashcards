@@ -83,7 +83,7 @@ class App extends Component {
           <Route path="/add_ingredient" component={IngredientCreator} />
           <Route path="/flashcards" component={asyncFlashcards} />
           <Route path="/" exact component={HomePage}/>
-          <Redirect to="/add_ingredient" />
+          <Redirect to="/add_cocktail" />
         </Switch>
       )
     }

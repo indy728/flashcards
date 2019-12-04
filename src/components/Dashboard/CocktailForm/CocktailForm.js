@@ -12,6 +12,7 @@ const cocktailForm = props => {
     const attributeKeys = Object.keys(attributes)
     const transformedAttributes = attributeKeys.map(key => {
         const attrObj = attributes[key]
+        const attrArray = []
         for (let i in attrObj) {
             console.log(attrObj)
             console.log(i)
@@ -22,7 +23,7 @@ const cocktailForm = props => {
                 console.log(ingredients[ingredient][label])
             }
 
-            return (
+            attrArray.push(
                 <Attribute
                     className={i}
                     category={i}
@@ -34,6 +35,7 @@ const cocktailForm = props => {
                     changed={props.inputChanged}
                     removeAttribute={props.removeAttribute}/>
             )
+            return attrArray
         }
     })
 
