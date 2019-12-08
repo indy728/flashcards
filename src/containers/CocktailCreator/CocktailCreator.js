@@ -86,7 +86,7 @@ class CocktailCreator extends Component {
         controls.ingredient = attrObj.ingredient
         newAttribute[attrObj.key] = controls
         attributes.push(newAttribute)
-        this.setState({attributes: attributes})
+        this.setState({ attributes })
     }
   
     removeAttributeHandler = (index) => {
@@ -101,8 +101,6 @@ class CocktailCreator extends Component {
         let formIsValid = true
         let i = 0
 
-        console.log(controls)
-        console.log(controlIndex)
         // const updatedControls = updateObject(controls, {
         //     [controlName]: updateObject(controls[controlName], {
         //         value: event.target.value,
@@ -126,7 +124,6 @@ class CocktailCreator extends Component {
     }
 
     render() {
-        console.log('creator')
         return (
             <React.Fragment>
                 <ContentBlock>

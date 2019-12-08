@@ -88,10 +88,8 @@ const newAttribute = props => {
         )
     }
 
-    console.log(props.index)
 
     // const suggestions = Object.keys(props.ingredients[props.category])
-    // console.log(suggestions)
 
     return (
         <Wrapper>

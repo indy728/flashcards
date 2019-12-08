@@ -58,11 +58,6 @@ class DashboardControls extends Component {
         groups: []
     }
 
-    componentDidMount() {
-        console.log(this.props.ingredients)
-        console.log(this.props.ingredients1)
-    }
-
     categorySelectHandler = (value) => {
         let ingredient = this.state.ingredient
         let categories = this.state.categories
@@ -87,120 +82,59 @@ class DashboardControls extends Component {
     }
     
     render() {
-        const { ingredients } = this.props
-        if (this.props.ingredients && this.state.groups.length === 0) {
-            const groups = []
-            console.log(ingredients)
-            for (let item in Object.keys(ingredients)) {
-                console.log(item)
+        const { ingredients, loading } = this.props
+        let buttons = null
 
-                let group = {
-                    name: ingredients[item]
-                }
-                group = updateObject(group, itemInit)
-                groups.push(group)
-            }
-            this.setState({ groups })
-        }
-        // const { ingredients } = this.props
-        // const ingsKeys = Object.keys(ingredients)
-        // // const ingredientControls = ingsKeys.map(ing => (
-        // //     <Button
-        // //         key={ing}
-        // //         value={ing}
-        // //         selected={this.buttonSelectedHandler('ingredient', ing)}
-        // //         clicked={() => this.categorySelectHandler(ing)}>
-        // //         {ing}
-        // //     </Button>
-        // // ))
-        // const ingredientControls = ingsKeys.map(ing => {
-        //     const catKeys = Object.keys(ingredients[ing])
-        //     const categoryControls = catKeys.map(cat => {
-        //         const clickedObj = {
-        //             key: cat,
-        //             label: cat,
-        //             ingredient: ing,
-        //             type: 'ingredient'
-        //         }
+        if (!loading) {
+            const groupKeys = Object.keys(ingredients)
 
-        //         return (
-        //             <ControlWrapper
-        //                 open={false} >
-        //                 key={cat}
-        //                 value={cat}
-        //                 clicked={()=> this.props.addAttribute(clickedObj)}>
-        //                 {cat}
-        //             </ControlWrapper>
-        //         )
-        //     })
+            buttons = groupKeys.map(group => {
+                const categories = ingredients[group]
+                const categoryDivs = []
 
-        //     return (
-        //         <div>
-        //             <ControlWrapper 
-        //                 key={ing}
-        //                 value={ing}
-        //                 // selected={this.buttonSelectedHandler('ingredient', ing)}
-        //                 onClick={() => this.categorySelectHandler(ing)}>
-        //                 <span>{ing}</span>
-        //                 <Sprite
-        //                     height="1.6rem"
-        //                     spriteName="chevron-right"
-        //                     className="dashboard__sprite"/>
-        //             </ControlWrapper>
-        //             <div>
-        //                 {categoryControls}
-        //             </div>
-        //         </div>
-        //     )
-        // })
-    
-        // let categoryControlsSection = null;
-        // if (this.state.categories) {
-        //     const catKeys = Object.keys(ingredients[this.state.ingredient])
-        //     const categoryControls = catKeys.map(cat => {
-        //         const clickedObj = {
-        //             key: cat,
-        //             label: cat,
-        //             ingredient: this.state.ingredient,
-        //             type: 'ingredient'
-        //         }
+                for (let category in categories) {
+                    const items = ingredients[group][category]
+                    const itemButtons = []
+                    
+                    for (let item in items) {
+                        if (items[item].name) {
+                            const clickedObj = {
+                                key: item,
+                                label: items[item].name,
+                                type: 'ingredient'
+                            }
 
-        //         return (
-        //             <Button
-        //                 key={cat}
-        //                 value={cat}
-        //                 clicked={()=> this.props.addAttribute(clickedObj)}>
-        //                 {cat}
-        //             </Button>
-        //         )
-        //     })
-        //     categoryControlsSection = (
-        //         <DashboardControlSection>
-        //             {categoryControls}
-        //         </DashboardControlSection>
-        //     )
-        // }
-        console.log(this.state.groups)
-        let groupList = null
-        if (!this.props.loading) {
-            console.log('not loading')
-            groupList = this.state.groups.map(group => (
-                <ControlWrapper
-                    key={group.name}
-                    clicked={this.toggleOpenHandler}
-                    >
-                    <span>{group.name}</span>
-                    <Sprite
-                        height="1.6rem"
-                        spriteName={group.open ? "chevron-down" : "chevron-right"}
-                        className="dashboard__sprite"/>
-                </ControlWrapper>
-            ))
+                            itemButtons.push(
+                                <Button
+                                    key={item}
+                                    value={item}
+                                    clicked={()=> this.props.addAttribute(clickedObj)}>
+                                    {items[item].name}
+                                </Button>
+                            )}
+                        }
+                        categoryDivs.push(<DashboardControlSection>{itemButtons}</DashboardControlSection>)
+                    }
+                    return categoryDivs
+                })
+
+            const instructions = (
+                <Button
+                    value={'instructions'}
+                    clicked={()=> this.props.addAttribute({
+                        key: 'instructions' + new Date(),
+                        label: 'Instructions',
+                        type: 'instructions'})}>
+                    Instructions
+                </Button>
+            )
+
+            buttons.push(<DashboardControlSection>{instructions}</DashboardControlSection>)
         }
         
         return (
             <Wrapper>
-                {groupList}
+                {buttons}
             </Wrapper>
         )
     }
@@ -209,7 +143,7 @@ class DashboardControls extends Component {
 
 const mapStateToProps = state => {
     return {
-        ingredients1: state.ingredients.ingredients,
+        ingredients: state.ingredients.ingredients,
         loading: state.ingredients.loading
     }
 }

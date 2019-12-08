@@ -14,19 +14,16 @@ const cocktailForm = props => {
         const attrObj = attributes[key]
         const attrArray = []
         for (let i in attrObj) {
-            console.log(attrObj)
-            console.log(i)
-            const { ingredient, label } = attrObj[i]
+            const { ingredient, label, elementConfig } = attrObj[i]
+            const textarea = elementConfig.type === 'textarea'
             if ( ingredient && label) {
-                console.log(ingredients)
-                console.log(label)
-                console.log(ingredients[ingredient][label])
             }
 
             attrArray.push(
                 <Attribute
                     className={i}
                     category={i}
+                    textarea={textarea}
                     header={attrObj[i].label}
                     quantity={attrObj[i].quantity}
                     remove={attrObj[i].removeable}
@@ -35,8 +32,8 @@ const cocktailForm = props => {
                     changed={props.inputChanged}
                     removeAttribute={props.removeAttribute}/>
             )
-            return attrArray
         }
+        return attrArray
     })
 
     return (
