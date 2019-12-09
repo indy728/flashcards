@@ -2,10 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import Button from '../../UI/Button/Button'
-import Sprite from '../../UI/Sprite/Sprite'
 
 import * as actions from '../../../store/actions'
-import { updateObject } from '../../../shared/utility'
 
 const Wrapper = styled.div`
     width: 25rem;
@@ -31,25 +29,25 @@ const DashboardControlSection = styled.div`
     }
 `
 
-const ControlWrapper = styled.div`
-    width: 100%;
-    height: 2.4rem;
-    padding: 0 0.8rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-radius: 3px;
-    background-color: ${props => props.theme.palette.white[2]};
+// const ControlWrapper = styled.div`
+//     width: 100%;
+//     height: 2.4rem;
+//     padding: 0 0.8rem;
+//     display: flex;
+//     align-items: center;
+//     justify-content: space-between;
+//     border-radius: 3px;
+//     background-color: ${props => props.theme.palette.white[2]};
     
-    :hover {
-        background-color: ${props => props.theme.palette.white[1]};
-    }
-`
+//     :hover {
+//         background-color: ${props => props.theme.palette.white[1]};
+//     }
+// `
 
-const itemInit = {
-    open: false,
-    list: []
-}
+// const itemInit = {
+//     open: false,
+//     list: []
+// }
 
 class DashboardControls extends Component {
     state = {

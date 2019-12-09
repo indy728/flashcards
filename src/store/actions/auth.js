@@ -49,12 +49,12 @@ export const auth = (authInfo) => {
         } else {
             firebaseAuth.signInWithEmailAndPassword(authInfo.email, authInfo.password)
                 .then(res => {
-                    const user = res.user
-                    const userObj = {
-                        name: user.displayName,
-                        email: user.email,
-                        photo: user.photoURL,
-                    }
+                    // const user = res.user
+                    // const userObj = {
+                    //     name: user.displayName,
+                    //     email: user.email,
+                    //     photo: user.photoURL,
+                    // }
                     // console.log(userObj)
                     dispatch(authSuccess(res.user.displayName, res.user.email))
                 })
@@ -66,7 +66,6 @@ export const auth = (authInfo) => {
 }
 
 export const logout = () => {
-    console.log('[logout]')
     firebaseAuth.signOut()
         .then(() => console.log('[actions/auth] logout: signout success'))
         .catch(er => console.log('[actions/auth] er:', er))

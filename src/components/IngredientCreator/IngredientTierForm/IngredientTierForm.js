@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import IngredientTierSelect from './IngredientTierSelect/IngredientTierSelect'
 import IngredientTierHeader from './IngredientTierHeader/IngredientTierHeader'
 import Select from '../../UI/Select/Select'
 

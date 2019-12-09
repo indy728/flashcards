@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import Button from '../../../UI/Button/Button'
-import AttributeInput from './AttributeInput/AttributeInput'
-import Autocomplete from '../../../../hoc/Autocomplete/Autocomplete'
-import DropDown from '../../../UI/DropDown/DropDown'
+// import AttributeInput from './AttributeInput/AttributeInput'
+// import Autocomplete from '../../../../hoc/Autocomplete/Autocomplete'
+// import DropDown from '../../../UI/DropDown/DropDown'
 
 const Wrapper = styled.div`
     width: 100%;

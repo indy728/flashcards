@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import NavigationItems from '../NavigationItems/NavigationItems'
 import DrawerToggle from '../SideNav/DrawerToggle/DrawerToggle'
 
 const Wrapper = styled.header`
@@ -17,14 +16,6 @@ const Wrapper = styled.header`
     align-items: center;
     /* padding: 0 2rem;
     z-index: 90; */
-`
-
-const NavWrapper = styled.nav`
-    display: ${props => props.show ? "inherit" : "none"};
-
-    @media (max-width: 499px) {
-        display: none
-    }
 `
 
 const header = (props) => {

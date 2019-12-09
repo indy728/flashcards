@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import ContentBlock from '../../components/UI/ContentBlock/ContentBlock'
 import Header from '../../components/UI/Header/Header'
 import Dashboard from '../../components/Dashboard/Dashboard'
-import { updateObject } from '../../shared/utility'
 import * as actions from '../../store/actions'
 
 const attributesInit = {
@@ -97,9 +96,9 @@ class CocktailCreator extends Component {
     }
 
     inputChangedHandler = (event, controlIndex) => {
-        let controls = {...this.state.attributes[controlIndex]}
-        let formIsValid = true
-        let i = 0
+        // let controls = {...this.state.attributes[controlIndex]}
+        // let formIsValid = true
+        // let i = 0
 
         // const updatedControls = updateObject(controls, {
         //     [controlName]: updateObject(controls[controlName], {
