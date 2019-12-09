@@ -97,6 +97,7 @@ class DashboardControls extends Component {
                     const itemButtons = []
                     
                     for (let item in items) {
+    
                         if (items[item].name) {
                             const clickedObj = {
                                 key: item,
@@ -111,12 +112,12 @@ class DashboardControls extends Component {
                                     clicked={()=> this.props.addAttribute(clickedObj)}>
                                     {items[item].name}
                                 </Button>
-                            )}
-                        }
-                        categoryDivs.push(<DashboardControlSection>{itemButtons}</DashboardControlSection>)
+                        )}
                     }
-                    return categoryDivs
-                })
+                    categoryDivs.push(<DashboardControlSection key={category}>{itemButtons}</DashboardControlSection>)
+                }
+                return categoryDivs
+            })
 
             const instructions = (
                 <Button
@@ -129,7 +130,7 @@ class DashboardControls extends Component {
                 </Button>
             )
 
-            buttons.push(<DashboardControlSection>{instructions}</DashboardControlSection>)
+            buttons.push(<DashboardControlSection key={'instructions'}>{instructions}</DashboardControlSection>)
         }
         
         return (

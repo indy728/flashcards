@@ -17,6 +17,7 @@ class CocktailCreator extends Component {
         attributes: [],
         drinkControls: {
             name: {
+                type: 'name',
                 label: '',
                 elementType: 'input',
                 elementConfig: {
@@ -25,7 +26,6 @@ class CocktailCreator extends Component {
                     autocomplete: '',
                 },
                 value: '',
-                quantity: false,
                 removeable: false,
                 validation: {
                     required: true,
@@ -34,6 +34,7 @@ class CocktailCreator extends Component {
                 touched: false
             },
             ingredient: {
+                type: 'ingredient',
                 label: '',
                 ingredient: '',
                 category: '',
@@ -44,7 +45,6 @@ class CocktailCreator extends Component {
                     autocomplete: '',
                 },
                 value: '',
-                quantity: true,
                 removeable: true,
                 validation: {
                     required: true,
@@ -53,6 +53,7 @@ class CocktailCreator extends Component {
                 touched: false
             },
             instructions: {
+                type: 'instruction',
                 label: '',
                 elementType: 'input',
                 elementConfig: {
@@ -61,7 +62,6 @@ class CocktailCreator extends Component {
                     autocomplete: '',
                 },
                 value: '',
-                quantity: false,
                 removeable: true,
                 validation: {
                     required: true,

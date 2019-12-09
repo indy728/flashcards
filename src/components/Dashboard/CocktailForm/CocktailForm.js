@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Attribute from './Attribute/Attribute'
 
@@ -8,32 +8,23 @@ const Wrapper = styled.div`
 `
 
 const cocktailForm = props => {
-    const { attributes, ingredients } = props
+    const { attributes } = props
     const attributeKeys = Object.keys(attributes)
     const transformedAttributes = attributeKeys.map(key => {
-        const attrObj = attributes[key]
-        const attrArray = []
-        for (let i in attrObj) {
-            const { ingredient, label, elementConfig } = attrObj[i]
-            const textarea = elementConfig.type === 'textarea'
-            if ( ingredient && label) {
-            }
+        const attribute = attributes[key]
+        const attributeProperties = attribute[Object.keys(attribute)[0]]
+        const { type, label, removeable } = attributeProperties
 
-            attrArray.push(
-                <Attribute
-                    className={i}
-                    category={i}
-                    textarea={textarea}
-                    header={attrObj[i].label}
-                    quantity={attrObj[i].quantity}
-                    remove={attrObj[i].removeable}
-                    key={key}
-                    index={key}
-                    changed={props.inputChanged}
-                    removeAttribute={props.removeAttribute}/>
-            )
-        }
-        return attrArray
+        return (
+            <Attribute
+                key={type + key}
+                index={key}
+                type={type}
+                header={label}
+                remove={removeable}
+                changed={props.inputChanged}
+                removeAttribute={props.removeAttribute}/>
+        )
     })
 
     return (

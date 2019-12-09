@@ -15,28 +15,28 @@ const Wrapper = styled.div`
     :not(:first-child) {
         padding-top: 3rem;
     }
+
     :not(:last-child) {
         padding-bottom: 3rem;
         border-bottom: 1px solid ${props => props.theme.palette.grayscale[2]};
     }
 
-    div :not(:first-child) {
-        margin-top: 1.5rem;
-    }
-    div :not(:last-child) {
-        margin-bottom: 1.5rem;
+    > div {
+        padding: 1rem 0;
     }
 `
 
 const AttributeHeader = styled.div`
-    width: 100%;
     font-size: 2rem;
     text-transform: uppercase;
     font-family: ${props => props.theme.fonts.header};
 `
 
-const InputDiv = styled.div`
+const TopDiv = styled.div`
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 `
 
 const BottomDiv = styled.div`
@@ -45,7 +45,6 @@ const BottomDiv = styled.div`
     align-items: space-between;
 `
 const QtyDiv = styled.div`
-    width: 80%;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -63,27 +62,29 @@ const qtyArray = [
     'oz', 'dash(es)'
 ]
 
-const newAttribute = props => {
-    let button = null
-    let qty = <QtyDiv />
+const attribute = props => {
+    let remove = null
+    let bottom = null
 
     if (props.remove) {
-        button = (
+        remove = (
             <Button
                 clicked={() => props.removeAttribute(props.index)}>
                 REMOVE
             </Button>
         )
     }
-    if (props.quantity) {
-        qty = (
+    if (props.type === 'ingredient') {
+        const measurementOptions = qtyArray.map((measurement, i) => (
+            <option key={measurement + i}>{measurement}</option>
+        ))
+        bottom = (
             <QtyDiv>
                 <div>Quantity:</div>
-                <DropDown 
-                    title='Select Quantity'
-                    list={qtyArray} />
-                <div><select><option>placeholder</option></select></div>
-                <div><select><option>placeholder</option></select></div>
+                <input style={{'width': '5rem', 'margin': '0 1rem 0 2rem'}} />
+                <select>
+                    {measurementOptions}
+                </select>
             </QtyDiv>
         )
     }
@@ -93,20 +94,21 @@ const newAttribute = props => {
 
     return (
         <Wrapper>
-            <AttributeHeader>{props.header}:</AttributeHeader>
-            <InputDiv>
-                <AttributeInput 
+            <TopDiv>
+                {/* <AttributeInput 
                     {...props}
-                    changed={(event) => props.changed(event, props.index)}/>
-            </InputDiv>
-            <BottomDiv>
-                {qty}
+                    className='attribute' + {props.type}
+                changed={(event) => props.changed(event, props.index)}/> */}
+                <AttributeHeader>{props.header}</AttributeHeader>
                 <RemoveDiv>
-                    {button}
+                    {remove}
                 </RemoveDiv>  
+            </TopDiv>
+            <BottomDiv>
+                {bottom}
             </BottomDiv>
         </Wrapper>
     )
 }
 
-export default newAttribute
+export default attribute
