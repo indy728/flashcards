@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Button from '../../../UI/Button/Button'
-// import AttributeInput from './AttributeInput/AttributeInput'
+import AttributeInput from './AttributeInput/AttributeInput'
 // import Autocomplete from '../../../../hoc/Autocomplete/Autocomplete'
 // import DropDown from '../../../UI/DropDown/DropDown'
 
@@ -13,11 +13,11 @@ const Wrapper = styled.div`
     justify-content: space-around;
 
     :not(:first-child) {
-        padding-top: 3rem;
+        padding-top: 1.5rem;
     }
 
     :not(:last-child) {
-        padding-bottom: 3rem;
+        padding-bottom: 1.5rem;
         border-bottom: 1px solid ${props => props.theme.palette.grayscale[2]};
     }
 
@@ -44,11 +44,24 @@ const BottomDiv = styled.div`
     display: flex;
     align-items: space-between;
 `
+
 const QtyDiv = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-start;
+
+    > div {
+        font-size: 1.6rem;
+    }
 `
+
+const InstructionsText = styled.textarea`
+    width: 100%;
+    height: 6rem;
+    padding: .8rem 1.2rem;
+    font-size: 1.4rem;
+`
+
 
 const RemoveDiv = styled.div`
     width: 20%;
@@ -79,13 +92,26 @@ const attribute = props => {
             <option key={measurement + i}>{measurement}</option>
         ))
         bottom = (
-            <QtyDiv>
+            <QtyDiv className='attributeQty'>
                 <div>Quantity:</div>
-                <input style={{'width': '5rem', 'margin': '0 1rem 0 2rem'}} />
-                <select>
+                <AttributeInput
+                    className='qtyInput' 
+                    width='5rem'
+                    margin='0 0 0 1rem'
+                    />
+                <select style={{'marginLeft': '2rem'}}>
                     {measurementOptions}
                 </select>
             </QtyDiv>
+        )
+    } else if (props.type === 'instruction') {
+        bottom = <InstructionsText className='instructionsText' />
+    } else {
+        bottom = (
+            <AttributeInput 
+                    {...props}
+                    className={'attribute' + props.type}
+                    changed={(event) => props.changed(event, props.index)}/> 
         )
     }
 
@@ -94,17 +120,13 @@ const attribute = props => {
 
     return (
         <Wrapper>
-            <TopDiv>
-                {/* <AttributeInput 
-                    {...props}
-                    className='attribute' + {props.type}
-                changed={(event) => props.changed(event, props.index)}/> */}
-                <AttributeHeader>{props.header}</AttributeHeader>
-                <RemoveDiv>
+            <TopDiv className="attributeTop">
+                <AttributeHeader className="attributeHeader">{props.header}</AttributeHeader>
+                <RemoveDiv className="attributeRemove">
                     {remove}
                 </RemoveDiv>  
             </TopDiv>
-            <BottomDiv>
+            <BottomDiv className="attributeBottom">
                 {bottom}
             </BottomDiv>
         </Wrapper>

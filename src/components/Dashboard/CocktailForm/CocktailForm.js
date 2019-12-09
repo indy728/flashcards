@@ -8,17 +8,13 @@ const Wrapper = styled.div`
 `
 
 const cocktailForm = props => {
-    const { attributes } = props
-    const attributeKeys = Object.keys(attributes)
-    const transformedAttributes = attributeKeys.map(key => {
-        const attribute = attributes[key]
-        const attributeProperties = attribute[Object.keys(attribute)[0]]
-        const { type, label, removeable } = attributeProperties
+    const transformedAttributes = props.attributes.map((key,i) => {
+        const { type, label, removeable } = key
 
         return (
             <Attribute
-                key={type + key}
-                index={key}
+                key={type + i}
+                index={i}
                 type={type}
                 header={label}
                 remove={removeable}

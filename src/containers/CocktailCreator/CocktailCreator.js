@@ -14,8 +14,10 @@ const attributesInit = {
 class CocktailCreator extends Component {
     state = {
         attributes: [],
+        count: 1,
         drinkControls: {
             name: {
+                tier: 0,
                 type: 'name',
                 label: '',
                 elementType: 'input',
@@ -33,6 +35,7 @@ class CocktailCreator extends Component {
                 touched: false
             },
             ingredient: {
+                tier: 1,
                 type: 'ingredient',
                 label: '',
                 ingredient: '',
@@ -52,6 +55,7 @@ class CocktailCreator extends Component {
                 touched: false
             },
             instructions: {
+                tier: 2,
                 type: 'instruction',
                 label: '',
                 elementType: 'input',
@@ -76,16 +80,25 @@ class CocktailCreator extends Component {
         this.addAttributeHandler(attributesInit)
     }
 
+    sortAttributes = attributes => {
+
+    }
+
     addAttributeHandler = (attrObj) => {
-        const attributes = [...this.state.attributes]
-        const newAttribute = {}
+        const { attributes, count } = this.state
         const controls = {...this.state.drinkControls[attrObj.type]}
 
         controls.label = attrObj.label
         controls.ingredient = attrObj.ingredient
-        newAttribute[attrObj.key] = controls
-        attributes.push(newAttribute)
-        this.setState({ attributes })
+        controls.added = count
+        attributes.push(controls)
+        attributes.sort((a, b) => {
+            if (a.tier > b.tier) return 1
+            if (a.tier < b.tier) return -1
+            return a.added > b.added ? 1 : -1
+        })
+        
+        this.setState({ attributes, count: count + 1 })
     }
   
     removeAttributeHandler = (index) => {
@@ -133,11 +146,6 @@ class CocktailCreator extends Component {
                         addAttribute={this.addAttributeHandler}
                         removeAttribute={this.removeAttributeHandler}
                         inputChanged={this.inputChangedHandler} />
-                    {/* <NewFlashcard attributes={this.state.attributes}/>
-                    <AttributeControls 
-                        attributeAdded={this.addAttributeHandler}
-                        attributeRemoved={this.removeAttributeHandler}
-                        /> */}
                 </ContentBlock>
             </React.Fragment>
         )
