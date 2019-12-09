@@ -78,20 +78,32 @@ class DashboardControls extends Component {
     buttonSelectedHandler = (section, value) => {
         return (this.state[section] === value)
     }
+
+    divSort = obj => {
+
+    }
     
     render() {
         const { ingredients, loading } = this.props
-        let buttons = null
+        let buttons = []
 
         if (!loading) {
             const groupKeys = Object.keys(ingredients)
+            const groups = []
 
-            buttons = groupKeys.map(group => {
+
+            // buttons = groupKeys.map(group => {
+            for (let group in ingredients) {
                 const categories = ingredients[group]
                 const categoryDivs = []
+                let groupRank = ingredients[group].rank
+
 
                 for (let category in categories) {
+                    let rank = 99
                     if (category === 'rank') {
+                        rank = categories[category]
+                        console.log(rank)
                         continue
                     }
                     const items = ingredients[group][category]
@@ -117,10 +129,15 @@ class DashboardControls extends Component {
                                 </AddItemButton>
                         )}
                     }
-                    categoryDivs.push(<DashboardControlSection key={category}>{itemButtons}</DashboardControlSection>)
+                    categoryDivs.push(<DashboardControlSection key={category} rank>{itemButtons}</DashboardControlSection>)
                 }
-                return categoryDivs
-            })
+                groups.push({categories: categoryDivs, rank: groupRank})
+            }
+
+            groups.sort((a, b) => a.rank > b.rank ? 1 : -1)
+            for (let group in groups) {
+                buttons.push(groups[group].categories)
+            }
 
             const instructions = (
                 <AddItemButton

@@ -81,10 +81,6 @@ class CocktailCreator extends Component {
         this.addAttributeHandler(attributesInit)
     }
 
-    sortAttributes = attributes => {
-
-    }
-
     addAttributeHandler = attrObj => {
         const { attributes, count } = this.state
         let controls = {...this.state.drinkControls[attrObj.type]}
