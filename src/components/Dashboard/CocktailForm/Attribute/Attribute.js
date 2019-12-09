@@ -104,7 +104,7 @@ const attribute = props => {
                 </select>
             </QtyDiv>
         )
-    } else if (props.type === 'instruction') {
+    } else if (props.type === 'instructions') {
         bottom = <InstructionsText className='instructionsText' />
     } else {
         bottom = (
@@ -119,7 +119,7 @@ const attribute = props => {
     // const suggestions = Object.keys(props.ingredients[props.category])
 
     return (
-        <Wrapper>
+        <Wrapper className='attribute'>
             <TopDiv className="attributeTop">
                 <AttributeHeader className="attributeHeader">{props.header}</AttributeHeader>
                 <RemoveDiv className="attributeRemove">

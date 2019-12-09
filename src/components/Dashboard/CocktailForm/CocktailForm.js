@@ -4,7 +4,7 @@ import Attribute from './Attribute/Attribute'
 
 const Wrapper = styled.div`
     width: 55rem;
-    padding: 4rem;
+    padding: 2rem 4rem;
 `
 
 const cocktailForm = props => {
@@ -24,7 +24,7 @@ const cocktailForm = props => {
     })
 
     return (
-        <Wrapper>
+        <Wrapper className='cocktailForm' >
             {transformedAttributes}
         </Wrapper>
     )

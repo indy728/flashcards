@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import Button from '../../UI/Button/Button'
+// import Button from '../../UI/Button/Button'
 
 import * as actions from '../../../store/actions'
 
@@ -11,8 +11,8 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-/* 
-    div:not(:last-child) {
+
+    /* > div:not(:last-child) {
         border-bottom: 1px solid ${props => props.theme.palette.grayscale[2]};
     } */
 `
@@ -29,20 +29,20 @@ const DashboardControlSection = styled.div`
     }
 `
 
-// const ControlWrapper = styled.div`
-//     width: 100%;
-//     height: 2.4rem;
-//     padding: 0 0.8rem;
-//     display: flex;
-//     align-items: center;
-//     justify-content: space-between;
-//     border-radius: 3px;
-//     background-color: ${props => props.theme.palette.white[2]};
+const AddItemButton = styled.div`
+    width: 100%;
+    height: 2.4rem;
+    padding: 0 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 3px;
+    background-color: ${props => props.theme.palette.white[2]};
     
-//     :hover {
-//         background-color: ${props => props.theme.palette.white[1]};
-//     }
-// `
+    :hover {
+        background-color: ${props => props.theme.palette.white[1]};
+    }
+`
 
 // const itemInit = {
 //     open: false,
@@ -91,6 +91,9 @@ class DashboardControls extends Component {
                 const categoryDivs = []
 
                 for (let category in categories) {
+                    if (category === 'rank') {
+                        continue
+                    }
                     const items = ingredients[group][category]
                     const itemButtons = []
                     
@@ -98,18 +101,20 @@ class DashboardControls extends Component {
     
                         if (items[item].name) {
                             const clickedObj = {
-                                key: item,
+                                subTier: categories.rank,
                                 label: items[item].name,
                                 type: 'ingredient'
                             }
-
+                            
                             itemButtons.push(
-                                <Button
+                                <AddItemButton
+                                    className='addItemButton'
                                     key={item}
                                     value={item}
-                                    clicked={()=> this.props.addAttribute(clickedObj)}>
+                                    onClick={()=> this.props.addAttribute(clickedObj)}
+                                    >
                                     {items[item].name}
-                                </Button>
+                                </AddItemButton>
                         )}
                     }
                     categoryDivs.push(<DashboardControlSection key={category}>{itemButtons}</DashboardControlSection>)
@@ -118,14 +123,15 @@ class DashboardControls extends Component {
             })
 
             const instructions = (
-                <Button
+                <AddItemButton
                     value={'instructions'}
-                    clicked={()=> this.props.addAttribute({
-                        key: 'instructions' + new Date(),
+                    onClick={()=> this.props.addAttribute({
+                        subTier: 99,
                         label: 'Instructions',
-                        type: 'instructions'})}>
+                        type: 'instructions'})}
+                    >
                     Instructions
-                </Button>
+                </AddItemButton>
             )
 
             buttons.push(<DashboardControlSection key={'instructions'}>{instructions}</DashboardControlSection>)

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import ContentBlock from '../../components/UI/ContentBlock/ContentBlock'
 import Header from '../../components/UI/Header/Header'
 import Dashboard from '../../components/Dashboard/Dashboard'
+import { updateObject } from '../../shared/utility'
 import * as actions from '../../store/actions'
 
 const attributesInit = {
@@ -84,18 +85,19 @@ class CocktailCreator extends Component {
 
     }
 
-    addAttributeHandler = (attrObj) => {
+    addAttributeHandler = attrObj => {
         const { attributes, count } = this.state
-        const controls = {...this.state.drinkControls[attrObj.type]}
-
-        controls.label = attrObj.label
-        controls.ingredient = attrObj.ingredient
+        let controls = {...this.state.drinkControls[attrObj.type]}
+        
+        controls = updateObject(controls, attrObj)
         controls.added = count
         attributes.push(controls)
         attributes.sort((a, b) => {
-            if (a.tier > b.tier) return 1
-            if (a.tier < b.tier) return -1
-            return a.added > b.added ? 1 : -1
+            if (a.tier === b.tier) {
+                if (a.subTier === b.subTier) return a.added > b.added ? 1 : -1
+                return a.subTier > b.subTier ? 1 : -1
+            }
+            return a.tier > b.tier ? 1 : -1
         })
         
         this.setState({ attributes, count: count + 1 })
@@ -140,7 +142,8 @@ class CocktailCreator extends Component {
             <React.Fragment>
                 <ContentBlock>
                     <Header>Add A New Cocktail</Header>
-                    <Dashboard 
+                    <Dashboard
+                        className='dashboard'
                         ingredients={this.props.ingredients}
                         attributes={this.state.attributes}
                         addAttribute={this.addAttributeHandler}
