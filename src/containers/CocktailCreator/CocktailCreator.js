@@ -81,29 +81,37 @@ class CocktailCreator extends Component {
         this.addAttributeHandler(attributesInit)
     }
 
-    addAttributeHandler = attrObj => {
+    addAttributeHandler = newAttribute => {
         const { attributes, count } = this.state
-        let controls = {...this.state.drinkControls[attrObj.type]}
-        
-        controls = updateObject(controls, attrObj)
-        controls.added = count
-        attributes.push(controls)
-        attributes.sort((a, b) => {
-            if (a.tier === b.tier) {
-                if (a.subTier === b.subTier) return a.added > b.added ? 1 : -1
-                return a.subTier > b.subTier ? 1 : -1
+        let controls = {...this.state.drinkControls[newAttribute.type]}
+        let duplicate = false;
+
+        for (let i in attributes) {
+            if (attributes[i].label === newAttribute.label) {
+                duplicate = true
+                break
             }
-            return a.tier > b.tier ? 1 : -1
-        })
-        
-        this.setState({ attributes, count: count + 1 })
+        }
+        if (!duplicate) {
+            controls = updateObject(controls, newAttribute)
+            controls.added = count
+            attributes.push(controls)
+            attributes.sort((a, b) => {
+                if (a.tier === b.tier) {
+                    if (a.subTier === b.subTier) return a.added > b.added ? 1 : -1
+                    return a.subTier > b.subTier ? 1 : -1
+                }
+                return a.tier > b.tier ? 1 : -1
+            })
+            this.setState({ attributes, count: count + 1 })
+        }
     }
   
-    removeAttributeHandler = (index) => {
+    removeAttributeHandler = index => {
         const attributes = [...this.state.attributes]
 
         attributes.splice(index, 1)
-        this.setState({attributes: attributes})
+        this.setState({ attributes })
     }
 
     inputChangedHandler = (event, controlIndex) => {
