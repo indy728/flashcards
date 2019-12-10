@@ -11,7 +11,7 @@ const Wrapper = styled.svg`
 const sprite = props => {
     return (
         <Wrapper
-            className={props.className}
+            className={props.className || 'sprite'}
             height={props.height}
             width={props.width}>
             <use xlinkHref={`${sprites}#icon-${props.spriteName}`} />

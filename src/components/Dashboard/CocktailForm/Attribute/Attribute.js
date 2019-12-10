@@ -42,7 +42,7 @@ const TopDiv = styled.div`
 const BottomDiv = styled.div`
     width: 100%;
     display: flex;
-    align-items: space-between;
+    justify-content: space-between;
 `
 
 const QtyDiv = styled.div`

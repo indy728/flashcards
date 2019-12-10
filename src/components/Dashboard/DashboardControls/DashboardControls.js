@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 // import Button from '../../UI/Button/Button'
+import Sprite from '../../UI/Sprite/Sprite'
 
 import * as actions from '../../../store/actions'
 
@@ -44,6 +45,12 @@ const AddItemButton = styled.div`
     }
 `
 
+const AddItemParent = styled(AddItemButton)`
+    height: 2.8rem;
+    font-size: 1.6rem;
+    font-weight: bold;
+`
+
 class ControlsParent extends Component {
     state = {
         hideChildren: true
@@ -56,13 +63,23 @@ class ControlsParent extends Component {
     }
 
     render() {
+        const { hideChildren } = this.state
+
         return (
-            <div 
-                style={{'height': '2rem', 'width': '5rem', 'backgroundColor': 'red'}}
-                onClick={() => this.toggleShowHide()}
-                >
-                {!this.state.hideChildren && <span>Ballsack</span>}
-            </div>
+            <React.Fragment>
+                <AddItemParent 
+                    className='addItemParent'
+                    onClick={() => this.toggleShowHide()}
+                    >
+                    <span>{this.props.label}</span>
+                    <Sprite 
+                        className='addItemParent--chevron'
+                        height='1.8rem'
+                        spriteName={hideChildren ? 'chevron-right' : 'chevron-down'}
+                        />
+                </AddItemParent>
+                {!hideChildren && this.props.children}
+            </React.Fragment>
         )
     }
 }
@@ -106,14 +123,16 @@ class DashboardControls extends Component {
 
             for (let group in ingredients) {
                 const categories = ingredients[group]
-                const categoryDivs = []
+                let categoryDivs = []
                 let groupRank = ingredients[group].rank
+                console.log(group)
 
 
                 for (let category in categories) {
+                    if (category === 'rank') continue
                     const items = ingredients[group][category]
                     const itemButtons = []
-                    
+
                     for (let item in items) {
     
                         if (items[item].name) {
@@ -134,8 +153,16 @@ class DashboardControls extends Component {
                                 </AddItemButton>
                         )}
                     }
-                    categoryDivs.push(<DashboardControlSection key={category} rank>{itemButtons}</DashboardControlSection>)
+                    categoryDivs.push(
+                        <DashboardControlSection key={category}>
+                            <ControlsParent
+                                label={category}
+                                >
+                                {itemButtons}
+                            </ControlsParent>
+                        </DashboardControlSection>)
                 }
+                categoryDivs = <ControlsParent label={group}>{categoryDivs}</ControlsParent>
                 groups.push({categories: categoryDivs, rank: groupRank})
             }
 
@@ -161,7 +188,6 @@ class DashboardControls extends Component {
         
         return (
             <Wrapper>
-                <ControlsParent />
                 {buttons}
             </Wrapper>
         )
