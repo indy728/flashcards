@@ -44,10 +44,28 @@ const AddItemButton = styled.div`
     }
 `
 
-// const itemInit = {
-//     open: false,
-//     list: []
-// }
+class ControlsParent extends Component {
+    state = {
+        hideChildren: true
+    }
+
+    toggleShowHide() {
+        this.setState(prevState => {
+            return {hideChildren: !prevState.hideChildren}
+        })
+    }
+
+    render() {
+        return (
+            <div 
+                style={{'height': '2rem', 'width': '5rem', 'backgroundColor': 'red'}}
+                onClick={() => this.toggleShowHide()}
+                >
+                {!this.state.hideChildren && <span>Ballsack</span>}
+            </div>
+        )
+    }
+}
 
 class DashboardControls extends Component {
     state = {
@@ -78,21 +96,14 @@ class DashboardControls extends Component {
     buttonSelectedHandler = (section, value) => {
         return (this.state[section] === value)
     }
-
-    divSort = obj => {
-
-    }
     
     render() {
         const { ingredients, loading } = this.props
         let buttons = []
 
         if (!loading) {
-            const groupKeys = Object.keys(ingredients)
             const groups = []
 
-
-            // buttons = groupKeys.map(group => {
             for (let group in ingredients) {
                 const categories = ingredients[group]
                 const categoryDivs = []
@@ -100,12 +111,6 @@ class DashboardControls extends Component {
 
 
                 for (let category in categories) {
-                    let rank = 99
-                    if (category === 'rank') {
-                        rank = categories[category]
-                        console.log(rank)
-                        continue
-                    }
                     const items = ingredients[group][category]
                     const itemButtons = []
                     
@@ -156,6 +161,7 @@ class DashboardControls extends Component {
         
         return (
             <Wrapper>
+                <ControlsParent />
                 {buttons}
             </Wrapper>
         )
