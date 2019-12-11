@@ -110,10 +110,14 @@ class CocktailCreator extends Component {
         }
     }
   
-    removeAttributeHandler = index => {
+    removeAttributeHandler = (event, index) => {
+        event.preventDefault()
         const attributes = [...this.state.attributes]
+        console.log('[CocktailCreator] attributes: ', attributes)
 
+        console.log('[CocktailCreator] index: ', index)
         attributes.splice(index, 1)
+        console.log('[CocktailCreator] attributes: ', attributes)
         this.setState({ attributes })
     }
 
@@ -153,6 +157,31 @@ class CocktailCreator extends Component {
         this.setState({ attributes, formIsValid })
     }
 
+    cocktailSubmitHandler = event => {
+        event.preventDefault()
+
+        const { attributes } = this.state
+        let cocktailNode = {}
+        let firstInstruction = -1
+
+        for (let i in attributes) {
+            const attribute = attributes[i]
+            console.log('[CocktailCreator] attribute: ', attribute)
+            let name = attribute.name
+            if (name === 'instruction') {
+                if (firstInstruction !== -1) {
+                    name = name + (i - firstInstruction)
+                } else if (i < attributes.length - 1) {
+                    firstInstruction = i
+                }
+            }
+            cocktailNode = updateObject(cocktailNode, {
+                [name]: attribute.value
+            })
+        }
+        console.log('[CocktailCreator] cocktailNode: ', cocktailNode)
+    }
+
     clearAttributes = () => {
         this.setState({attributes: []}, () => {
             this.addAttributeHandler(attributesInit)
@@ -172,6 +201,7 @@ class CocktailCreator extends Component {
                         removeAttribute={this.removeAttributeHandler}
                         inputChanged={this.inputChangedHandler}
                         formIsValid={this.state.formIsValid}
+                        cocktailSubmitHandler={this.cocktailSubmitHandler}
                         />
                 </ContentBlock>
             </React.Fragment>

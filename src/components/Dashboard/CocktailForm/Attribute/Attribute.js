@@ -81,7 +81,7 @@ const attribute = props => {
     if (props.remove) {
         remove = (
             <Button
-                clicked={() => props.removeAttribute(props.index)}>
+                clicked={(event) => props.removeAttribute(event, props.index)}>
                 REMOVE
             </Button>
         )
@@ -97,6 +97,7 @@ const attribute = props => {
                     className='qtyInput' 
                     width='7rem'
                     margin='0 0 0 1rem'
+                    value={props.value}
                     changed={(event) => props.changed(event, props.index)}
                     />
                 <select style={{'marginLeft': '2rem'}}>
@@ -108,6 +109,7 @@ const attribute = props => {
         bottom = (
             <InstructionsText
                 className='instructionsText'
+                value={props.value}
                 onChange={(event) => props.changed(event, props.index)}
                 />
         )

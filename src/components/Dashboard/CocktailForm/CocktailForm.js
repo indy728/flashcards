@@ -10,13 +10,14 @@ const Wrapper = styled.form`
 
 const cocktailForm = props => {
     const transformedAttributes = props.attributes.map((key,i) => {
-        const { type, label, removeable } = key
+        const { type, label, removeable, value } = key
 
         return (
             <Attribute
                 key={type + i}
                 index={i}
                 type={type}
+                value={value}
                 header={label}
                 remove={removeable}
                 changed={props.inputChanged}
@@ -25,7 +26,10 @@ const cocktailForm = props => {
     })
 
     return (
-        <Wrapper className='cocktailForm' >
+        <Wrapper
+            className='cocktailForm' 
+            onSubmit={props.cocktailSubmitHandler}
+            >
             {transformedAttributes}
             <Button
                 disabled={!props.formIsValid}>

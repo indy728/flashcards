@@ -223,7 +223,7 @@ class IngredientCreator extends Component {
         this.setState({formControls: updatedControls, formType: 'select', formIsValid: false})
     }
 
-    addIngredientHandler = (event) => {
+    addIngredientHandler = event => {
         event.preventDefault()
 
         const { formControls, selector } = this.state
