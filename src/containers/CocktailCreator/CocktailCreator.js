@@ -73,7 +73,8 @@ class CocktailCreator extends Component {
                 valid: false,
                 touched: false
             },
-        }
+        },
+        formIsValid: false
     }
 
     componentDidMount() {
@@ -86,10 +87,12 @@ class CocktailCreator extends Component {
         let controls = {...this.state.drinkControls[newAttribute.type]}
         let duplicate = false;
 
-        for (let i in attributes) {
-            if (attributes[i].label === newAttribute.label) {
-                duplicate = true
-                break
+        if (newAttribute.type !== 'instructions') {
+            for (let i in attributes) {
+                if (attributes[i].label === newAttribute.label) {
+                    duplicate = true
+                    break
+                }
             }
         }
         if (!duplicate) {
@@ -114,25 +117,40 @@ class CocktailCreator extends Component {
         this.setState({ attributes })
     }
 
-    inputChangedHandler = (event, controlIndex) => {
-        // let controls = {...this.state.attributes[controlIndex]}
-        // let formIsValid = true
-        // let i = 0
+    checkValidity = (value, rules) => {
+        let isValid = true;
+        
+        if (!rules) return true
+        
+        if (rules.required) {
+            isValid = value.trim() !== '' && isValid;
+        }
+        
+        if (rules.length) {
+            isValid = value.length >= rules.length.absMin && value.length <= rules.length.absMax && isValid
+        }
 
-        // const updatedControls = updateObject(controls, {
-        //     [controlName]: updateObject(controls[controlName], {
-        //         value: event.target.value,
-        //         valid: this.checkValidity(event.target.value, controls[controlName].validation),
-        //         touched: true
-        //     })
-        // })
-        // for (let inputIdentifier in updatedControls) {
-        //     if (this.state.tier <= i) {
-        //         formIsValid = updatedControls[inputIdentifier].valid && formIsValid
-        //     }
-        //     i = i + 1
-        // }
-        // this.setState({ingredientControls: updatedControls, formIsValid: formIsValid})
+        // TO DO
+        // way more validation stuff
+
+        return isValid
+    }
+
+    inputChangedHandler = (event, controlIndex) => {
+        const { attributes } = this.state
+        let controls = attributes[controlIndex]
+        const updatedControls = updateObject(controls, {
+            value: event.target.value,
+            valid: this.checkValidity(event.target.value, controls.validation),
+            touched: true
+        })
+        let formIsValid = true
+        
+        attributes[controlIndex] = updatedControls
+        for (let attribute in attributes) {
+            formIsValid = attributes[attribute].valid && formIsValid
+        }
+        this.setState({ attributes, formIsValid })
     }
 
     clearAttributes = () => {
@@ -152,7 +170,9 @@ class CocktailCreator extends Component {
                         attributes={this.state.attributes}
                         addAttribute={this.addAttributeHandler}
                         removeAttribute={this.removeAttributeHandler}
-                        inputChanged={this.inputChangedHandler} />
+                        inputChanged={this.inputChangedHandler}
+                        formIsValid={this.state.formIsValid}
+                        />
                 </ContentBlock>
             </React.Fragment>
         )
@@ -161,7 +181,8 @@ class CocktailCreator extends Component {
 
 const mapStateToProps = state => {
     return {
-        ingredients: state.ingredients.ingredients
+        ingredients: state.ingredients.ingredients,
+        loading: state.ingredients.loading
     }
 }
 

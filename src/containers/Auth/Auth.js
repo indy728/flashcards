@@ -270,7 +270,7 @@ class Auth extends Component {
         let form = formElementsArray.map(formElement => (
             <AuthInput 
                 key={formElement.id}
-                autocomplete={formElement.config.elementConfig.autocomplete || ''}
+                autocomplete={formElement.config.elementConfig.autocomplete}
                 className="AuthInput"
                 elementType={formElement.config.elementType}
                 elementConfig={formElement.config.elementConfig}

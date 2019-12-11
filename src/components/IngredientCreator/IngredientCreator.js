@@ -47,7 +47,6 @@ const controlsInit = {
 class IngredientCreator extends Component {
     state = {
         selector: ['ingredients'],
-        // tier: 0,
         formType: 'select',
         formControls: {},
         groupControls: [
@@ -323,7 +322,7 @@ class IngredientCreator extends Component {
             }
             window = (
                 <ContentBlock>
-                    <button onClick={this.clearInputs}>clear inputs</button>
+                    {/* <button onClick={this.clearInputs}>clear inputs</button> */}
                     <Header>Add A New Ingredient</Header>
                     {formMenus}
                     {newItemForm}

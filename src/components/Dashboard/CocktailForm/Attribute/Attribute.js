@@ -62,7 +62,6 @@ const InstructionsText = styled.textarea`
     font-size: 1.4rem;
 `
 
-
 const RemoveDiv = styled.div`
     width: 20%;
     display: flex;
@@ -96,8 +95,9 @@ const attribute = props => {
                 <div>Quantity:</div>
                 <AttributeInput
                     className='qtyInput' 
-                    width='5rem'
+                    width='7rem'
                     margin='0 0 0 1rem'
+                    changed={(event) => props.changed(event, props.index)}
                     />
                 <select style={{'marginLeft': '2rem'}}>
                     {measurementOptions}
@@ -105,7 +105,12 @@ const attribute = props => {
             </QtyDiv>
         )
     } else if (props.type === 'instructions') {
-        bottom = <InstructionsText className='instructionsText' />
+        bottom = (
+            <InstructionsText
+                className='instructionsText'
+                onChange={(event) => props.changed(event, props.index)}
+                />
+        )
     } else {
         bottom = (
             <AttributeInput 

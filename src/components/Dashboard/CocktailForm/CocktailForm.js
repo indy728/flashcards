@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import Attribute from './Attribute/Attribute'
+import Button from '../../UI/Button/Button'
 
-const Wrapper = styled.div`
+const Wrapper = styled.form`
     width: 55rem;
     padding: 2rem 4rem;
 `
@@ -26,6 +27,10 @@ const cocktailForm = props => {
     return (
         <Wrapper className='cocktailForm' >
             {transformedAttributes}
+            <Button
+                disabled={!props.formIsValid}>
+                    SUBMIT
+            </Button>
         </Wrapper>
     )
 }
