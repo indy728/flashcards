@@ -43,8 +43,7 @@ const dashboardControls = props => {
                                 className='dashboardControl'
                                 key={item}
                                 level={2}
-                                label=
-                                {items[item].name}
+                                label={items[item].name}
                                 clicked={()=> props.addAttribute(clickedObj)}
                                 />
                     )}

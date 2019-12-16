@@ -8,6 +8,13 @@ const Wrapper = styled.form`
     padding: 2rem 4rem;
 `
 
+const SubmitButtonDiv = styled.div`
+    width: 100%;
+    padding-top: 2rem;
+    display: flex;
+    justify-content: center;
+`
+
 const cocktailForm = props => {
     const transformedAttributes = props.attributes.map((key,i) => {
         const { type, label, removeable, value } = key
@@ -32,10 +39,12 @@ const cocktailForm = props => {
             onSubmit={props.cocktailSubmitHandler}
             >
             {transformedAttributes}
-            <Button
-                disabled={!props.formIsValid}>
-                    SUBMIT
-            </Button>
+            <SubmitButtonDiv>
+                <Button
+                    disabled={!props.formIsValid}>
+                        SUBMIT NEW COCKTAIL
+                </Button>
+            </SubmitButtonDiv>
         </Wrapper>
     )
 }

@@ -56,8 +56,20 @@ class CocktailCreator extends Component {
                 valid: false,
                 touched: false
             },
-            instructions: {
+            glassware: {
                 tier: 2,
+                type: 'glassware',
+                label: '',
+                elementType: 'static',
+                elementConfig: {},
+                value: '',
+                removeable: true,
+                validation: {},
+                valid: true,
+                touched: true
+            },
+            instructions: {
+                tier: 3,
                 type: 'instruction',
                 label: '',
                 elementType: 'input',
@@ -180,10 +192,21 @@ class CocktailCreator extends Component {
 
         for (let i in attributes) {
             const attribute = attributes[i]
-            console.log('[CocktailCreator] attribute: ', attribute)
+            // console.log('[CocktailCreator] attribute: ', attribute)
             let key = ''
             let type = attribute.type
-            if (type === 'instructions') {
+
+            if (i === '0') {
+                const { value } = attribute
+                const id = value.toLowerCase()
+                    .replace(/[\s]/g, '')
+                    .replace(/^the/i, '')
+                    .substring(0, 6)
+                cocktailNode = updateObject(cocktailNode, {
+                    name: value,
+                    id
+                })
+            } else if (type === 'instructions') {
                 if (firstInstruction !== -1) {
                     key = key + (i - firstInstruction)
                 } else if (i < attributes.length - 1) {
@@ -198,12 +221,12 @@ class CocktailCreator extends Component {
                 key = attribute.value
                 cocktailNode = updateObject(cocktailNode, {
                     elements: updateObject(cocktailNode.elements, {
-                        [attribute.key]: attribute.value + ' ' + attribute.valueType
+                        [attribute.key]: {
+                            qty: attribute.value + ' ' + attribute.valueType,
+                            order: i - 1,
+                            label: attribute.label
+                        }
                     })
-                })
-            } else {
-                cocktailNode = updateObject(cocktailNode, {
-                    [type]: attribute.value
                 })
             }
         }

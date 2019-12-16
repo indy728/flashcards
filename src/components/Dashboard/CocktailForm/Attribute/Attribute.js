@@ -71,7 +71,7 @@ const RemoveDiv = styled.div`
 `
 
 const qtyArray = [
-    'oz', 'dash(es)'
+    'oz', 'dash(es)', 'count'
 ]
 
 const attribute = props => {
