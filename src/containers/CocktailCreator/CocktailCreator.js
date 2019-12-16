@@ -48,6 +48,7 @@ class CocktailCreator extends Component {
                     autocomplete: '',
                 },
                 value: '',
+                valueType: 'oz',
                 removeable: true,
                 validation: {
                     required: true,
@@ -113,11 +114,8 @@ class CocktailCreator extends Component {
     removeAttributeHandler = (event, index) => {
         event.preventDefault()
         const attributes = [...this.state.attributes]
-        console.log('[CocktailCreator] attributes: ', attributes)
 
-        console.log('[CocktailCreator] index: ', index)
         attributes.splice(index, 1)
-        console.log('[CocktailCreator] attributes: ', attributes)
         this.setState({ attributes })
     }
 
@@ -157,6 +155,17 @@ class CocktailCreator extends Component {
         this.setState({ attributes, formIsValid })
     }
 
+    valueTypeChangedHandler = (event, controlIndex) => {
+        const { attributes } = this.state
+        let controls = attributes[controlIndex]
+        const updatedControls = updateObject(controls, {
+            valueType: event.target.value,
+        })
+
+        attributes[controlIndex] = updatedControls
+        this.setState({ attributes })
+    }
+
     cocktailSubmitHandler = event => {
         event.preventDefault()
 
@@ -188,8 +197,8 @@ class CocktailCreator extends Component {
             } else if (type === 'ingredient') {
                 key = attribute.value
                 cocktailNode = updateObject(cocktailNode, {
-                    elements: updateObject(cocktailNode.instructions, {
-                        [attribute.label]: attribute.value
+                    elements: updateObject(cocktailNode.elements, {
+                        [attribute.key]: attribute.value + ' ' + attribute.valueType
                     })
                 })
             } else {
@@ -219,6 +228,7 @@ class CocktailCreator extends Component {
                         addAttribute={this.addAttributeHandler}
                         removeAttribute={this.removeAttributeHandler}
                         inputChanged={this.inputChangedHandler}
+                        selectChanged={this.valueTypeChangedHandler}
                         formIsValid={this.state.formIsValid}
                         cocktailSubmitHandler={this.cocktailSubmitHandler}
                         />

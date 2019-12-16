@@ -100,7 +100,10 @@ const attribute = props => {
                     value={props.value}
                     changed={(event) => props.changed(event, props.index)}
                     />
-                <select style={{'marginLeft': '2rem'}}>
+                <select
+                    style={{'marginLeft': '2rem'}}
+                    onChange={event => props.selectChanged(event, props.index)}
+                    >
                     {measurementOptions}
                 </select>
             </QtyDiv>

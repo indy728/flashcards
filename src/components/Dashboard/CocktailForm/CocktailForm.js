@@ -21,6 +21,7 @@ const cocktailForm = props => {
                 header={label}
                 remove={removeable}
                 changed={props.inputChanged}
+                selectChanged={props.selectChanged}
                 removeAttribute={props.removeAttribute}/>
         )
     })

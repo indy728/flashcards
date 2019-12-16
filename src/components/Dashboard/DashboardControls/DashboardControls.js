@@ -34,10 +34,10 @@ const dashboardControls = props => {
                     if (items[item].name) {
                         const clickedObj = {
                             label: items[item].name,
+                            key: item,
                             subTier: categories.rank,
                             type: 'ingredient'
                         }
-                        
                         itemButtons.push(
                             <DashboardControl
                                 className='dashboardControl'
