@@ -161,23 +161,42 @@ class CocktailCreator extends Component {
         event.preventDefault()
 
         const { attributes } = this.state
-        let cocktailNode = {}
+        let cocktailNode = {
+            id: '',
+            name: '',
+            elements: {},
+            instructions: {}
+        }
         let firstInstruction = -1
 
         for (let i in attributes) {
             const attribute = attributes[i]
             console.log('[CocktailCreator] attribute: ', attribute)
-            let name = attribute.name
-            if (name === 'instruction') {
+            let key = ''
+            let type = attribute.type
+            if (type === 'instructions') {
                 if (firstInstruction !== -1) {
-                    name = name + (i - firstInstruction)
+                    key = key + (i - firstInstruction)
                 } else if (i < attributes.length - 1) {
                     firstInstruction = i
                 }
+                cocktailNode = updateObject(cocktailNode, {
+                    instructions: updateObject(cocktailNode.instructions, {
+                        ['instruction' + key]: attribute.value
+                    })
+                })
+            } else if (type === 'ingredient') {
+                key = attribute.value
+                cocktailNode = updateObject(cocktailNode, {
+                    elements: updateObject(cocktailNode.instructions, {
+                        [attribute.label]: attribute.value
+                    })
+                })
+            } else {
+                cocktailNode = updateObject(cocktailNode, {
+                    [type]: attribute.value
+                })
             }
-            cocktailNode = updateObject(cocktailNode, {
-                [name]: attribute.value
-            })
         }
         console.log('[CocktailCreator] cocktailNode: ', cocktailNode)
     }
