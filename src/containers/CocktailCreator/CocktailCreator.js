@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import ContentBlock from '../../components/UI/ContentBlock/ContentBlock'
 import Header from '../../components/UI/Header/Header'
 import Dashboard from '../../components/Dashboard/Dashboard'
+import Modal from '../../components/UI/Modal/Modal'
+import IngredientForm from '../../components/IngredientForm/IngredientForm'
 import { updateObject } from '../../shared/utility'
 import * as actions from '../../store/actions'
 
@@ -16,6 +18,7 @@ class CocktailCreator extends Component {
     state = {
         attributes: [],
         count: 1,
+        adding: false,
         drinkControls: {
             name: {
                 tier: 0,
@@ -94,6 +97,15 @@ class CocktailCreator extends Component {
         if (!this.props.ingredients) this.props.onInitIngredients()
         this.addAttributeHandler(attributesInit)
     }
+
+    addingCanceled = () => {
+        this.setState({adding: false})
+    }
+
+    addingTrue = () => {
+        this.setState({adding: true})
+    }
+
 
     addAttributeHandler = newAttribute => {
         const { attributes, count } = this.state
@@ -242,6 +254,10 @@ class CocktailCreator extends Component {
     render() {
         return (
             <React.Fragment>
+                <Modal show={this.state.adding} modalClosed={this.addingCanceled}>
+                    <IngredientForm />
+                </Modal>
+                <button onClick={this.addingTrue}>ADDING</button>
                 <ContentBlock>
                     <Header>Add A New Cocktail</Header>
                     <Dashboard

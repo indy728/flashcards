@@ -5,7 +5,7 @@ import Layout from './hoc/Layout/Layout'
 import asyncComponent from './hoc/asyncComponent/asyncComponent'
 import CocktailCreator from './containers/CocktailCreator/CocktailCreator'
 import HomePage from './containers/HomePage/HomePage'
-import IngredientCreator from './components/IngredientCreator/IngredientCreator'
+import IngredientCreator from './containers/IngredientCreator/IngredientCreator'
 import Logout from './containers/Auth/Logout/Logout'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 
