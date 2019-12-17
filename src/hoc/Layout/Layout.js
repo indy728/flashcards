@@ -70,10 +70,10 @@ class Layout extends Component {
                 usage: "creator",
                 isAuth: true,
             },
-            addIngredient: {
-                key: "addIngredient",
-                link: "/add_ingredient",
-                title: "Add An Ingredient",
+            addElement: {
+                key: "addElement",
+                link: "/add_element",
+                title: "Add An Element",
                 usage: "creator",
                 isAuth: true,
             },

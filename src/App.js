@@ -80,7 +80,7 @@ class App extends Component {
         <Switch>
           <Route path="/logout" exact component={Logout} />
           <Route path="/add_cocktail" component={CocktailCreator} />
-          <Route path="/add_ingredient" component={IngredientCreator} />
+          <Route path="/add_element" component={IngredientCreator} />
           <Route path="/flashcards" component={asyncFlashcards} />
           <Route path="/" exact component={HomePage}/>
           <Redirect to="/add_cocktail" />

@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import Backdrop from '../Backdrop/Backdrop'
 
 const ModalFocus = styled.div`
-
     > * {
         transform: ${props => props.show ? "translateY(0)" : "translateY(-100vh)"} translateX(-50%);
         opacity: ${props => props.show ? '1' : '0'};
@@ -39,7 +38,7 @@ class Modal extends Component {
                 <ModalFocus 
                     className='modal'
                     show={this.props.show}
-                >
+                    >
                     {this.props.children}
                 </ModalFocus>
             </Wrapper>

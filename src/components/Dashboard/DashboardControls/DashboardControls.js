@@ -13,6 +13,15 @@ const Wrapper = styled.div`
     justify-content: flex-start;
 `
 
+const AddElementControl = styled(DashboardControl)`
+    text-transform: uppercase;
+    font-weight: normal;
+    
+    .addElementLabel {
+        font-style: italic;
+    }
+`
+
 const dashboardControls = props => {
         const { ingredients } = props
         let buttons = []
@@ -48,20 +57,42 @@ const dashboardControls = props => {
                                 />
                     )}
                 }
+                itemButtons.push(
+                    <AddElementControl
+                                className='addElementControl'
+                                labelClassName='addElementLabel'
+                                key={"add" + category}
+                                level={2}
+                                label={"add to " + category}
+                                clicked={props.addIngredient}
+                                />
+                )
                 categoryDivs.push(
                     <ParentControl
                         key={category}
                         label={category}
                         level={1}
+                        addIngredient={props.addIngredient}
                         >
                         {itemButtons}
                     </ParentControl>
                 )
             }
+            categoryDivs.push(
+                <AddElementControl
+                    className='addElementControl'
+                    labelClassName='addElementLabel'
+                    key={"add" + group}
+                    level={1}
+                    label={"add to " + group}
+                    clicked={props.addIngredient}
+                    />
+            )
             const newCategory = (
                 <ParentControl
                     key={group} 
                     label={group}
+                    addIngredient={props.addIngredient}
                     >
                     {categoryDivs}
                 </ParentControl>

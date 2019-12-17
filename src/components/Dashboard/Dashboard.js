@@ -16,6 +16,7 @@ const dashboard = props => {
         <Wrapper>
             <DashboardControls 
                 ingredients={props.ingredients}
+                addIngredient={props.addIngredient}
                 addAttribute={props.addAttribute} />
             <CocktailForm 
                 {...props}/>

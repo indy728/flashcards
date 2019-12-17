@@ -115,10 +115,15 @@ class IngredientCreator extends Component {
             })
         } else if (event.target.value === 'add' || event.target.value === 'edit') {
             const groupControls = [ ...this.state.groupControls ]
-
-            groupControls.splice(0, Math.min(index, tier))
+            
+            // groupControls.splice(0, Math.min(index, tier))
+            console.log('[IngredientForm] groupControls: ', groupControls)
+            console.log('[IngredientForm] groupControls[index]: ', groupControls[index])
+            console.log('[IngredientForm] groupControls[tier]: ', groupControls[tier])
+            console.log('[IngredientForm] index, tier: ', index, tier)
             this.setState({
-                formControls: setFormControls(groupControls),
+                // formControls: setFormControls(groupControls),
+                formControls: setFormControls([groupControls[tier]]),
                 selector: selector.slice(0, index + 1),
                 formType: event.target.value,
             })
@@ -283,18 +288,19 @@ class IngredientCreator extends Component {
         let window = <Spinner />
         if (!this.props.loading) {
             const formMenus = this.objectFormCreator()
-            const formElementsArray = []
-            const formElementsObj = {...this.state.formControls}
-           
-            for (let key in formElementsObj) {
-                formElementsArray.push({
-                    id: key,
-                    config: formElementsObj[key],
-                })
-            }
+            console.log('[IngredientForm] this.state.selector: ', this.state.selector)
             let newItemForm = null
             
             if (this.state.formType === 'add') {
+                const formElementsArray = []
+                const formElementsObj = {...this.state.formControls}
+            
+                for (let key in formElementsObj) {
+                    formElementsArray.push({
+                        id: key,
+                        config: formElementsObj[key],
+                    })
+                }
                 let form = formElementsArray.map(formElement => (
                         <AddElementInput 
                             key={formElement.id}
@@ -323,7 +329,7 @@ class IngredientCreator extends Component {
             window = (
                 <ContentBlock>
                     {/* <button onClick={this.clearInputs}>clear inputs</button> */}
-                    <Header>Add A New Ingredient</Header>
+                    <Header>Add A New Element</Header>
                     {formMenus}
                     {newItemForm}
                 </ContentBlock>

@@ -257,12 +257,12 @@ class CocktailCreator extends Component {
                 <Modal show={this.state.adding} modalClosed={this.addingCanceled}>
                     <IngredientForm />
                 </Modal>
-                <button onClick={this.addingTrue}>ADDING</button>
                 <ContentBlock>
                     <Header>Add A New Cocktail</Header>
                     <Dashboard
                         className='dashboard'
                         ingredients={this.props.ingredients}
+                        addIngredient={this.addingTrue}
                         attributes={this.state.attributes}
                         addAttribute={this.addAttributeHandler}
                         removeAttribute={this.removeAttributeHandler}
