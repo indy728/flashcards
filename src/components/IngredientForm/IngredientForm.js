@@ -8,7 +8,7 @@ import Input from '../UI/Input/Input'
 import Header from '../UI/Header/Header'
 
 import IngredientTierForm from './IngredientTierForm/IngredientTierForm'
-import { updateObject } from '../../shared/utility'
+import { updateObject, idTransform, nameTransform } from '../../shared/utility'
 import * as actions from '../../store/actions'
 
 
@@ -23,9 +23,21 @@ const AddElementForm = styled.form`
 
 const AddElementInput = styled(Input)`
     width: 100%;
+`
+
+const FormElement = styled.div`
+    width: 100%;
     display: flex;
+    flex-flow: column;
     justify-content: center;
     align-items: center;
+`
+
+const AddFormElement = styled.div`
+    margin-bottom: 2rem;
+    padding: .5rem 2rem;
+    border: 1px solid black;
+    background-color: orangered;
 `
 
 const controlsInit = {
@@ -61,12 +73,7 @@ class IngredientCreator extends Component {
                 example: 'gin'
             },
             { 
-                name: 'tag',
-                placeholder: 'New Item Tag',
-                example: 'londonDry'
-            },
-            { 
-                name: 'name',
+                name: 'item',
                 placeholder: 'New Item Name',
                 example: 'London Dry Gin'
             },
@@ -117,10 +124,10 @@ class IngredientCreator extends Component {
             const groupControls = [ ...this.state.groupControls ]
             
             // groupControls.splice(0, Math.min(index, tier))
-            console.log('[IngredientForm] groupControls: ', groupControls)
-            console.log('[IngredientForm] groupControls[index]: ', groupControls[index])
-            console.log('[IngredientForm] groupControls[tier]: ', groupControls[tier])
-            console.log('[IngredientForm] index, tier: ', index, tier)
+            // console.log('[IngredientForm] groupControls: ', groupControls)
+            // console.log('[IngredientForm] groupControls[index]: ', groupControls[index])
+            // console.log('[IngredientForm] groupControls[tier]: ', groupControls[tier])
+            // console.log('[IngredientForm] index, tier: ', index, tier)
             this.setState({
                 // formControls: setFormControls(groupControls),
                 formControls: setFormControls([groupControls[tier]]),
@@ -236,8 +243,18 @@ class IngredientCreator extends Component {
         const tier = selector.length - 1
         const dbRefArray = [...selector]
         const controlArray = Object.keys(formControls)
-        const newItem = {
-            [formControls.tag.value]: {
+        console.log('[IngredientForm] formControls: ', formControls)
+        console.log('[IngredientForm] selector: ', selector)
+        console.log('[IngredientForm] ingredients: ', ingredients)
+
+        // CHANGE THIS TO FIT WHATEVER
+        const tmp = "item"
+        const id = idTransform(formControls[tmp].value)
+        const name = nameTransform(formControls[tmp].value)
+        console.log('[IngredientForm] id: ', id)
+        console.log('[IngredientForm] name: ', name)
+        let newItem = {
+            [id]: {
                 name: formControls.name.value
             }
         }
@@ -288,8 +305,8 @@ class IngredientCreator extends Component {
         let window = <Spinner />
         if (!this.props.loading) {
             const formMenus = this.objectFormCreator()
-            console.log('[IngredientForm] this.state.selector: ', this.state.selector)
             let newItemForm = null
+            console.log('[IngredientForm] this.state.formControls: ', this.state.formControls)
             
             if (this.state.formType === 'add') {
                 const formElementsArray = []
@@ -301,21 +318,34 @@ class IngredientCreator extends Component {
                         config: formElementsObj[key],
                     })
                 }
-                let form = formElementsArray.map(formElement => (
-                        <AddElementInput 
-                            key={formElement.id}
-                            autocomplete={formElement.config.elementConfig.autocomplete || ''}
-                            className="AddElementInput"
-                            elementType={formElement.config.elementType}
-                            elementConfig={formElement.config.elementConfig}
-                            value={formElement.config.value}
-                            invalid={!formElement.config.valid}
-                            shouldValidate={formElement.config.validation}
-                            touched={formElement.config.touched}
-                            changed={(event) => this.inputChangedHandler(event, formElement.id)} 
-                            />
+
+                let form = formElementsArray.map(formElement => {
+                    let addButton = null;
+
+                    if (formElement.id !== 'item'){
+                        addButton = (
+                            <AddFormElement>
+                                Add Item To {formElement.config.value}
+                            </AddFormElement>
+                        )
+                    }
+                    return (
+                        <FormElement key={formElement.id}>
+                            <AddElementInput 
+                                autocomplete={formElement.config.elementConfig.autocomplete || ''}
+                                className="AddElementInput"
+                                elementType={formElement.config.elementType}
+                                elementConfig={formElement.config.elementConfig}
+                                value={formElement.config.value}
+                                invalid={!formElement.config.valid}
+                                shouldValidate={formElement.config.validation}
+                                touched={formElement.config.touched}
+                                changed={(event) => this.inputChangedHandler(event, formElement.id)} 
+                                />
+                                {addButton}
+                        </FormElement>
                     )
-                )
+                })
                 newItemForm = (
                     <AddElementForm onSubmit={this.addIngredientHandler}>
                         {form}

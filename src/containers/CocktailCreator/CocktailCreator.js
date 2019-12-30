@@ -5,7 +5,7 @@ import Header from '../../components/UI/Header/Header'
 import Dashboard from '../../components/Dashboard/Dashboard'
 import Modal from '../../components/UI/Modal/Modal'
 import IngredientForm from '../../components/IngredientForm/IngredientForm'
-import { updateObject } from '../../shared/utility'
+import { updateObject, idTransform, nameTransform } from '../../shared/utility'
 import * as actions from '../../store/actions'
 
 const attributesInit = {
@@ -210,12 +210,11 @@ class CocktailCreator extends Component {
 
             if (i === '0') {
                 const { value } = attribute
-                const id = value.toLowerCase()
-                    .replace(/[\s]/g, '')
+                const name = nameTransform(value)
+                const id = idTransform(value)
                     .replace(/^the/i, '')
-                    .substring(0, 6)
                 cocktailNode = updateObject(cocktailNode, {
-                    name: value,
+                    name,
                     id
                 })
             } else if (type === 'instructions') {
