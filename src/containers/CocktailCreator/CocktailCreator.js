@@ -107,7 +107,6 @@ class CocktailCreator extends Component {
 
     addingTrue = (selectors) => {
         this.setState({adding: true, selectorInit: selectors})
-        console.log('[CocktailCreator] selectors: ', selectors)
         // ADD FORM ATTRIBUTES
     }
 
@@ -209,7 +208,6 @@ class CocktailCreator extends Component {
 
         for (let i in attributes) {
             const attribute = attributes[i]
-            // console.log('[CocktailCreator] attribute: ', attribute)
             let key = ''
             let type = attribute.type
 
@@ -257,7 +255,7 @@ class CocktailCreator extends Component {
 
     render() {
         let form = this.state.adding ? <IngredientForm selectorInit={this.state.selectorInit} /> : null
-        console.log('[CocktailCreator] this.state.selectorInit: ', this.state.selectorInit)
+        
         return (
             <React.Fragment>
                 <Modal show={this.state.adding} modalClosed={this.addingCanceled}>

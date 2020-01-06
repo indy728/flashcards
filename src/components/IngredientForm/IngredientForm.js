@@ -90,14 +90,12 @@ class IngredientCreator extends Component {
     }
 
     componentDidMount() {
-        console.log('[IngredientForm] ComponentDidMount: ', 'yee')
         if (this.props.ingredients === null) {
             this.props.onInitIngredients()
         }
         if (this.props.selectorInit) {
             const newSelector = this.state.selector.concat(this.props.selectorInit)
             this.setState({ selector: newSelector })
-            console.log('[IngredientForm] newSelector: ', newSelector)
         }
     }
 
@@ -130,9 +128,6 @@ class IngredientCreator extends Component {
         } else if (event.target.value === 'add' || event.target.value === 'edit') {
             const groupControls = [ ...this.state.groupControls ]
             
-            // console.log('[IngredientForm] groupControls: ', groupControls)
-            // console.log('[IngredientForm] selector: ', selector)
-            // console.log('[IngredientForm] index, tier: ', index, tier)
             this.setState({
                 formControls: setFormControls([groupControls[index]]),
                 selector: selector.slice(0, index + 1),
@@ -156,36 +151,7 @@ class IngredientCreator extends Component {
         }
     }
 
-    objectFormCreator = () => {
-        const { selector } = this.state
-        const { ingredients } = this.props
-        const tier = selector.length - 1
-        const dropdowns = []
-
-        const pickObj = (obj, currentTier, maxTier) => {
-            if (currentTier < maxTier) {
-                return pickObj(obj[selector[currentTier + 1]], currentTier + 1, maxTier)
-            } else {
-                return obj
-            }
-        }
-
-        for (let i = 0 ; i <= tier; i++) {
-            let name = selector[i]
-            let optionKeys = Object.keys(pickObj(ingredients, 0, i))
-
-            dropdowns.push(
-                <IngredientTierForm
-                    key={i}
-                    name={name}
-                    changed={this.selectChangedHandler}
-                    options={optionKeys}>
-                </IngredientTierForm>
-            )
-        }
-        return dropdowns
-    }
-
+    
     checkValidity = (value, rules) => {
         let isValid = true;
         
@@ -242,26 +208,36 @@ class IngredientCreator extends Component {
     addIngredientHandler = event => {
         event.preventDefault()
 
-        const { formControls, selector } = this.state
+        const { formControls, groupControls, selector } = this.state
         const { ingredients } = this.props
         const tier = selector.length - 1
         const dbRefArray = [...selector]
         const controlArray = Object.keys(formControls)
-        console.log('[IngredientForm] formControls: ', formControls)
-        console.log('[IngredientForm] selector: ', selector)
-        console.log('[IngredientForm] ingredients: ', ingredients)
+        const key = groupControls[tier].name
 
-        // CHANGE THIS TO FIT WHATEVER
-        const tmp = "item"
-        const id = idTransform(formControls[tmp].value)
-        const name = nameTransform(formControls[tmp].value)
+        const setNode = (i, tier, selector, node) => {
+            if (i < tier) {
+                node = node[selector[i + 1]]
+                console.log('[IngredientForm] node: ', node)
+                return setNode(i + 1, tier, selector, node)
+            } else {
+                return node
+            }
+        }
+
+        const id = idTransform(formControls[key].value)
+        const name = nameTransform(formControls[key].value)
+        const keyNode = setNode(0, tier, selector, ingredients)
+        console.log('[IngredientForm] keyNode: ', keyNode)
         console.log('[IngredientForm] id: ', id)
         console.log('[IngredientForm] name: ', name)
         let newItem = {
             [id]: {
-                name: formControls.name.value
+                name: formControls[key].value,
+                rank: Object.keys(setNode(0, tier, selector, ingredients)).length
             }
         }
+
         const setObj = (obj, i, selector, tier) => {
             if (i > tier) {
                 return setObj({ [selector[i]]: obj}, i - 1, selector, tier)
@@ -273,20 +249,16 @@ class IngredientCreator extends Component {
         for (let control in controlArray) {
             dbRefArray.push(formControls[controlArray[control]].value.toLowerCase())
         }
+        // THE CODE BELOW IS FOR creating an initial object and I'm not sure if I still need it
+        // const addIngredientObject = setObj(newItem, 2, dbRefArray, tier)
 
-        const addIngredientObject = setObj(newItem, 2, dbRefArray, tier)
-        let node = ingredients
+        const addIngredientObject = newItem
 
-        const setNode = (i, tier, selector, node) => {
-            if (i < tier) {
-                node = node[selector[i + 1]]
-                return setNode(i + 1, tier, selector, node)
-            } else {
-                return node
-            }
-        }
+        console.log('[IngredientForm] addIngredientObject: ', addIngredientObject)
+        // let node = ingredients
+
     
-        node = setNode(0, tier, dbRefArray, node)
+        let node = setNode(0, tier, dbRefArray, ingredients)
 
         if (Object.keys(node).indexOf(Object.keys(addIngredientObject)[0].toLowerCase()) === -1) {
             node = updateObject(node, addIngredientObject)
@@ -302,78 +274,108 @@ class IngredientCreator extends Component {
             console.log('Duplicate of something')
             this.clearInputs()
         }
-        
+    }
+
+    dropdownMenuCreator = () => {
+        const { selector } = this.state
+        const { ingredients } = this.props
+        const tier = selector.length - 1
+        const dropdowns = []
+
+        const pickObj = (obj, currentTier, maxTier) => {
+            if (currentTier < maxTier) {
+                return pickObj(obj[selector[currentTier + 1]], currentTier + 1, maxTier)
+            } else {
+                return obj
+            }
+        }
+
+        for (let i = 0 ; i <= tier; i++) {
+            let name = selector[i]
+            let optionKeys = Object.keys(pickObj(ingredients, 0, i))
+
+            dropdowns.push(
+                <IngredientTierForm
+                    key={i}
+                    name={name}
+                    changed={this.selectChangedHandler}
+                    options={optionKeys}>
+                </IngredientTierForm>
+            )
+        }
+        return dropdowns
+    }
+
+    addItemForm = () => {
+        const formElementsArray = []
+        const formElementsObj = {...this.state.formControls}
+    
+        for (let key in formElementsObj) {
+            formElementsArray.push({
+                id: key,
+                config: formElementsObj[key],
+            })
+        }
+
+        let form = formElementsArray.map(formElement => {
+            let addButton = null;
+            console.log('[IngredientForm] this.state.selector: ', this.state.selector)
+            console.log('[IngredientForm] this.state.formControls: ', this.state.formControls)
+            if (formElement.id !== 'item'){
+                addButton = (
+                    <AddFormElement>
+                        Add Item To {formElement.config.value}
+                    </AddFormElement>
+                )
+            }
+            return (
+                <FormElement key={formElement.id}>
+                    <AddElementInput 
+                        autocomplete={formElement.config.elementConfig.autocomplete || ''}
+                        className="AddElementInput"
+                        elementType={formElement.config.elementType}
+                        elementConfig={formElement.config.elementConfig}
+                        value={formElement.config.value}
+                        invalid={!formElement.config.valid}
+                        shouldValidate={formElement.config.validation}
+                        touched={formElement.config.touched}
+                        changed={(event) => this.inputChangedHandler(event, formElement.id)} 
+                        />
+                        {addButton}
+                </FormElement>
+            )
+        })
+        return (
+            <AddElementForm onSubmit={this.addIngredientHandler}>
+                {form}
+                <Button
+                    disabled={!this.state.formIsValid}
+                    >
+                    SUBMIT
+                </Button>
+            </AddElementForm>
+        )
     }
 
     render() {
-        let window = <Spinner />
+        let ingredientForm = <Spinner />
         if (!this.props.loading) {
-            const formMenus = this.objectFormCreator()
-            let newItemForm = null
-            console.log('[IngredientForm] this.state.selector: ', this.state.selector)
+            let dropdownMenus = this.dropdownMenuCreator()
+            // let dropdownMenus = this.props.selectorInit ? null : this.dropdownMenuCreator()
+            let newItemForm = this.state.formType === 'add' ? this.addItemForm() : null
             console.log('[IngredientForm] this.state.formControls: ', this.state.formControls)
             
-            if (this.state.formType === 'add') {
-                const formElementsArray = []
-                const formElementsObj = {...this.state.formControls}
-            
-                for (let key in formElementsObj) {
-                    formElementsArray.push({
-                        id: key,
-                        config: formElementsObj[key],
-                    })
-                }
-
-                let form = formElementsArray.map(formElement => {
-                    let addButton = null;
-                    console.log('[IngredientForm] this.state.selector: ', this.state.selector)
-                    console.log('[IngredientForm] this.state.formControls: ', this.state.formControls)
-                    if (formElement.id !== 'item'){
-                        addButton = (
-                            <AddFormElement>
-                                Add Item To {formElement.config.value}
-                            </AddFormElement>
-                        )
-                    }
-                    return (
-                        <FormElement key={formElement.id}>
-                            <AddElementInput 
-                                autocomplete={formElement.config.elementConfig.autocomplete || ''}
-                                className="AddElementInput"
-                                elementType={formElement.config.elementType}
-                                elementConfig={formElement.config.elementConfig}
-                                value={formElement.config.value}
-                                invalid={!formElement.config.valid}
-                                shouldValidate={formElement.config.validation}
-                                touched={formElement.config.touched}
-                                changed={(event) => this.inputChangedHandler(event, formElement.id)} 
-                                />
-                                {addButton}
-                        </FormElement>
-                    )
-                })
-                newItemForm = (
-                    <AddElementForm onSubmit={this.addIngredientHandler}>
-                        {form}
-                        <Button
-                            disabled={!this.state.formIsValid}>
-                                SUBMIT
-                        </Button>
-                    </AddElementForm>
-                )
-            }
-            window = (
+            ingredientForm = (
                 <ContentBlock>
-                    {/* <button onClick={this.clearInputs}>clear inputs</button> */}
                     <Header>Add A New Element</Header>
-                    {formMenus}
+                    {dropdownMenus}
                     {newItemForm}
                 </ContentBlock>
             )
         }
         return (
             <React.Fragment>
-                {window}
+                {ingredientForm}
             </React.Fragment>
         )
     }
