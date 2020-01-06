@@ -5,7 +5,8 @@ import Header from '../../components/UI/Header/Header'
 import Dashboard from '../../components/Dashboard/Dashboard'
 import Modal from '../../components/UI/Modal/Modal'
 import IngredientForm from '../../components/IngredientForm/IngredientForm'
-import { updateObject, idTransform, nameTransform } from '../../shared/utility'
+import { updateObject } from '../../shared/utility'
+import { idTransform, nameTransform } from '../../shared/stringUtility'
 import * as actions from '../../store/actions'
 
 const attributesInit = {
@@ -100,10 +101,12 @@ class CocktailCreator extends Component {
 
     addingCanceled = () => {
         this.setState({adding: false})
+        // ADD CLEAR FORM ATTRIBUTES
     }
 
     addingTrue = () => {
         this.setState({adding: true})
+        // ADD FORM ATTRIBUTES
     }
 
 
@@ -254,7 +257,9 @@ class CocktailCreator extends Component {
         return (
             <React.Fragment>
                 <Modal show={this.state.adding} modalClosed={this.addingCanceled}>
-                    <IngredientForm />
+                    <IngredientForm 
+
+                        />
                 </Modal>
                 <ContentBlock>
                     <Header>Add A New Cocktail</Header>

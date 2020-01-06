@@ -8,7 +8,8 @@ import Input from '../UI/Input/Input'
 import Header from '../UI/Header/Header'
 
 import IngredientTierForm from './IngredientTierForm/IngredientTierForm'
-import { updateObject, idTransform, nameTransform } from '../../shared/utility'
+import { updateObject } from '../../shared/utility'
+import { idTransform, nameTransform } from '../../shared/stringUtility'
 import * as actions from '../../store/actions'
 
 
@@ -123,14 +124,11 @@ class IngredientCreator extends Component {
         } else if (event.target.value === 'add' || event.target.value === 'edit') {
             const groupControls = [ ...this.state.groupControls ]
             
-            // groupControls.splice(0, Math.min(index, tier))
             // console.log('[IngredientForm] groupControls: ', groupControls)
-            // console.log('[IngredientForm] groupControls[index]: ', groupControls[index])
-            // console.log('[IngredientForm] groupControls[tier]: ', groupControls[tier])
+            // console.log('[IngredientForm] selector: ', selector)
             // console.log('[IngredientForm] index, tier: ', index, tier)
             this.setState({
-                // formControls: setFormControls(groupControls),
-                formControls: setFormControls([groupControls[tier]]),
+                formControls: setFormControls([groupControls[index]]),
                 selector: selector.slice(0, index + 1),
                 formType: event.target.value,
             })
