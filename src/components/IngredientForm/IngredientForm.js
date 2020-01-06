@@ -90,8 +90,14 @@ class IngredientCreator extends Component {
     }
 
     componentDidMount() {
+        console.log('[IngredientForm] ComponentDidMount: ', 'yee')
         if (this.props.ingredients === null) {
             this.props.onInitIngredients()
+        }
+        if (this.props.selectorInit) {
+            const newSelector = this.state.selector.concat(this.props.selectorInit)
+            this.setState({ selector: newSelector })
+            console.log('[IngredientForm] newSelector: ', newSelector)
         }
     }
 
@@ -304,6 +310,7 @@ class IngredientCreator extends Component {
         if (!this.props.loading) {
             const formMenus = this.objectFormCreator()
             let newItemForm = null
+            console.log('[IngredientForm] this.state.selector: ', this.state.selector)
             console.log('[IngredientForm] this.state.formControls: ', this.state.formControls)
             
             if (this.state.formType === 'add') {
@@ -319,7 +326,8 @@ class IngredientCreator extends Component {
 
                 let form = formElementsArray.map(formElement => {
                     let addButton = null;
-
+                    console.log('[IngredientForm] this.state.selector: ', this.state.selector)
+                    console.log('[IngredientForm] this.state.formControls: ', this.state.formControls)
                     if (formElement.id !== 'item'){
                         addButton = (
                             <AddFormElement>

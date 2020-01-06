@@ -31,12 +31,14 @@ const dashboardControls = props => {
             const categories = ingredients[group]
             const categoryDivs = []
             let groupRank = ingredients[group].rank
+            // console.log('[DashboardControls] group: ', group)
 
 
             for (let category in categories) {
                 if (category === 'rank') continue
                 const items = ingredients[group][category]
                 const itemButtons = []
+                // console.log('[DashboardControls] category: ', category)
 
                 for (let item in items) {
                     if (item === 'rank') continue
@@ -61,10 +63,11 @@ const dashboardControls = props => {
                     <AddElementControl
                                 className='addElementControl'
                                 labelClassName='addElementLabel'
+                                selectors={[group, category]}
                                 key={"add" + category}
                                 level={2}
                                 label={"add to " + category}
-                                clicked={props.addIngredient}
+                                clicked={() => props.addIngredient([group, category])}
                                 />
                 )
                 categoryDivs.push(
@@ -82,10 +85,11 @@ const dashboardControls = props => {
                 <AddElementControl
                     className='addElementControl'
                     labelClassName='addElementLabel'
+                    selectors={[group]}
                     key={"add" + group}
                     level={1}
                     label={"add to " + group}
-                    clicked={props.addIngredient}
+                    clicked={() => props.addIngredient([group])}
                     />
             )
             const newCategory = (

@@ -20,6 +20,7 @@ class CocktailCreator extends Component {
         attributes: [],
         count: 1,
         adding: false,
+        selectorInit: null,
         drinkControls: {
             name: {
                 tier: 0,
@@ -100,12 +101,13 @@ class CocktailCreator extends Component {
     }
 
     addingCanceled = () => {
-        this.setState({adding: false})
+        this.setState({adding: false, selectorInit: []})
         // ADD CLEAR FORM ATTRIBUTES
     }
 
-    addingTrue = () => {
-        this.setState({adding: true})
+    addingTrue = (selectors) => {
+        this.setState({adding: true, selectorInit: selectors})
+        console.log('[CocktailCreator] selectors: ', selectors)
         // ADD FORM ATTRIBUTES
     }
 
@@ -254,12 +256,12 @@ class CocktailCreator extends Component {
     }
 
     render() {
+        let form = this.state.adding ? <IngredientForm selectorInit={this.state.selectorInit} /> : null
+        console.log('[CocktailCreator] this.state.selectorInit: ', this.state.selectorInit)
         return (
             <React.Fragment>
                 <Modal show={this.state.adding} modalClosed={this.addingCanceled}>
-                    <IngredientForm 
-
-                        />
+                    {form}
                 </Modal>
                 <ContentBlock>
                     <Header>Add A New Cocktail</Header>
