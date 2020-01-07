@@ -96,9 +96,29 @@ class IngredientCreator extends Component {
             this.props.onInitIngredients()
         }
         if (this.props.selectorInit) {
-            const newSelector = this.state.selector.concat(this.props.selectorInit)
-            this.setState({ selector: newSelector })
+            const selector = this.state.selector.concat(this.props.selectorInit)
+            const formControls= this.setFormControls([this.state.groupControls[selector.length - 1]])
+            this.setState({
+                formControls,
+                selector,
+                formType: 'add'
+            })
         }
+    }
+
+    setFormControls = (controlArray) => {
+        let formControls = {}
+        for (let control in controlArray) {
+            const { name, placeholder, example } = controlArray[control]
+            formControls = updateObject(formControls, {
+                [name]: updateObject(controlsInit, {
+                    elementConfig: updateObject(controlsInit.elementConfig, {
+                        placeholder: placeholder + ` (i.e.: '${example}')`
+                    })
+                })
+            })
+        }
+        return formControls
     }
 
     selectChangedHandler = (event) => {
@@ -107,31 +127,16 @@ class IngredientCreator extends Component {
         const selection = event.target.value
         const index = selector.indexOf(event.target.name)
 
-        const setFormControls = (controlArray) => {
-            let formControls = {}
-            for (let control in controlArray) {
-                const { name, placeholder, example } = controlArray[control]
-                formControls = updateObject(formControls, {
-                    [name]: updateObject(controlsInit, {
-                        elementConfig: updateObject(controlsInit.elementConfig, {
-                            placeholder: placeholder + ` (i.e.: '${example}')`
-                        })
-                    })
-                })
-            }
-            return formControls
-        }
-
         if (tier > 2) {
             this.setState({
-                formControls: setFormControls(this.state.productControls),
+                formControls: this.setFormControls(this.state.productControls),
                 formType: 'add'
             })
         } else if (event.target.value === 'add' || event.target.value === 'edit') {
             const groupControls = [ ...this.state.groupControls ]
             
             this.setState({
-                formControls: setFormControls([groupControls[index]]),
+                formControls: this.setFormControls([groupControls[index]]),
                 selector: selector.slice(0, index + 1),
                 formType: event.target.value,
             })
@@ -216,7 +221,6 @@ class IngredientCreator extends Component {
         const dbRefArray = [...selector]
         const controlArray = Object.keys(formControls)
         const key = groupControls[tier].name
-
         const setNode = (i, tier, selector, node) => {
             if (i < tier) {
                 node = node[selector[i + 1]]
@@ -225,7 +229,6 @@ class IngredientCreator extends Component {
                 return node
             }
         }
-
         const id = idTransform(formControls[key].value)
         const name = nameTransform(formControls[key].value)
         const levelKeys = Object.keys(setNode(0, tier, selector, ingredients)).filter(key => {
@@ -241,37 +244,37 @@ class IngredientCreator extends Component {
             }
         }
 
-        const setObj = (obj, i, selector, tier) => {
-            if (i > tier) {
-                return setObj({ [selector[i]]: obj}, i - 1, selector, tier)
-            } else {
-                return obj
-            }
-        }
-
         for (let control in controlArray) {
             dbRefArray.push(formControls[controlArray[control]].value.toLowerCase())
         }
+
         // THE CODE BELOW IS FOR creating an initial object and I'm not sure if I still need it
+        
+        // const setObj = (obj, i, selector, tier) => {
+        //     if (i > tier) {
+        //         return setObj({ [selector[i]]: obj}, i - 1, selector, tier)
+        //     } else {
+        //         return obj
+        //     }
+        // }
         // const addIngredientObject = setObj(newItem, 2, dbRefArray, tier)
 
         const addIngredientObject = newItem
-
-        console.log('[IngredientForm] addIngredientObject: ', addIngredientObject)
-        // let node = ingredients
-
-    
         let node = setNode(0, tier, dbRefArray, ingredients)
 
         if (Object.keys(node).indexOf(Object.keys(addIngredientObject)[0].toLowerCase()) === -1) {
-            node = updateObject(node, addIngredientObject)
-            this.props.onAddIngredient(node, dbRefArray, tier)
-            this.setState({
-                selector: ['ingredients'],
-                formType: 'select',
-                formControls: {},
-                formIsValid: false
-            })
+                node = updateObject(node, addIngredientObject)
+                this.props.onAddIngredient(node, dbRefArray, tier)
+                if (this.props.selectorInit) {
+                    console.log('[IngredientForm] closeModal: ')
+                    this.props.closeModal()
+                } else {
+                    this.setState({
+                        selector: ['ingredients'],
+                        formType: 'select',
+                        formControls: {},
+                        formIsValid: false
+                })}
         } else {
             //  NEED A POPUP WARNING HERE
             console.log('Duplicate of something')
@@ -323,7 +326,8 @@ class IngredientCreator extends Component {
         let form = formElementsArray.map(formElement => {
             let addButton = null;
             console.log('[IngredientForm] this.state.selector: ', this.state.selector)
-            console.log('[IngredientForm] this.state.formControls: ', this.state.formControls)
+            console.log('[IngredientForm] formElementsObj: ', formElementsObj)
+            console.log('[IngredientForm] formElementsArray: ', formElementsArray)
             if (formElement.id !== 'item'){
                 addButton = (
                     <AddFormElement>
@@ -353,6 +357,7 @@ class IngredientCreator extends Component {
                 {form}
                 <Button
                     disabled={!this.state.formIsValid}
+                    // clicked={this.props.closeModal}
                     >
                     SUBMIT
                 </Button>
@@ -363,10 +368,11 @@ class IngredientCreator extends Component {
     render() {
         let ingredientForm = <Spinner />
         if (!this.props.loading) {
-            let dropdownMenus = this.dropdownMenuCreator()
-            // let dropdownMenus = this.props.selectorInit ? null : this.dropdownMenuCreator()
+            // let dropdownMenus = this.dropdownMenuCreator()
+            let dropdownMenus = this.props.selectorInit ? null : this.dropdownMenuCreator()
             let newItemForm = this.state.formType === 'add' ? this.addItemForm() : null
-            console.log('[IngredientForm] this.state.formControls: ', this.state.formControls)
+            // console.log('[IngredientForm] this.state.formControls: ', this.state.formControls)
+            console.log('[IngredientForm] this.state', this.state)
             
             ingredientForm = (
                 <ContentBlock>

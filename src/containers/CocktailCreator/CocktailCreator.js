@@ -254,7 +254,14 @@ class CocktailCreator extends Component {
     }
 
     render() {
-        let form = this.state.adding ? <IngredientForm selectorInit={this.state.selectorInit} /> : null
+        let form = (
+            this.state.adding ? 
+            <IngredientForm 
+                selectorInit={this.state.selectorInit}
+                closeModal={this.addingCanceled}
+                /> : 
+            null
+        )
         
         return (
             <React.Fragment>

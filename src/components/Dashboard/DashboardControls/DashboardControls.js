@@ -22,12 +22,15 @@ const AddElementControl = styled(DashboardControl)`
     }
 `
 
+const ignored = ["name", "rank"]
+
 const dashboardControls = props => {
         const { ingredients } = props
         let buttons = []
         const groups = []
         
         for (let group in ingredients) {
+            if (ignored.indexOf(group) !== -1) continue
             const categories = ingredients[group]
             const categoryDivs = []
             let groupRank = ingredients[group].rank
@@ -35,13 +38,13 @@ const dashboardControls = props => {
 
 
             for (let category in categories) {
-                if (category === 'rank') continue
+                if (ignored.indexOf(category) !== -1) continue
                 const items = ingredients[group][category]
                 const itemButtons = []
                 // console.log('[DashboardControls] category: ', category)
 
                 for (let item in items) {
-                    if (item === 'rank') continue
+                    if (ignored.indexOf(item) !== -1) continue
                     if (items[item].name) {
                         const clickedObj = {
                             label: items[item].name,
