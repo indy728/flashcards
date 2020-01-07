@@ -57,6 +57,8 @@ const controlsInit = {
     touched: false
 }
 
+const ignored = ["name", "rank"]
+
 class IngredientCreator extends Component {
     state = {
         selector: ['ingredients'],
@@ -218,7 +220,6 @@ class IngredientCreator extends Component {
         const setNode = (i, tier, selector, node) => {
             if (i < tier) {
                 node = node[selector[i + 1]]
-                console.log('[IngredientForm] node: ', node)
                 return setNode(i + 1, tier, selector, node)
             } else {
                 return node
@@ -227,14 +228,16 @@ class IngredientCreator extends Component {
 
         const id = idTransform(formControls[key].value)
         const name = nameTransform(formControls[key].value)
-        const keyNode = setNode(0, tier, selector, ingredients)
-        console.log('[IngredientForm] keyNode: ', keyNode)
-        console.log('[IngredientForm] id: ', id)
-        console.log('[IngredientForm] name: ', name)
+        const levelKeys = Object.keys(setNode(0, tier, selector, ingredients)).filter(key => {
+            return ignored.indexOf(key) === -1
+        })
+        // console.log('[IngredientForm] id: ', id)
+        // console.log('[IngredientForm] name: ', name)
+        // console.log('[IngredientForm] levelKeys: ', levelKeys)
         let newItem = {
             [id]: {
-                name: formControls[key].value,
-                rank: Object.keys(setNode(0, tier, selector, ingredients)).length
+                name: name,
+                rank: levelKeys.length
             }
         }
 
