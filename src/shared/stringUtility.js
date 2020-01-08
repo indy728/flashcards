@@ -11,17 +11,24 @@ export const idTransform = str => {
 export const nameTransform = str => {
     return (
         str.toLowerCase()
-            .replace(/[^a-zA-Z0-9\s']/g, '')
+            .replace(/[^a-zA-Z0-9\s()']/g, '')
             .trim()
             .replace(/[\s]+/g, ' ')
     )
 }
 
 export const titleCase = str => {
-    let splitStr = str.toLowerCase().split(' ');
-    for (let i = 0; i < splitStr.length; i++) {
-        // cannot transform an immutable array, so replaces the array instead
-        splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
+    const preChar = [' ', '(']
+    // const preChar = [' ', '(', '\'']
+    let newStr = str.toLowerCase()
+    for (let char in preChar) {
+        let splitStr = newStr.split(preChar[char]);
+        for (let i = 0; i < splitStr.length; i++) {
+            // cannot transform an immutable array, so replaces the array instead
+            splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
+        }
+        console.log('[stringUtility] splitStr: ', splitStr)
+        newStr = splitStr.join(preChar[char])
     }
-    return splitStr.join(' ');
+    return newStr;
 }
