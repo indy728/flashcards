@@ -79,6 +79,11 @@ const controlsInit = {
 
 const ignored = ["name", "rank"]
 
+const attributeOptions = [
+    { "value": "qty", "text": "quantity / count" },
+    { "value": "text", "text": "text instructions" },
+]
+
 class IngredientCreator extends Component {
     state = {
         selector: ['ingredients'],
@@ -349,7 +354,8 @@ class IngredientCreator extends Component {
 
         let form = formElementsArray.map(formElement => {
             let addButton = null;
-            let attribute = null;
+            // let attribute = null;
+            let checkboxes = null;
             // console.log('[IngredientForm] this.state.selector: ', this.state.selector)
             // console.log('[IngredientForm] formElementsObj: ', formElementsObj)
             // console.log('[IngredientForm] formElementsArray: ', formElementsArray)
@@ -360,10 +366,34 @@ class IngredientCreator extends Component {
                     </AddFormElement>
                 )
             } else {
-                attribute = <ItemAttributeSelect>
-                    <option>qty</option>
-                    <option>text instructions</option>
-                </ItemAttributeSelect>
+                // let options = attributeOptions.map(attributeOption => {
+                //     return (
+                //         <option key={attributeOption.name} value={attributeOption.name}>{attributeOption.text}</option>
+                //     )
+                // })
+                // attribute = (
+                //     <ItemAttributeSelect
+                //         name="newItemAttributes"
+                //         changed={null}
+                //         className="itemAttribute-select"
+                //         >
+                //         <option hidden>-- select an option --</option>
+                //         {options}
+                //     </ItemAttributeSelect>
+                // )
+                checkboxes = (
+                    <div>
+                        {
+                            attributeOptions.map(attributeOption => {
+                                return (
+                                    <React.Fragment>
+                                        <input type="checkbox" key={attributeOption.name} name={attributeOption.name} value={attributeOption.name}/>{attributeOption.text}
+                                    </React.Fragment>
+                                )
+                            })
+                        }
+                    </div>
+                )
             }
             return (
                 <FormElement key={formElement.id}>
@@ -379,8 +409,9 @@ class IngredientCreator extends Component {
                             touched={formElement.config.touched}
                             changed={(event) => this.inputChangedHandler(event, formElement.id)} 
                             />
-                            {attribute}
+                            {/* {attribute} */}
                     </AddElementDiv>
+                        {checkboxes}
                         {addButton}
                 </FormElement>
             )
