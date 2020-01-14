@@ -206,44 +206,44 @@ class CocktailCreator extends Component {
         }
         let firstInstruction = -1
 
-        for (let i in attributes) {
-            const attribute = attributes[i]
-            let key = ''
-            let type = attribute.type
+        attributes.forEach((attribute, i) => {
+        // for (let i in attributes) {
+            // const attribute = attributes[i]
+            let idNum = ''
+            let { type, value, valueType, key, label } = attribute
 
-            if (i === '0') {
-                const { value } = attribute
+            if (type === 'name') {
+                // const { value } = attribute
                 const name = nameTransform(value)
-                const id = idTransform(value)
-                    .replace(/^the/i, '')
+                const id = idTransform(value.replace(/^the /i, ''))
                 cocktailNode = updateObject(cocktailNode, {
                     name,
                     id
                 })
             } else if (type === 'instructions') {
                 if (firstInstruction !== -1) {
-                    key = key + (i - firstInstruction)
+                    idNum = idNum + (i - firstInstruction)
                 } else if (i < attributes.length - 1) {
                     firstInstruction = i
                 }
                 cocktailNode = updateObject(cocktailNode, {
                     instructions: updateObject(cocktailNode.instructions, {
-                        ['instruction' + key]: attribute.value
+                        ['instruction' + idNum]: value
                     })
                 })
             } else if (type === 'ingredient') {
-                key = attribute.value
+                idNum = value
                 cocktailNode = updateObject(cocktailNode, {
                     elements: updateObject(cocktailNode.elements, {
-                        [attribute.key]: {
-                            qty: attribute.value + ' ' + attribute.valueType,
+                        [key]: {
+                            qty: value + ' ' + valueType,
                             order: i - 1,
-                            label: attribute.label
+                            label
                         }
                     })
                 })
             }
-        }
+        })
         console.log('[CocktailCreator] cocktailNode: ', cocktailNode)
     }
 

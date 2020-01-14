@@ -33,6 +33,7 @@ const dashboardControls = props => {
             if (ignored.indexOf(group) !== -1) continue
             const categories = ingredients[group]
             const categoryDivs = []
+            const groupLabel = ingredients[group].name
             let groupRank = ingredients[group].rank
             // console.log('[DashboardControls] group: ', group)
 
@@ -41,7 +42,10 @@ const dashboardControls = props => {
                 if (ignored.indexOf(category) !== -1) continue
                 const items = ingredients[group][category]
                 const itemButtons = []
+                const catLabel = categories[category].name
                 // console.log('[DashboardControls] category: ', category)
+                // console.log('[DashboardControls] categories[category]: ', categories[category])
+                // console.log('[DashboardControls] categories[category].name: ', categories[category].name)
 
                 for (let item in items) {
                     if (ignored.indexOf(item) !== -1) continue
@@ -69,14 +73,14 @@ const dashboardControls = props => {
                                 selectors={[group, category]}
                                 key={"add" + category}
                                 level={2}
-                                label={"add to " + category}
+                                label={"add to " + catLabel}
                                 clicked={() => props.addIngredient([group, category])}
                                 />
                 )
                 categoryDivs.push(
                     <ParentControl
                         key={category}
-                        label={category}
+                        label={catLabel}
                         level={1}
                         addIngredient={props.addIngredient}
                         >
@@ -91,14 +95,14 @@ const dashboardControls = props => {
                     selectors={[group]}
                     key={"add" + group}
                     level={1}
-                    label={"add to " + group}
+                    label={"add to " + groupLabel}
                     clicked={() => props.addIngredient([group])}
                     />
             )
             const newCategory = (
                 <ParentControl
                     key={group} 
-                    label={group}
+                    label={groupLabel}
                     addIngredient={props.addIngredient}
                     >
                     {categoryDivs}

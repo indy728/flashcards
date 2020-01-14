@@ -27,7 +27,6 @@ export const titleCase = str => {
             // cannot transform an immutable array, so replaces the array instead
             splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
         }
-        console.log('[stringUtility] splitStr: ', splitStr)
         newStr = splitStr.join(preChar[char])
     }
     return newStr;
