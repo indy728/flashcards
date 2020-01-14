@@ -12,6 +12,7 @@ import IngredientTierForm from './IngredientTierForm/IngredientTierForm'
 import { updateObject } from '../../shared/utility'
 import { idTransform, nameTransform } from '../../shared/stringUtility'
 import * as actions from '../../store/actions'
+import { loadPartialConfig } from '@babel/core'
 
 
 const AddElementForm = styled.form`
@@ -70,6 +71,7 @@ const controlsInit = {
         autocomplete: '',
     },
     value: '',
+    attributes: {},
     validation: {
         required: true,
     },
@@ -103,7 +105,11 @@ class IngredientCreator extends Component {
             { 
                 name: 'item',
                 placeholder: 'New Item Name',
-                example: 'London Dry Gin'
+                example: 'London Dry Gin',
+                attributes: {
+                    qty: false,
+                    text: false
+                }
             },
         ],
         productControls: [
@@ -141,7 +147,8 @@ class IngredientCreator extends Component {
                 [name]: updateObject(controlsInit, {
                     elementConfig: updateObject(controlsInit.elementConfig, {
                         placeholder: placeholder + ` (i.e.: '${example}')`
-                    })
+                    }),
+                    attributes: control.attributes || {}
                 })
             })
         })
@@ -157,6 +164,7 @@ class IngredientCreator extends Component {
         const index = selector.indexOf(event.target.name)
 
         if (tier > 2) {
+            console.log('[IngredientForm] selector: ', selector)
             this.setState({
                 formControls: this.setFormControls(this.state.productControls),
                 formType: 'add'
@@ -187,6 +195,17 @@ class IngredientCreator extends Component {
         }
     }
 
+    checkboxChangedHandler = (event) => {
+        const { value } = event.target
+        let { formControls } = this.state
+        console.log('[IngredientForm] formControls: ', formControls)
+        console.log('[IngredientForm] formControls.item.attributes[value]: ', formControls.item.attributes[value])
+        formControls.item.attributes[value] = !formControls.item.attributes[value]
+        console.log('[IngredientForm] formControls.item.attributes[value]: ', formControls.item.attributes[value])
+        console.log('[IngredientForm] formControls: ', formControls)
+
+        this.setState({ formControls })
+    }
     
     checkValidity = (value, rules) => {
         let isValid = true;
@@ -263,16 +282,18 @@ class IngredientCreator extends Component {
         const levelKeys = Object.keys(setNode(0, tier, selector, ingredients)).filter(key => {
             return ignored.indexOf(key) === -1
         })
-        // console.log('[IngredientForm] id: ', id)
-        // console.log('[IngredientForm] name: ', name)
-        // console.log('[IngredientForm] levelKeys: ', levelKeys)
         let newItem = {
             [id]: {
-                name: name,
+                name,
                 rank: levelKeys.length
             }
         }
 
+        if (key === "item") {
+            newItem[id] = updateObject(newItem[id], {
+                attributes: formControls[key].attributes
+            })
+        }
         for (let control in controlArray) {
             dbRefArray.push(formControls[controlArray[control]].value.toLowerCase())
         }
@@ -290,12 +311,10 @@ class IngredientCreator extends Component {
 
         const addIngredientObject = newItem
         let node = setNode(0, tier, dbRefArray, ingredients)
-
         if (Object.keys(node).indexOf(Object.keys(addIngredientObject)[0].toLowerCase()) === -1) {
                 node = updateObject(node, addIngredientObject)
                 this.props.onAddIngredient(node, dbRefArray, tier)
                 if (this.props.selectorInit) {
-                    // console.log('[IngredientForm] closeModal: ')
                     this.props.closeModal()
                 } else {
                     this.setState({
@@ -386,8 +405,14 @@ class IngredientCreator extends Component {
                         {
                             attributeOptions.map(attributeOption => {
                                 return (
-                                    <React.Fragment>
-                                        <input type="checkbox" key={attributeOption.name} name={attributeOption.name} value={attributeOption.name}/>{attributeOption.text}
+                                    <React.Fragment key={attributeOption.value}>
+                                        <input
+                                            type="checkbox"
+                                            name={attributeOption.value}
+                                            value={attributeOption.value}
+                                            onClick={this.checkboxChangedHandler}
+                                            />
+                                        {attributeOption.text}
                                     </React.Fragment>
                                 )
                             })
@@ -435,8 +460,9 @@ class IngredientCreator extends Component {
             // let dropdownMenus = this.dropdownMenuCreator()
             let dropdownMenus = this.props.selectorInit ? null : this.dropdownMenuCreator()
             let newItemForm = this.state.formType === 'add' ? this.addItemForm() : null
-            // console.log('[IngredientForm] this.state.formControls: ', this.state.formControls)
+            console.log('[IngredientForm] this.state.formControls: ', this.state.formControls)
             // console.log('[IngredientForm] this.state', this.state)
+            console.log('[IngredientForm] this.state.groupControls[2]: ', this.state.groupControls[2])
             
             ingredientForm = (
                 <ContentBlock>
