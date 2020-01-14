@@ -52,6 +52,7 @@ const dashboardControls = props => {
                     if (items[item].name) {
                         const clickedObj = {
                             label: items[item].name,
+                            attributes: items[item].attributes,
                             key: item,
                             subTier: categories.rank,
                             type: 'ingredient'

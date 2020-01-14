@@ -42,7 +42,11 @@ const TopDiv = styled.div`
 const BottomDiv = styled.div`
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    flex-flow: column;
+
+    > *:not(:first-child) {
+        margin-top: 2rem;
+    }
 `
 
 const QtyDiv = styled.div`
@@ -76,7 +80,11 @@ const qtyArray = [
 
 const attribute = props => {
     let remove = null
-    let bottom = null
+    let qty = null
+    let text = null
+    let name = null
+
+    console.log('[Attribute] props: ', props)
 
     if (props.remove) {
         remove = (
@@ -86,11 +94,11 @@ const attribute = props => {
             </Button>
         )
     }
-    if (props.type === 'ingredient') {
+    if (props.attributes && props.attributes.qty) {
         const measurementOptions = qtyArray.map((measurement, i) => (
             <option key={measurement + i}>{measurement}</option>
         ))
-        bottom = (
+        qty = (
             <QtyDiv className='attributeQty'>
                 <div>Quantity:</div>
                 <AttributeInput
@@ -108,16 +116,20 @@ const attribute = props => {
                 </select>
             </QtyDiv>
         )
-    } else if (props.type === 'instructions') {
-        bottom = (
+    }
+    if (props.type === 'instructions' || (props.attributes && props.attributes.text)) {
+    // if (props.type === 'instructions') {
+        text = (
             <InstructionsText
                 className='instructionsText'
                 value={props.value}
+                placeholder="Instructions Text (optional)"
                 onChange={(event) => props.changed(event, props.index)}
                 />
         )
-    } else {
-        bottom = (
+    } 
+    if (props.type === 'name') {
+        name = (
             <AttributeInput 
                     {...props}
                     className={'attribute' + props.type}
@@ -137,7 +149,9 @@ const attribute = props => {
                 </RemoveDiv>  
             </TopDiv>
             <BottomDiv className="attributeBottom">
-                {bottom}
+                {name}
+                {qty}
+                {text}
             </BottomDiv>
         </Wrapper>
     )

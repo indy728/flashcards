@@ -16,8 +16,8 @@ const SubmitButtonDiv = styled.div`
 `
 
 const cocktailForm = props => {
-    const transformedAttributes = props.attributes.map((key,i) => {
-        const { type, label, removeable, value } = key
+    const transformedAttributes = props.attributes.map((attribute,i) => {
+        const { type, label, removeable, value, attributes } = attribute
 
         return (
             <Attribute
@@ -26,6 +26,7 @@ const cocktailForm = props => {
                 type={type}
                 value={value}
                 header={label}
+                attributes={attributes}
                 remove={removeable}
                 changed={props.inputChanged}
                 selectChanged={props.selectChanged}

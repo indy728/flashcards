@@ -44,8 +44,9 @@ class CocktailCreator extends Component {
                 tier: 1,
                 type: 'ingredient',
                 label: '',
-                ingredient: '',
-                category: '',
+                // ingredient: '',
+                attributes:{},
+                // category: '',
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
@@ -115,6 +116,8 @@ class CocktailCreator extends Component {
         const { attributes, count } = this.state
         let controls = {...this.state.drinkControls[newAttribute.type]}
         let duplicate = false;
+
+        console.log('[CocktailCreator] newAttribute: ', newAttribute)
 
         if (newAttribute.type !== 'instructions') {
             for (let i in attributes) {
