@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import Button from '../../../UI/Button/Button'
 import AttributeInput from './AttributeInput/AttributeInput'
-import { qtyStringToFloat } from '../../../../shared/stringUtility'
 
 const Wrapper = styled.div`
     width: 100%;
@@ -83,7 +82,7 @@ const attribute = props => {
     let text = null
     let name = null
 
-    console.log('[Attribute] props: ', props)
+    // console.log('[Attribute] props: ', props)
 
     if (props.remove) {
         remove = (
@@ -94,7 +93,6 @@ const attribute = props => {
         )
     }
     if (props.attributes && props.attributes.qty) {
-        console.log('[Attribute] qtyStringToFloat(props.value): ', qtyStringToFloat(props.value))
         const measurementOptions = qtyArray.map((measurement, i) => (
             <option key={measurement + i}>{measurement}</option>
         ))
@@ -105,8 +103,8 @@ const attribute = props => {
                     className='qtyInput' 
                     width='7rem'
                     margin='0 0 0 1rem'
-                    value={props.value}
-                    changed={(event) => props.changed(event, props.index)}
+                    value={props.qty}
+                    changed={(event) => props.changed(event, props.index, "qty")}
                     />
                 <select
                     style={{'marginLeft': '2rem'}}
@@ -122,9 +120,9 @@ const attribute = props => {
         text = (
             <InstructionsText
                 className='instructionsText'
-                value={props.value}
+                value={props.instruction}
                 placeholder="Instructions Text (optional)"
-                onChange={(event) => props.changed(event, props.index)}
+                onChange={(event) => props.changed(event, props.index, "text")}
                 />
         )
     } 

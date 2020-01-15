@@ -6,7 +6,7 @@ import Dashboard from '../../components/Dashboard/Dashboard'
 import Modal from '../../components/UI/Modal/Modal'
 import IngredientForm from '../../components/IngredientForm/IngredientForm'
 import { updateObject } from '../../shared/utility'
-import { idTransform, nameTransform } from '../../shared/stringUtility'
+import { idTransform, nameTransform, qtyStringToFloat } from '../../shared/stringUtility'
 import * as actions from '../../store/actions'
 
 const attributesInit = {
@@ -53,8 +53,8 @@ class CocktailCreator extends Component {
                     placeholder: '',
                     autocomplete: '',
                 },
-                value: '',
-                valueType: 'oz',
+                // value:'',
+                qtyType: 'oz',
                 removeable: true,
                 validation: {
                     required: true,
@@ -117,8 +117,21 @@ class CocktailCreator extends Component {
         let controls = {...this.state.drinkControls[newAttribute.type]}
         let duplicate = false;
 
-        console.log('[CocktailCreator] newAttribute: ', newAttribute)
 
+        if (newAttribute.attributes) {
+            Object.keys(newAttribute.attributes).forEach(attr => {
+                if (newAttribute.attributes[attr] === true)
+                controls = updateObject(controls, {
+                    [attr]: ''
+                })
+            })
+        }
+
+        console.log('[CocktailCreator] controls: ', controls)
+
+        // if (!controls.value && !controls.qty && !controls.text && !controls.instruction) {
+        //     controls.validation.required = false
+        // }
         if (newAttribute.type !== 'instructions') {
             for (let i in attributes) {
                 if (attributes[i].label === newAttribute.label) {
@@ -169,11 +182,11 @@ class CocktailCreator extends Component {
         return isValid
     }
 
-    inputChangedHandler = (event, controlIndex) => {
+    inputChangedHandler = (event, controlIndex, valueType = "value") => {
         const { attributes } = this.state
         let controls = attributes[controlIndex]
         const updatedControls = updateObject(controls, {
-            value: event.target.value,
+            [valueType]: event.target.value,
             valid: this.checkValidity(event.target.value, controls.validation),
             touched: true
         })
@@ -186,15 +199,12 @@ class CocktailCreator extends Component {
         this.setState({ attributes, formIsValid })
     }
 
-    valueTypeChangedHandler = (event, controlIndex) => {
+    qtyTypeChangedHandler = (event, controlIndex) => {
         const { attributes } = this.state
         let controls = attributes[controlIndex]
         const updatedControls = updateObject(controls, {
-            valueType: event.target.value,
+            qtyType: event.target.value,
         })
-
-        console.log('[CocktailCreator] event.target.value: ', event.target.value)
-        console.log('[CocktailCreator] controls: ', controls)
 
         attributes[controlIndex] = updatedControls
         this.setState({ attributes })
@@ -216,7 +226,17 @@ class CocktailCreator extends Component {
         // for (let i in attributes) {
             // const attribute = attributes[i]
             let idNum = ''
-            let { type, value, valueType, key, label } = attribute
+            // let inputText = []
+            let { type, value, qtyType, key, label, qty, text } = attribute
+            let attributesObj = attribute.attributes
+            
+            // ["value", "qty", "text"].forEach(val => {
+            //     if (attributes[val]) {
+            //         inputText.push(val)
+            //     }
+            // })
+
+            console.log('[CocktailCreator] attribute: ', attribute)
 
             if (type === 'name') {
                 // const { value } = attribute
@@ -234,7 +254,7 @@ class CocktailCreator extends Component {
                 }
                 cocktailNode = updateObject(cocktailNode, {
                     instructions: updateObject(cocktailNode.instructions, {
-                        ['instruction' + idNum]: value
+                        ['instruction' + idNum]: text
                     })
                 })
             } else if (type === 'ingredient') {
@@ -242,12 +262,24 @@ class CocktailCreator extends Component {
                 cocktailNode = updateObject(cocktailNode, {
                     elements: updateObject(cocktailNode.elements, {
                         [key]: {
-                            qty: value + ' ' + valueType,
                             order: i - 1,
                             label
                         }
                     })
                 })
+                if (attributesObj) {
+                    if (attributesObj.qty) {
+                        cocktailNode.elements[key] = updateObject(cocktailNode.elements[key], {
+                            qty: qtyStringToFloat(qty),
+                            qtyType
+                        })
+                    }
+                    if (attributesObj.text) {
+                        cocktailNode.elements[key] = updateObject(cocktailNode.elements[key], {
+                            text
+                        })
+                    }
+                }
             }
         })
         console.log('[CocktailCreator] cocktailNode: ', cocktailNode)
@@ -284,7 +316,7 @@ class CocktailCreator extends Component {
                         addAttribute={this.addAttributeHandler}
                         removeAttribute={this.removeAttributeHandler}
                         inputChanged={this.inputChangedHandler}
-                        selectChanged={this.valueTypeChangedHandler}
+                        selectChanged={this.qtyTypeChangedHandler}
                         formIsValid={this.state.formIsValid}
                         cocktailSubmitHandler={this.cocktailSubmitHandler}
                         />
