@@ -193,6 +193,9 @@ class CocktailCreator extends Component {
             valueType: event.target.value,
         })
 
+        console.log('[CocktailCreator] event.target.value: ', event.target.value)
+        console.log('[CocktailCreator] controls: ', controls)
+
         attributes[controlIndex] = updatedControls
         this.setState({ attributes })
     }

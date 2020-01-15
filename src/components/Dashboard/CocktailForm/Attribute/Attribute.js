@@ -2,8 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Button from '../../../UI/Button/Button'
 import AttributeInput from './AttributeInput/AttributeInput'
-// import Autocomplete from '../../../../hoc/Autocomplete/Autocomplete'
-// import DropDown from '../../../UI/DropDown/DropDown'
+import { qtyStringToFloat } from '../../../../shared/stringUtility'
 
 const Wrapper = styled.div`
     width: 100%;
@@ -95,6 +94,7 @@ const attribute = props => {
         )
     }
     if (props.attributes && props.attributes.qty) {
+        console.log('[Attribute] qtyStringToFloat(props.value): ', qtyStringToFloat(props.value))
         const measurementOptions = qtyArray.map((measurement, i) => (
             <option key={measurement + i}>{measurement}</option>
         ))
