@@ -29,3 +29,12 @@ firebaseAuth.onAuthStateChanged(user => {
 })
 
 export const database = app.database()
+
+export const firebaseRefByArray = (ref, childArray, depth = 0) => {
+    if (depth < childArray.length) {
+        ref = ref.child(childArray[depth])
+        return firebaseRefByArray(ref, childArray, depth + 1)
+    } else  {
+        return ref
+    }
+}

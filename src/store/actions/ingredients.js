@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes'
-import { database } from './firebase'
+import { database, firebaseRefByArray } from './firebase'
+import { updateObject } from '../../shared/utility'
 
 export const addIngredientSuccess = (ingredients) => {
     return {
@@ -20,26 +21,55 @@ export const addIngredientFail = (error) => {
     }
 }
 
-export const addIngredient = (ingredientNode, databaseRefArray, tier) => {
+export const addIngredient = (ingredientNode, ingredientRefArray, id) => {
     return dispatch => {
         dispatch(addIngredientStart())
 
-        if ([0, 1, 2].indexOf(tier) === -1) {
+        console.log('[ingredients] ingredientRefArray: ', ingredientRefArray)
+
+        // if ([0, 1, 2].indexOf(tier) === -1) {
+        if (!ingredientRefArray || ingredientRefArray.length < 1 || ingredientRefArray.length > 3) {
             return dispatch(addIngredientFail('Add Ingredients Failed At Array Length'))
         }
 
         const rootRef = database.ref()
-        let nodeRef = null
-        const setRef = (i, tier, ref, dbRefArray) => {
-            if (i <= tier) {
-                ref = ref.child(dbRefArray[i])
-                return setRef(i + 1, tier, ref, dbRefArray)
-            } else {
-                return ref
+        const indexRef = rootRef.child("elementIndex")
+        let nodeRef = firebaseRefByArray(rootRef, ingredientRefArray)
+        // const setRef = (i, tier, ref, dbRefArray) => {
+        //     if (i <= tier) {
+        //         ref = ref.child(dbRefArray[i])
+        //         return setRef(i + 1, tier, ref, dbRefArray)
+        //     } else {
+        //         return ref
+        //     }
+        // }
+        
+        // nodeRef = setRef(0, tier, rootRef, ingredientRefArray)
+
+
+        
+
+        let refObj = {}
+        // const refArray = ingredientRefArray.slice(0, ingredientRefArray.length - 1)
+        for (let i in ingredientRefArray) {
+            refObj = updateObject(refObj, {
+                [i]: ingredientRefArray[i]
+            })
+        }
+        const indexNode = {
+            [id]: {
+                ref: refObj
             }
         }
-        
-        nodeRef = setRef(0, tier, rootRef, databaseRefArray)
+        console.log('[ingredients] ingredientNode: ', ingredientNode)
+        console.log('[ingredients] nodeRef: ', nodeRef)
+
+
+        indexRef.update(indexNode, error => {
+            if (error) {
+                return dispatch(addIngredientFail(error))
+            }
+        })
         nodeRef.update(ingredientNode, error => {
             if (error) {
                 return dispatch(addIngredientFail(error))

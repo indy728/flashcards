@@ -257,47 +257,64 @@ class IngredientCreator extends Component {
     addIngredientHandler = event => {
         event.preventDefault()
 
+        let key = '',
+            id = '',
+            name = ''
+        let node = null
+        let controlArray = [],
+            dbRefArray = [],
+            levelKeys = []
+        let newItem = {}
         const { formControls, groupControls, selector } = this.state
         const { ingredients } = this.props
-        const tier = selector.length - 1
-        const dbRefArray = [...selector]
-        const controlArray = Object.keys(formControls)
-        const key = groupControls[tier].name
-        const setNode = (i, tier, selector, node) => {
-            if (i < tier) {
-                node = node[selector[i + 1]]
-                return setNode(i + 1, tier, selector, node)
+        // const setNode = (i, tier, selector, node) => {
+        //     if (i < tier) {
+        //         node = node[selector[i + 1]]
+        //         return setNode(i + 1, tier, selector, node)
+        //     } else {
+        //         return node
+        //     }
+        // }
+        const setNode = (selector, node, depth = 0) => {
+            console.log('[IngredientForm] selector, node, depth: ', selector, node, depth)
+            if (depth < selector.length - 1) {
+                node = node[selector[depth + 1]]
+                return setNode(selector, node, depth + 1)
             } else {
                 return node
             }
         }
-        const id = idTransform(formControls[key].value)
-        const name = nameTransform(formControls[key].value)
-        const levelKeys = Object.keys(setNode(0, tier, selector, ingredients)).filter(key => {
+
+        key = groupControls[selector.length - 1].name
+        id = idTransform(formControls[key].value)
+        name = nameTransform(formControls[key].value)
+        levelKeys = Object.keys(setNode(selector, ingredients)).filter(key => {
             return ignored.indexOf(key) === -1
         })
-        let newItem = {
+        newItem = {
             [id]: {
                 name,
                 rank: levelKeys.length
             }
         }
-
         if (key === "item") {
             newItem[id] = updateObject(newItem[id], {
                 attributes: formControls[key].attributes
             })
         }
-        for (let control in controlArray) {
-            dbRefArray.push(formControls[controlArray[control]].value.toLowerCase())
-        }
+        // controlArray = Object.keys(formControls)
+        console.log('[IngredientForm] controlArray: ', controlArray)
+        dbRefArray = [...selector]
+        node = setNode(dbRefArray, ingredients)
+        console.log('[IngredientForm] node: ', node)
+        console.log('[IngredientForm] dbRefArray: ', dbRefArray)
 
-        const addIngredientObject = newItem
-        let node = setNode(0, tier, dbRefArray, ingredients)
-
-        if (Object.keys(node).indexOf(Object.keys(addIngredientObject)[0].toLowerCase()) === -1) {
-            node = updateObject(node, addIngredientObject)
-            this.props.onAddIngredient(node, dbRefArray, tier)
+        // controlArray.forEach(control => {
+        //     dbRefArray.push(idTransform(formControls[control].value))
+        // })
+        if (Object.keys(node).indexOf(Object.keys(newItem)[0].toLowerCase()) === -1) {
+            node = updateObject(node, newItem)
+            this.props.onAddIngredient(node, dbRefArray, id)
             this.setState({
                 selector: ['ingredients'],
                 formType: 'select',
@@ -306,6 +323,7 @@ class IngredientCreator extends Component {
             })
         } else {
             //  NEED A POPUP WARNING HERE
+            // DUPLICATE SHOULD LOOK AT INDEX INSTEAD AND RETURN PATH TO DUPE
             console.log('Duplicate of something')
             this.clearInputs()
         }
@@ -369,21 +387,6 @@ class IngredientCreator extends Component {
                     </AddFormElement>
                 )
             } else {
-                // let options = attributeOptions.map(attributeOption => {
-                //     return (
-                //         <option key={attributeOption.name} value={attributeOption.name}>{attributeOption.text}</option>
-                //     )
-                // })
-                // attribute = (
-                //     <ItemAttributeSelect
-                //         name="newItemAttributes"
-                //         changed={null}
-                //         className="itemAttribute-select"
-                //         >
-                //         <option hidden>-- select an option --</option>
-                //         {options}
-                //     </ItemAttributeSelect>
-                // )
                 checkboxes = (
                     <div>
                         {
@@ -474,7 +477,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onInitIngredients: () => dispatch(actions.fetchIngredients()),
-        onAddIngredient: (ingredientNode, dbRefArray, tier) => dispatch(actions.addIngredient(ingredientNode, dbRefArray, tier))
+        onAddIngredient: (ingredientNode, dbRefArray, tier, id) => dispatch(actions.addIngredient(ingredientNode, dbRefArray, tier, id))
     }
 }
 
