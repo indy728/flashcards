@@ -12,7 +12,10 @@ const addIngredientStart = state => {
 }
 
 const addIngredientFail = (state, action) => {
-    return updateObject(state, {error: action.error, loading: false})
+    return updateObject(state, {
+        error: action.error,
+        loading: false
+    })
 }
 
 const setIngredients = (state, action) => {
@@ -26,12 +29,12 @@ const setIngredients = (state, action) => {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.ADD_INGREDIENT_START: return addIngredientStart(state)
-        case actionTypes.ADD_INGREDIENT_SUCCESS: return setIngredients(state, action)
-        case actionTypes.ADD_INGREDIENT_FAIL: return addIngredientFail(state, action)
-        case actionTypes.REMOVE_INGREDIENT: return 
-        case actionTypes.SET_INGREDIENTS: return setIngredients(state, action)
-        case actionTypes.FETCH_INGREDIENTS_FAILED: return
+        case actionTypes.ADD_COCKTAIL_START: return addIngredientStart(state)
+        case actionTypes.ADD_COCKTAIL_SUCCESS: return setIngredients(state, action)
+        case actionTypes.ADD_COCKTAIL_FAIL: return addIngredientFail(state, action)
+        case actionTypes.REMOVE_COCKTAIL: return 
+        case actionTypes.SET_COCKTAILS: return setIngredients(state, action)
+        case actionTypes.FETCH_COCKTAILS_FAILED: return
         default: return state
     }
 }

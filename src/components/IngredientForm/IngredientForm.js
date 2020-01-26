@@ -23,7 +23,7 @@ const AddElementForm = styled.form`
     align-items: center;
 `
 
-const AddElementDiv = styled.div`
+const AddElementInputContainer = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
@@ -31,7 +31,7 @@ const AddElementDiv = styled.div`
 `
 
 const AddElementInput = styled(Input)`
-    flex: 1;
+    /* flex: 1; */
     width: 100%;
 `
 
@@ -95,7 +95,7 @@ class IngredientCreator extends Component {
                 placeholder: 'New Item Name',
                 example: 'London Dry Gin',
                 attributes: {
-                    qty: false,
+                    qty: true,
                     text: false
                 }
             },
@@ -144,7 +144,7 @@ class IngredientCreator extends Component {
         return formControls
     }
 
-    selectChangedHandler = (event) => {
+    selectChangedHandler = event => {
         const { selector } = this.state
         const tier = selector.length - 1
         const selection = event.target.value
@@ -181,7 +181,7 @@ class IngredientCreator extends Component {
         }
     }
 
-    checkboxChangedHandler = (event) => {
+    checkboxChangedHandler = event => {
         const { value } = event.target
         let { formControls } = this.state
 
@@ -362,6 +362,7 @@ class IngredientCreator extends Component {
                                             name={attributeOption.value}
                                             value={attributeOption.value}
                                             onClick={this.checkboxChangedHandler}
+                                            defaultChecked={attributeOption.value === 'qty'}
                                             />
                                         {attributeOption.text}
                                     </React.Fragment>
@@ -373,7 +374,7 @@ class IngredientCreator extends Component {
             }
             return (
                 <FormElement key={formElement.id}>
-                    <AddElementDiv>
+                    <AddElementInputContainer>
                         <AddElementInput 
                             autocomplete={formElement.config.elementConfig.autocomplete || ''}
                             className="AddElementInput"
@@ -386,7 +387,7 @@ class IngredientCreator extends Component {
                             changed={(event) => this.inputChangedHandler(event, formElement.id)} 
                             />
                             {/* {attribute} */}
-                    </AddElementDiv>
+                    </AddElementInputContainer>
                         {checkboxes}
                         {addButton}
                 </FormElement>

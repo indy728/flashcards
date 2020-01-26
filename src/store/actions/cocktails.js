@@ -21,35 +21,9 @@ export const addIngredientFail = (error) => {
     }
 }
 
-const addItemToIndex = (rootRef, ingredientRefArray, id) => {
-    return dispatch => {
-        const indexRef = rootRef.child("elementIndex")
-        let refObj = {}
-        
-        for (let i in ingredientRefArray) {
-            refObj = updateObject(refObj, {
-                [i]: ingredientRefArray[i]
-            })
-        }
-
-        const indexNode = {
-            [id]: {
-                ref: refObj
-            }
-        }
-
-        indexRef.update(indexNode, error => {
-            if (error) {
-                return dispatch(addIngredientFail(error))
-            }
-        })
-    }
-}
-
 export const addIngredient = (ingredientNode, ingredientRefArray, id) => {
     return dispatch => {
         dispatch(addIngredientStart())
-
         if (!ingredientRefArray || ingredientRefArray.length < 1 || ingredientRefArray.length > 3) {
             return dispatch(addIngredientFail('Add Ingredients Failed At Array Length'))
         }
@@ -58,7 +32,24 @@ export const addIngredient = (ingredientNode, ingredientRefArray, id) => {
         let nodeRef = firebaseRefByArray(rootRef, ingredientRefArray)
 
         if (ingredientRefArray.length === 3) {
-            dispatch(addItemToIndex(rootRef, ingredientRefArray, id))
+            const indexRef = rootRef.child("elementIndex")
+            let refObj = {}
+            for (let i in ingredientRefArray) {
+                refObj = updateObject(refObj, {
+                    [i]: ingredientRefArray[i]
+                })
+            }
+            const indexNode = {
+                [id]: {
+                    ref: refObj
+                }
+            }
+
+            indexRef.update(indexNode, error => {
+                if (error) {
+                    return dispatch(addIngredientFail(error))
+                }
+            })
         }
         nodeRef.update(ingredientNode, error => {
             if (error) {
