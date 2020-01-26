@@ -2,25 +2,30 @@ import * as actionTypes from '../actions/actionTypes'
 import { updateObject } from '../../shared/utility'
 
 const initialState = {
-    ingredients: null,
+    cocktails: null,
     error: null,
-    loading: true,
+    loading: false,
+    quiz: {
+        count: 0,
+        pool: []
+    },
+    flashcards: {
+        count: 0,
+        pool: []
+    }
 }
 
-const addIngredientStart = state => {
+const addCocktailStart = state => {
     return updateObject(state, {error: null, loading: true})
 }
 
-const addIngredientFail = (state, action) => {
-    return updateObject(state, {
-        error: action.error,
-        loading: false
-    })
+const addCocktailFail = (state, action) => {
+    return updateObject(state, {error: action.error, loading: false})
 }
 
-const setIngredients = (state, action) => {
+const setCocktails = (state, action) => {
     const updatedState = {
-        ingredients: action.ingredients,
+        cocktails: action.cocktails,
         error: false,
         loading: false
     }
@@ -29,11 +34,12 @@ const setIngredients = (state, action) => {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.ADD_COCKTAIL_START: return addIngredientStart(state)
-        case actionTypes.ADD_COCKTAIL_SUCCESS: return setIngredients(state, action)
-        case actionTypes.ADD_COCKTAIL_FAIL: return addIngredientFail(state, action)
+        case actionTypes.ADD_COCKTAIL_START: return addCocktailStart(state)
+        case actionTypes.ADD_COCKTAIL_SUCCESS: return setCocktails(state, action)
+        case actionTypes.ADD_COCKTAIL_FAIL: return addCocktailFail(state, action)
+        case actionTypes.EDIT_COCKTAIL: return 
         case actionTypes.REMOVE_COCKTAIL: return 
-        case actionTypes.SET_COCKTAILS: return setIngredients(state, action)
+        case actionTypes.SET_COCKTAILS: return setCocktails(state, action)
         case actionTypes.FETCH_COCKTAILS_FAILED: return
         default: return state
     }

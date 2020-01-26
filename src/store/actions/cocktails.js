@@ -1,94 +1,70 @@
 import * as actionTypes from './actionTypes'
-import { database, firebaseRefByArray } from './firebase'
+import { database } from './firebase'
 import { updateObject } from '../../shared/utility'
 
-export const addIngredientSuccess = (ingredients) => {
+export const addCocktailSuccess = (cocktails) => {
     return {
-        type: actionTypes.ADD_INGREDIENT_SUCCESS
+        type: actionTypes.ADD_COCKTAIL_SUCCESS
     }
 }
 
-export const addIngredientStart = () => {
+export const addCocktailStart = () => {
     return {
-        type: actionTypes.ADD_INGREDIENT_START
+        type: actionTypes.ADD_COCKTAIL_START
     }
 }
 
-export const addIngredientFail = (error) => {
+export const addCocktailFail = (error) => {
     return {
-        type: actionTypes.ADD_INGREDIENT_FAIL,
+        type: actionTypes.ADD_COCKTAIL_FAIL,
         error: error
     }
 }
 
-export const addIngredient = (ingredientNode, ingredientRefArray, id) => {
+export const addCocktail = cocktail => {
     return dispatch => {
-        dispatch(addIngredientStart())
-        if (!ingredientRefArray || ingredientRefArray.length < 1 || ingredientRefArray.length > 3) {
-            return dispatch(addIngredientFail('Add Ingredients Failed At Array Length'))
-        }
+        dispatch(addCocktailStart())
 
         const rootRef = database.ref()
-        let nodeRef = firebaseRefByArray(rootRef, ingredientRefArray)
-
-        if (ingredientRefArray.length === 3) {
-            const indexRef = rootRef.child("elementIndex")
-            let refObj = {}
-            for (let i in ingredientRefArray) {
-                refObj = updateObject(refObj, {
-                    [i]: ingredientRefArray[i]
-                })
-            }
-            const indexNode = {
-                [id]: {
-                    ref: refObj
-                }
-            }
-
-            indexRef.update(indexNode, error => {
-                if (error) {
-                    return dispatch(addIngredientFail(error))
-                }
-            })
-        }
-        nodeRef.update(ingredientNode, error => {
+        const indexRef = rootRef.child("cocktailIndex")
+        indexRef.update(cocktail, error => {
             if (error) {
-                return dispatch(addIngredientFail(error))
+                return dispatch(addCocktailFail(error))
             } else {
-                return dispatch(fetchIngredients())
+                return dispatch(fetchCocktails())
             }
         })
     }
 }
 
-export const removeIngredient = (ingName) => {
+export const removeCocktail = cocktail => {
     return {
-        type: actionTypes.REMOVE_INGREDIENT,
-        ingredientName: ingName
+        type: actionTypes.REMOVE_COCKTAIL,
+        cocktail
     }
 }
 
-export const setIngredients = (ingredients) => {
+export const setCocktails = cocktails => {
     return {
-        type: actionTypes.SET_INGREDIENTS,
-        ingredients: ingredients,
+        type: actionTypes.SET_COCKTAILS,
+        cocktails: cocktails,
     }
 }
 
-export const fetchIngredientsFailed = (errorCode) => {
+export const fetchCocktailsFailed = error => {
     return {
-        type: actionTypes.FETCH_INGREDIENTS_FAILED,
-        errorCode: errorCode,
+        type: actionTypes.FETCH_COCKTAILS_FAILED,
+        error
     }
 }
 
-export const fetchIngredients = () => {
-    const ingredientsRef = database.ref().child('ingredients')
+export const fetchCocktails = () => {
+    const cocktailsRef = database.ref().child('cocktailIndex')
     return dispatch => {
-        ingredientsRef.once('value', snapshot => {
-            return dispatch(setIngredients(snapshot.val()))
+        cocktailsRef.once('value', snapshot => {
+            return dispatch(setCocktails(snapshot.val()))
         }, errorObject => {
-            return dispatch(fetchIngredientsFailed(errorObject.code))
+            return dispatch(fetchCocktailsFailed(errorObject.code))
         })
     }
 }

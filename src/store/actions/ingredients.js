@@ -57,13 +57,13 @@ export const addIngredient = (ingredientNode, ingredientRefArray, id) => {
         const rootRef = database.ref()
         let nodeRef = firebaseRefByArray(rootRef, ingredientRefArray)
 
-        if (ingredientRefArray.length === 3) {
-            dispatch(addItemToIndex(rootRef, ingredientRefArray, id))
-        }
         nodeRef.update(ingredientNode, error => {
             if (error) {
                 return dispatch(addIngredientFail(error))
             } else {
+                if (ingredientRefArray.length === 3) {
+                    dispatch(addItemToIndex(rootRef, ingredientRefArray, id))
+                }
                 return dispatch(fetchIngredients())
             }
         })
