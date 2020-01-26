@@ -35,17 +35,6 @@ const AddElementInput = styled(Input)`
     width: 100%;
 `
 
-const ItemAttributeSelect = styled(Select)`
-    min-width: 15rem;
-    height: 2.5rem;
-    border-radius: 0;
-    border: 2px solid black;
-    font-size: 1rem;
-    font-weight: bold;
-    text-align-last: center;
-    text-transform: uppercase;
-`
-
 const FormElement = styled.div`
     width: 100%;
     display: flex;
@@ -254,67 +243,45 @@ class IngredientCreator extends Component {
         this.setState({formControls: updatedControls, formType: 'select', formIsValid: false})
     }
 
+    setNode = (selector, node, depth = 0) => {
+        if (depth < selector.length - 1) {
+            node = node[selector[depth + 1]]
+            return this.setNode(selector, node, depth + 1)
+        } else {
+            return node
+        }
+    }
+
     addIngredientHandler = event => {
         event.preventDefault()
 
-        let key = '',
-            id = '',
-            name = ''
-        let node = null
-        let controlArray = [],
-            dbRefArray = [],
-            levelKeys = []
-        let newItem = {}
         const { formControls, groupControls, selector } = this.state
         const { ingredients } = this.props
-        // const setNode = (i, tier, selector, node) => {
-        //     if (i < tier) {
-        //         node = node[selector[i + 1]]
-        //         return setNode(i + 1, tier, selector, node)
-        //     } else {
-        //         return node
-        //     }
-        // }
-        const setNode = (selector, node, depth = 0) => {
-            console.log('[IngredientForm] selector, node, depth: ', selector, node, depth)
-            if (depth < selector.length - 1) {
-                node = node[selector[depth + 1]]
-                return setNode(selector, node, depth + 1)
-            } else {
-                return node
-            }
-        }
 
-        key = groupControls[selector.length - 1].name
-        id = idTransform(formControls[key].value)
-        name = nameTransform(formControls[key].value)
-        levelKeys = Object.keys(setNode(selector, ingredients)).filter(key => {
+        const key = groupControls[selector.length - 1].name
+        const id = idTransform(formControls[key].value)
+        const name = nameTransform(formControls[key].value)
+        const levelKeys = Object.keys(this.setNode(selector, ingredients)).filter(key => {
             return ignored.indexOf(key) === -1
         })
-        newItem = {
+        const newItem = {
             [id]: {
                 name,
                 rank: levelKeys.length
             }
         }
+
         if (key === "item") {
             newItem[id] = updateObject(newItem[id], {
                 attributes: formControls[key].attributes
             })
         }
-        // controlArray = Object.keys(formControls)
-        console.log('[IngredientForm] controlArray: ', controlArray)
-        dbRefArray = [...selector]
-        node = setNode(dbRefArray, ingredients)
-        console.log('[IngredientForm] node: ', node)
-        console.log('[IngredientForm] dbRefArray: ', dbRefArray)
 
-        // controlArray.forEach(control => {
-        //     dbRefArray.push(idTransform(formControls[control].value))
-        // })
+        let node = this.setNode(selector, ingredients)
+
         if (Object.keys(node).indexOf(Object.keys(newItem)[0].toLowerCase()) === -1) {
             node = updateObject(node, newItem)
-            this.props.onAddIngredient(node, dbRefArray, id)
+            this.props.onAddIngredient(node, selector, id)
             this.setState({
                 selector: ['ingredients'],
                 formType: 'select',
@@ -363,23 +330,20 @@ class IngredientCreator extends Component {
     }
 
     addItemForm = () => {
+        const { formControls } = this.state
         const formElementsArray = []
-        const formElementsObj = {...this.state.formControls}
     
-        for (let key in formElementsObj) {
+        for (let key in formControls) {
             formElementsArray.push({
                 id: key,
-                config: formElementsObj[key],
+                config: formControls[key],
             })
         }
 
         let form = formElementsArray.map(formElement => {
             let addButton = null;
-            // let attribute = null;
             let checkboxes = null;
-            // console.log('[IngredientForm] this.state.selector: ', this.state.selector)
-            // console.log('[IngredientForm] formElementsObj: ', formElementsObj)
-            // console.log('[IngredientForm] formElementsArray: ', formElementsArray)
+
             if (formElement.id !== 'item') {
                 addButton = (
                     <AddFormElement>
