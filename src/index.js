@@ -10,12 +10,14 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import authReducer from './store/reducers/auth'
 import ingredientsReducer from './store/reducers/ingredients'
+import cocktailsReducer from './store/reducers/cocktails'
 
 require('dotenv').config()
 
 const rootReducer = combineReducers({
     auth: authReducer,
-    ingredients: ingredientsReducer
+    ingredients: ingredientsReducer,
+    cocktails: cocktailsReducer
 })
 
 const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;

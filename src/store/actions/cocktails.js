@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes'
-import { database } from './firebase'
+import { database, firebaseRefByArray } from './firebase'
 import { updateObject } from '../../shared/utility'
 
 export const addCocktailSuccess = (cocktails) => {
@@ -21,12 +21,46 @@ export const addCocktailFail = (error) => {
     }
 }
 
+const cocktailElementTwoWayReferenceUpdate = cocktail => {
+    const id = Object.keys(cocktail)[0]
+    console.log('[cocktails] cocktail: ', cocktail)
+    const elements = Object.keys(cocktail[id].elements)
+    const rootRef = database.ref()
+    const elementIndexRef = rootRef.child("elementIndex")
+
+    elements.forEach(element => {
+        elementIndexRef.child(element).once('value', snapshot => {
+            let elementRefArray = snapshot.val().ref
+            elementRefArray.push(element)
+            let elementRef = firebaseRefByArray(rootRef, elementRefArray)
+            elementRef.once('value', snapshot => {
+                let element = snapshot.val()
+                let cocktailTwoWayRef = element.cocktails ? element.cocktails : {}
+                cocktailTwoWayRef = updateObject(cocktailTwoWayRef, {
+                    [id]: true
+                })
+                elementRef.child('cocktails').update(cocktailTwoWayRef, error => {
+                    if (error) {
+                        // SOMETHING
+                    }
+                })
+                // console.log('[cocktails] snapshot.val(): ', snapshot.val())
+            })
+        }, errorObject => {
+            // ERROR FOR THIS SPECIFIC INSTANCE
+        })
+    })
+
+
+}
+
 export const addCocktail = cocktail => {
     return dispatch => {
         dispatch(addCocktailStart())
 
         const rootRef = database.ref()
         const indexRef = rootRef.child("cocktailIndex")
+        cocktailElementTwoWayReferenceUpdate(cocktail)
         indexRef.update(cocktail, error => {
             if (error) {
                 return dispatch(addCocktailFail(error))

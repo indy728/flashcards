@@ -117,7 +117,6 @@ class CocktailCreator extends Component {
         let controls = {...this.state.drinkControls[newAttribute.type]}
         let duplicate = false;
 
-
         if (newAttribute.attributes) {
             Object.keys(newAttribute.attributes).forEach(attr => {
                 if (newAttribute.attributes[attr] === true)
@@ -127,11 +126,6 @@ class CocktailCreator extends Component {
             })
         }
 
-        console.log('[CocktailCreator] controls: ', controls)
-
-        // if (!controls.value && !controls.qty && !controls.text && !controls.instruction) {
-        //     controls.validation.required = false
-        // }
         if (newAttribute.type !== 'instructions') {
             for (let i in attributes) {
                 if (attributes[i].label === newAttribute.label) {
@@ -141,6 +135,14 @@ class CocktailCreator extends Component {
             }
         }
         if (!duplicate) {
+            if (newAttribute.type === 'ingredient' && !newAttribute.attributes.qty && !newAttribute.attributes.text) {
+                newAttribute = updateObject(newAttribute, {
+                    valid: true,
+                    validation: {
+                        required: false
+                    }
+                })
+            }
             controls = updateObject(controls, newAttribute)
             controls.added = count
             attributes.push(controls)
@@ -214,37 +216,25 @@ class CocktailCreator extends Component {
         event.preventDefault()
 
         const { attributes } = this.state
-        let cocktailNode = {
-            id: '',
+        let cocktailObj = {
             name: '',
             elements: {},
             instructions: {}
         }
         let firstInstruction = -1
+        let id = ''
 
         attributes.forEach((attribute, i) => {
-        // for (let i in attributes) {
-            // const attribute = attributes[i]
             let idNum = ''
-            // let inputText = []
             let { type, value, qtyType, key, label, qty, text } = attribute
             let attributesObj = attribute.attributes
-            
-            // ["value", "qty", "text"].forEach(val => {
-            //     if (attributes[val]) {
-            //         inputText.push(val)
-            //     }
-            // })
-
-            console.log('[CocktailCreator] attribute: ', attribute)
 
             if (type === 'name') {
                 // const { value } = attribute
                 const name = nameTransform(value)
-                const id = idTransform(value.replace(/^the /i, ''))
-                cocktailNode = updateObject(cocktailNode, {
-                    name,
-                    id
+                id = idTransform(value.replace(/^the /i, ''))
+                cocktailObj = updateObject(cocktailObj, {
+                    name
                 })
             } else if (type === 'instructions') {
                 if (firstInstruction !== -1) {
@@ -252,15 +242,15 @@ class CocktailCreator extends Component {
                 } else if (i < attributes.length - 1) {
                     firstInstruction = i
                 }
-                cocktailNode = updateObject(cocktailNode, {
-                    instructions: updateObject(cocktailNode.instructions, {
+                cocktailObj = updateObject(cocktailObj, {
+                    instructions: updateObject(cocktailObj.instructions, {
                         ['instruction' + idNum]: text
                     })
                 })
             } else if (type === 'ingredient') {
                 idNum = value
-                cocktailNode = updateObject(cocktailNode, {
-                    elements: updateObject(cocktailNode.elements, {
+                cocktailObj = updateObject(cocktailObj, {
+                    elements: updateObject(cocktailObj.elements, {
                         [key]: {
                             order: i - 1,
                             label
@@ -269,24 +259,34 @@ class CocktailCreator extends Component {
                 })
                 if (attributesObj) {
                     if (attributesObj.qty) {
-                        cocktailNode.elements[key] = updateObject(cocktailNode.elements[key], {
+                        cocktailObj.elements[key] = updateObject(cocktailObj.elements[key], {
                             qty: qtyStringToFloat(qty),
                             qtyType
                         })
                     }
                     if (attributesObj.text) {
-                        cocktailNode.elements[key] = updateObject(cocktailNode.elements[key], {
+                        cocktailObj.elements[key] = updateObject(cocktailObj.elements[key], {
                             text
                         })
                     }
                 }
             }
         })
+        const cocktailNode = {
+            [id]: cocktailObj
+        }
+        this.props.onAddCocktail(cocktailNode)
+        this.clearAttributes()
         console.log('[CocktailCreator] cocktailNode: ', cocktailNode)
     }
 
     clearAttributes = () => {
-        this.setState({attributes: []}, () => {
+        this.setState({
+            attributes: [],
+            count: 1,
+            adding: false,
+            selectorInit: null,
+            formIsValid: false}, () => {
             this.addAttributeHandler(attributesInit)
         })
     }
@@ -300,7 +300,7 @@ class CocktailCreator extends Component {
                 /> : 
             null
         )
-        
+
         return (
             <React.Fragment>
                 <Modal show={this.state.adding} modalClosed={this.addingCanceled}>
@@ -330,12 +330,14 @@ const mapStateToProps = state => {
     return {
         ingredients: state.ingredients.ingredients,
         loading: state.ingredients.loading
+
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onInitIngredients: () => dispatch(actions.fetchIngredients())
+        onInitIngredients: () => dispatch(actions.fetchIngredients()),
+        onAddCocktail: cocktail => dispatch(actions.addCocktail(cocktail))
     }
 }
 

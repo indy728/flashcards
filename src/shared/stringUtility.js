@@ -44,7 +44,7 @@ export const qtyStringToFloat = str => {
         str = splitStr.join('.')
         console.log('[stringUtility] splitStr: ', splitStr)
     } else if (str.match(/\//g)) {
-        str = decimals[fractions.indexOf(str)]
+        str = '.' + decimals[fractions.indexOf(str)]
     }
     float = (Math.round(parseFloat(str) * 4) / 4).toFixed(2)
     return float
