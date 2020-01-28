@@ -6,7 +6,7 @@ const Wrapper = styled.div`
     width: 100%;
     height: 50rem;
     max-height: 100%;
-    z-index: 499;
+    z-index: 500;
     top: 50%;
     left: 0%;
     transform: translateY(-50%);
@@ -18,7 +18,11 @@ const Wrapper = styled.div`
 const SlideshowFeature = styled.div`
     flex: 1;
     height: 100%;
-    background-color: orange;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* background-color: orange; */
 `
 
 const slideshow = props => {
@@ -29,7 +33,7 @@ const slideshow = props => {
             >
             <SlideshowControlButton
                 className='slideshow--control-back'
-                buttonSymbol={'lol'}
+                buttonSymbol='chevron-left'
                 clicked={null}
                 />
             <SlideshowFeature>
@@ -37,7 +41,7 @@ const slideshow = props => {
             </SlideshowFeature>
             <SlideshowControlButton
                 className='slideshow--control-forward'
-                buttonSymbol={'ror'}
+                buttonSymbol='chevron-right'
                 clicked={null}
                 />
         </Wrapper>

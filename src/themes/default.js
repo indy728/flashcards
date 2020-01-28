@@ -18,6 +18,7 @@ theme.palette = {
         '#cfd8dc',
         '#eceff1',
     ],
+    transparent: ['rgba(13, 19, 19, 0.5)', 'rgba(13, 19, 19, 0.7)', 'rgba(13, 19, 19, 0.9)']
 }
 
 theme.reversePalette = reversePalette(theme.palette)

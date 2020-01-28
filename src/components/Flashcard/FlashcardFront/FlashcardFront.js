@@ -4,6 +4,10 @@ import CardFace from '../../UI/CardFace/CardFace'
 
 const Wrapper = styled(CardFace)`
     height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
 
 const Name = styled.div`
@@ -12,6 +16,8 @@ const Name = styled.div`
     font-size: 4.8rem;
     text-align: center;
     text-transform: capitalize;
+
+
 `
 
 const flashcardFront = props => {

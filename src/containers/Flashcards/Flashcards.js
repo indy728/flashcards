@@ -18,61 +18,6 @@ const Wrapper = styled.div`
     justify-content: center;
 `
 
-const initFlashcards = [
-    {
-        name: 'The Keeper',
-        ingredients: [
-            {
-                name: 'vodka',
-                qty: '1 1/2 oz',
-            },
-            {
-                name: 'aperol',
-                qty: '1/2 oz',
-            },
-            {
-                name: 'honey syrup',
-                qty: '1/2 oz',
-            },
-            {
-                name: 'lemon juice',
-                qty: '3/4 oz',
-            },
-        ],
-        instructions: 'shake, strain, top with prosecco',
-        glassware: 'coupe',
-        garnish: 'lemon wheel'
-    },
-    // {
-    //     name: 'Opening Statement',
-    //     ingredients: [
-    //         {
-    //             name: 'gin',
-    //             qty: '3/4 oz',
-    //         },
-    //         {
-    //             name: "Kina L'Aero D'Or",
-    //             qty: '3/4 oz',
-    //         },
-    //         {
-    //             name: 'luxardo',
-    //             qty: '3/4 oz',
-    //         },
-    //         {
-    //             name: 'lemon juice',
-    //             qty: '3/4 oz',
-    //         },
-    //         {
-    //             name: 'orange bitters',
-    //             qty: '2 dashes',
-    //         },
-    //     ],
-    //     instructions: 'shake and strain',
-    //     glassware: 'coupe',
-    //     garnish: 'none'
-    // },
-]
-
 class Flashcards extends Component {
     state = {
         cocktailArray: null
@@ -108,9 +53,21 @@ class Flashcards extends Component {
         //             />
         //     )
         // })
-            flashcards = <Modal show>
-                <Slideshow />
-            </Modal>
+            let flashcardArray = (
+                <Flashcard
+                    key='keeper'
+                    cocktail={this.props.cocktails['keeper']}
+                    />
+            )
+
+
+            flashcards = (
+                <Modal show>
+                    <Slideshow 
+                        flashcardArray={flashcardArray}
+                        />
+                </Modal>
+            ) 
         } 
         return (
             <Wrapper className='flashcards'>

@@ -49,3 +49,28 @@ export const qtyStringToFloat = str => {
     float = (Math.round(parseFloat(str) * 4) / 4).toFixed(2)
     return float
 }
+
+export const qtyFloatToString = float => {
+    let floatString = float.toString()
+    let splitStr = floatString.split('.')
+    const converter = {
+        '00': '',
+        '25': '1/4',
+        '50': '1/2',
+        '75': '3/4',
+    }
+    if (splitStr[1] === '00') return splitStr[0]
+    splitStr[1] = converter[splitStr[1]]
+    if (splitStr[0] === '0') return splitStr[1]
+    return splitStr.join(' ')
+}
+
+export const makePlural = str => {
+    let newStr = ''
+    if (str.match(/[(ch)(sh)sxz]$/i)){
+        newStr = str + 'es'
+    } else {
+        newStr = str + 's'
+    }
+    return newStr
+}
