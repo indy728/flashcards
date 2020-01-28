@@ -19,11 +19,11 @@ const Bullet = styled.div`
 `
 
 const flashcardBack = props => {
-    const { ingredients, instructions, glassware, garnish } = props
+    const { elements, instructions, glassware, garnish } = props
 
-    const ingsKeys = Object.keys(ingredients)
+    const ingsKeys = Object.keys(elements)
         const ings = ingsKeys.map(ing => {
-            const ingredient = ingredients[ing]
+            const ingredient = elements[ing]
             return (
                 <Bullet>{ingredient.qty} {ingredient.name}</Bullet>
             )
@@ -34,9 +34,9 @@ const flashcardBack = props => {
             className='flashcard-back'
             reveal={props.reveal} >
             {ings}
-            <Bullet>Instructions: {instructions}</Bullet>
+            {/* <Bullet>Instructions: {instructions}</Bullet>
             <Bullet>Glassware: {glassware}</Bullet>
-            <Bullet>Garnish: {garnish}</Bullet>
+            <Bullet>Garnish: {garnish}</Bullet> */}
         </Wrapper>
     )
 }

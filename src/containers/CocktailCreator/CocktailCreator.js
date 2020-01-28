@@ -5,7 +5,7 @@ import Header from '../../components/UI/Header/Header'
 import Dashboard from '../../components/Dashboard/Dashboard'
 import Modal from '../../components/UI/Modal/Modal'
 import IngredientForm from '../../components/IngredientForm/IngredientForm'
-import { updateObject } from '../../shared/utility'
+import { updateObject } from '../../shared/objectUtility'
 import { idTransform, nameTransform, qtyStringToFloat } from '../../shared/stringUtility'
 import * as actions from '../../store/actions'
 
@@ -330,7 +330,6 @@ const mapStateToProps = state => {
     return {
         ingredients: state.ingredients.ingredients,
         loading: state.ingredients.loading
-
     }
 }
 

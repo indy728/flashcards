@@ -1,6 +1,6 @@
 import * as actionTypes from './actionTypes'
 import { database, firebaseRefByArray } from './firebase'
-import { updateObject } from '../../shared/utility'
+import { updateObject } from '../../shared/objectUtility'
 
 export const addIngredientSuccess = (ingredients) => {
     return {

@@ -5,7 +5,7 @@ import Button from '../../components/UI/Button/Button'
 import Input from '../../components/UI/Input/Input'
 import ContentBlock from '../../components/UI/ContentBlock/ContentBlock'
 import * as actions from '../../store/actions'
-import { updateObject } from '../../shared/utility'
+import { updateObject } from '../../shared/objectUtility'
 
 const Wrapper = styled(ContentBlock)`
     width: 50rem;

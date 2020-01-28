@@ -1,10 +1,10 @@
 import * as actionTypes from '../actions/actionTypes'
-import { updateObject } from '../../shared/utility'
+import { updateObject } from '../../shared/objectUtility'
 
 const initialState = {
     cocktails: null,
     error: null,
-    loading: false,
+    loading: true,
     quiz: {
         count: 0,
         pool: []

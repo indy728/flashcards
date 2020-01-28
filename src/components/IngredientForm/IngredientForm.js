@@ -9,7 +9,7 @@ import Header from '../UI/Header/Header'
 import Select from '../UI/Select/Select'
 
 import IngredientTierForm from './IngredientTierForm/IngredientTierForm'
-import { updateObject } from '../../shared/utility'
+import { updateObject } from '../../shared/objectUtility'
 import { idTransform, nameTransform } from '../../shared/stringUtility'
 import * as actions from '../../store/actions'
 

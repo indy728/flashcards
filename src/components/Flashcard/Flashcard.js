@@ -26,7 +26,7 @@ class Flashcard extends Component {
     }
 
     render() {
-        const { name, ingredients, instructions, glassware, garnish } = this.props.cocktail
+        const { name, elements, instructions, glassware, garnish } = this.props.cocktail
 
         
 
@@ -43,10 +43,10 @@ class Flashcard extends Component {
                 <FlashcardBack
                     className='flashcard-back'
                     reveal={this.state.reveal}
-                    ingredients={ingredients}
-                    instructions={instructions}
-                    glassware={glassware}
-                    garnish={garnish}
+                    elements={elements}
+                    // instructions={instructions}
+                    // glassware={glassware}
+                    // garnish={garnish}
                     >
                 </FlashcardBack>
             </Wrapper>
