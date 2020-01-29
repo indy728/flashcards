@@ -42,15 +42,15 @@ class Flashcard extends Component {
             if (element.qty){
                 let qty = qtyFloatToString(element.qty)
                 if (element.qtyType === 'count') {
-                    elementStr = qty + 'x ' + element.label
+                    elementStr = qty + 'x ' + element.label.toUpperCase()
                 } else {
-                    elementStr = qty + ' ' + element.qtyType.toLowerCase() + ' ' + element.label
+                    elementStr = qty + ' ' + element.qtyType.toLowerCase() + ' ' + element.label.toUpperCase()
                 }
             }
             if (element.class === 'garnish') {
                 garnishes.push(elementStr)
             } else if (element.class === 'glassware') {
-                glassware.push(elementStr)
+                glassware.push(elementStr.toUpperCase())
             } else {
                 measurements.push(elementStr)
             }
