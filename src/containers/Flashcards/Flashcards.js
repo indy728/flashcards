@@ -136,15 +136,11 @@ class Flashcards extends Component {
                     slideshowArray.push(
                         <Flashcard
                             key={id}
-                            cocktail={this.props.cocktails[id]}
+                            cocktail={cocktails[id]}
                             />
                     )
                 })
-                const featureFlashcard = (
-                    <Flashcard
-                        cocktail={this.props.cocktails[this.state.slideshowFlashcardIDs[this.state.slideshowIndex]]}
-                        />
-                ) 
+                const featureFlashcard = slideshowArray[this.state.slideshowIndex]
                 slideshow = (
                     <Modal show>
                         <Button
