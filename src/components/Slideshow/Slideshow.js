@@ -13,8 +13,6 @@ const Wrapper = styled.div`
     display: flex;
 `
 
-
-
 const SlideshowFeature = styled.div`
     flex: 1;
     height: 100%;
@@ -22,6 +20,11 @@ const SlideshowFeature = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+
+    /* > * {
+        transform: ${props => `translateX(calc(-100% * ${props.index}))`};
+    } */
     /* background-color: orange; */
 `
 
@@ -34,15 +37,15 @@ const slideshow = props => {
             <SlideshowControlButton
                 className='slideshow--control-back'
                 buttonSymbol='chevron-left'
-                clicked={null}
+                clicked={() => props.slideshowControls(-1)}
                 />
             <SlideshowFeature>
-                {props.flashcardArray}
+                {props.feature}
             </SlideshowFeature>
             <SlideshowControlButton
                 className='slideshow--control-forward'
                 buttonSymbol='chevron-right'
-                clicked={null}
+                clicked={() => props.slideshowControls(1)}
                 />
         </Wrapper>
     )

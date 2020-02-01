@@ -7,6 +7,7 @@ import Flashcard from '../../components/Flashcard/Flashcard'
 import Slideshow from '../../components/Slideshow/Slideshow'
 import Spinner from '../../components/UI/Spinner/Spinner'
 import Modal from '../../components/UI/Modal/Modal'
+import Button from '../../components/UI/Button/Button'
 import { shuffleArray } from '../../shared/arrayUtility'
 
 const Wrapper = styled.div`
@@ -48,16 +49,21 @@ class Flashcards extends Component {
     }
 
     inSlideshowToggle = () => {
-        this.setState(prevState => ({ inSlideshow: !prevState }))
+        this.setState(prevState => ({ inSlideshow: !prevState.inSlideshow }))
     }
 
-    cocktailObjectToArray = cocktailObj => {
-        let cocktailArray = Object.values(cocktailObj)
-        console.log('[Flashcards] cocktailArray: ', cocktailArray)
-        cocktailArray = shuffleArray(cocktailArray)
-        console.log('[Flashcards] cocktailArray: ', cocktailArray)
-        // this.setState({ cocktailArray })
-        return cocktailArray
+    startSlideshow = () => {
+        this.setState({
+            inSlideshow: true,
+            slideshowIndex: 0
+        })
+    }
+
+    endSlideshow = () => {
+        this.setState({
+            inSlideshow: false,
+            slideshowIndex: -1
+        })
     }
 
     slideshowFlashcardIDsPushHandler = (id) => {
@@ -71,17 +77,10 @@ class Flashcards extends Component {
 
     slideshowFlashcardIDsRemoveHandler = (id) => {
         let updatedSlideshowFlashcardIDs = [...this.state.slideshowFlashcardIDs]
-        console.log('[Flashcards] id: ', id)
         updatedSlideshowFlashcardIDs = updatedSlideshowFlashcardIDs.filter(key => key !== id)
         this.setState({
             slideshowFlashcardIDs: updatedSlideshowFlashcardIDs,
             flashcardCount: updatedSlideshowFlashcardIDs.length
-        })
-    }
-
-    startSlideShowHandler = () => {
-        this.setState({
-            slideshowIndex: 0
         })
     }
 
@@ -96,28 +95,23 @@ class Flashcards extends Component {
 
     render() {
         let flashcards = <Spinner />
+        let controls = null
         let cocktailButtons = null;
         let addedCocktails = null;
         let nextBackButtons = null;
+        let slideshow = null
         if (!this.props.loading) {
             const { cocktails } = this.props
-            let flashcardArray = (
-                <Flashcard
-                    key='keeper'
-                    cocktail={this.props.cocktails['keeper']}
-                    />
-            )
-
-            console.log('[Flashcards] this.props.cocktails: ', this.props.cocktails)
-            
             let cocktailKeys = Object.keys(cocktails)
+
             cocktailButtons = cocktailKeys.map(key => {
+                const selected = this.state.slideshowFlashcardIDs.findIndex(element => element === key) !== -1
                 return (
                     <CocktailButton
                         key={key}
-                        onClick={() => this.slideshowFlashcardIDsPushHandler(key)}
+                        onClick={selected ? null : () => this.slideshowFlashcardIDsPushHandler(key)}
                         id={key}
-                        selected={this.state.slideshowFlashcardIDs.findIndex(element => element === key) !== -1}
+                        selected={selected}
                         >
                         {cocktails[key].name}
                     </CocktailButton>
@@ -135,34 +129,63 @@ class Flashcards extends Component {
                     </CocktailButton>
                 )
             })
-            nextBackButtons = (
-                <div>
-                    <div onClick={() => this.slideshowIndexChangeHandler(-1)}>back</div>
-                    <div onClick={() => this.slideshowIndexChangeHandler(1)}>next</div>
-                </div>
-            )
-            flashcards = (
-                <Modal show>
-                    <Slideshow 
-                        flashcardArray={flashcardArray}
+            if (this.state.inSlideshow)  {
+                const slideshowArray = []
+
+                this.state.slideshowFlashcardIDs.forEach(id => {
+                    slideshowArray.push(
+                        <Flashcard
+                            key={id}
+                            cocktail={this.props.cocktails[id]}
+                            />
+                    )
+                })
+                const featureFlashcard = (
+                    <Flashcard
+                        cocktail={this.props.cocktails[this.state.slideshowFlashcardIDs[this.state.slideshowIndex]]}
                         />
-                </Modal>
-            ) 
+                ) 
+                slideshow = (
+                    <Modal show>
+                        <Button
+                            clicked={() => this.endSlideshow()}
+                            >
+                            X
+                        </Button>
+                        <Slideshow 
+                            // flashcardArray={slideshowArray}
+                            feature={featureFlashcard}
+                            index={this.state.slideshowIndex}
+                            slideshowControls={this.slideshowIndexChangeHandler}
+                            />
+                    </Modal>
+                ) 
+            }
+            controls = (
+                <React.Fragment>
+                    <Button
+                        disabled={this.state.flashcardCount < 1}
+                        clicked={() => this.startSlideshow()}
+                        >
+                        Launch Flashcards
+                    </Button>
+                    <CocktailButtons>
+                        {addedCocktails}
+                    </CocktailButtons>
+                        {/* this.state.inSlideshow {this.state.inSlideshow ? "true" : "false"}<br></br>
+                        this.state.flashcardCount {this.state.flashcardCount}<br></br>
+                        this.state.slideshowIndex {this.state.slideshowIndex}<br></br>
+                        this.state.slideshowFlashcardIDs {this.state.slideshowFlashcardIDs.join('+')}<br></br> */}
+                    <CocktailButtons>
+                        {cocktailButtons}
+                    </CocktailButtons>
+                </React.Fragment>
+            )
         } 
         return (
             <Wrapper className='flashcards'>
-                {/* {flashcards} */}
-                <CocktailButtons>
-                    {addedCocktails}
-                </CocktailButtons>
-                this.state.inSlideshow {this.state.inSlideshow ? "true" : "false"}<br></br>
-                this.state.flashcardCount {this.state.flashcardCount}<br></br>
-                this.state.slideshowIndex {this.state.slideshowIndex}<br></br>
-                this.state.slideshowFlashcardIDs {this.state.slideshowFlashcardIDs.join('+')}<br></br>
-                <CocktailButtons>
-                    {cocktailButtons}
-                </CocktailButtons>
-                {nextBackButtons}
+                {controls}
+                {slideshow}
             </Wrapper>
         )
     }

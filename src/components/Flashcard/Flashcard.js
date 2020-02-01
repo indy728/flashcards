@@ -17,6 +17,7 @@ const Wrapper = styled.div`
     -moz-perspective: 150rem;
     /* height: 52rem; */
 
+
 `
 
 class Flashcard extends Component {

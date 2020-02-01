@@ -35,7 +35,6 @@ const Bullet = styled.div`
     `
 
 const Bullets = styled.div`
-    /* height: calc(100% - 2.1rem - 4.4rem); */
     width: 100%;
     flex: 1;
     margin-top: 2.1rem;
@@ -68,6 +67,7 @@ const flashcardBack = props => {
     const { measurements, garnishes, glassware } = elements
     let cocktailGarnish = null
     let cocktailGlassware= null
+    let cocktailInstructions = null
 
     console.log('[FlashcardBack] props: ', props)
     const cocktailMeasurements = measurements.map((measurement, i) => {
@@ -95,6 +95,12 @@ const flashcardBack = props => {
             </FlashcardBackSpecialClass>
         )
     }
+    if (props.instructions) {
+        cocktailInstructions = (
+            <FlashcardBackInstructions>
+                Instructions: {props.instructions.instruction}
+            </FlashcardBackInstructions>)
+    }
     
 
     return (
@@ -110,9 +116,7 @@ const flashcardBack = props => {
             {cocktailInstructions} */}
             {cocktailGarnish}
             {cocktailGlassware}
-            <FlashcardBackInstructions>
-                Instructions: {props.instructions.instruction}
-            </FlashcardBackInstructions>
+            {cocktailInstructions}
         </Wrapper>
     )
 }
