@@ -34,17 +34,17 @@ class Layout extends Component {
                 usage: "basic",
                 isAuth: false,
             },
-            home: {
-                key: "home",
-                link: "/",
-                title: "Profile",
-                usage: "basic",
-                isAuth: true,
-            },
-            quiz: {
-                key: "quiz",
-                link: "/quiz",
-                title: "Quiz",
+            // quiz: {
+            //     key: "quiz",
+            //     link: "/quiz",
+            //     title: "Quiz",
+            //     usage: "basic",
+            //     isAuth: true,
+            // },
+            learningCenter: {
+                key: "learning_center",
+                link: "/learning_center",
+                title: "Learning Center",
                 usage: "basic",
                 isAuth: true,
             },
@@ -55,6 +55,13 @@ class Layout extends Component {
                 usage: "basic",
                 isAuth: true,
                                                                 
+            },
+            home: {
+                key: "home",
+                link: "/",
+                title: "Profile",
+                usage: "basic",
+                isAuth: true,
             },
             logout: {
                 key: "logout",
@@ -75,13 +82,6 @@ class Layout extends Component {
                 link: "/add_element",
                 title: "Add An Element",
                 usage: "creator",
-                isAuth: true,
-            },
-            flashcards: {
-                key: "flashcards",
-                link: "/flashcards",
-                title: "Flashcards",
-                usage: "basic",
                 isAuth: true,
             },
         },
