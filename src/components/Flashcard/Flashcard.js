@@ -66,7 +66,6 @@ class Flashcard extends Component {
     render() {
         const { name, elements, instructions } = this.props.cocktail
         const elementsByClass = this.classifyElementsHandler(elements) 
-        
 
         return (
             <Wrapper
