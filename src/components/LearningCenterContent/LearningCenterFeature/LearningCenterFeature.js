@@ -5,7 +5,6 @@ import FeatureLaunchButtons from './FeatureLaunchButtons/FeatureLaunchButtons'
 
 const Wrapper = styled.div`
     max-width: 100%;
-    height: 20rem;
     padding: 0 2rem;
     display: flex;
     flex-flow: column;

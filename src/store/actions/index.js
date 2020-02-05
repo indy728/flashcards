@@ -12,3 +12,7 @@ export {
     addCocktail,
     fetchCocktails
 } from './cocktails'
+export {
+    addToStack,
+    removeFromStack
+} from './learning'

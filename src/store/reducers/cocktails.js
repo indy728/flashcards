@@ -5,14 +5,6 @@ const initialState = {
     cocktails: null,
     error: null,
     loading: true,
-    quiz: {
-        count: 0,
-        pool: []
-    },
-    flashcards: {
-        count: 0,
-        pool: []
-    }
 }
 
 const addCocktailStart = state => {

@@ -2,7 +2,7 @@ import * as actionTypes from './actionTypes'
 import { database, firebaseRefByArray } from './firebase'
 import { updateObject } from '../../shared/objectUtility'
 
-export const addCocktailSuccess = (cocktails) => {
+export const addCocktailSuccess = () => {
     return {
         type: actionTypes.ADD_COCKTAIL_SUCCESS
     }
@@ -51,6 +51,7 @@ const cocktailElementTwoWayReferenceUpdate = cocktail => {
                 // ERROR FOR THIS SPECIFIC INSTANCE
             })
         })
+        dispatch(addCocktailSuccess())
         return dispatch(fetchCocktails())
     }
 
