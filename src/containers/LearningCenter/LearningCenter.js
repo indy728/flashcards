@@ -31,8 +31,8 @@ const CocktailButton = styled.div`
 class Flashcards extends Component {
     state = {
         inSlideshow: false,
-        flashcardCount: 0,
         slideshowIndex: -1,
+        flashcardCount: 0,
         slideshowFlashcardIDs: []
     }
 
@@ -174,7 +174,7 @@ class Flashcards extends Component {
         } 
         return (
             <LearningCenterContent 
-                flashcardCount={this.state.flashcardCount}
+                flashcardCount={this.props.stack.count}
                 />
         )
     }
@@ -183,7 +183,8 @@ class Flashcards extends Component {
 const mapStateToProps = state => {
     return {
         cocktails: state.cocktails.cocktails,
-        loading: state.cocktails.loading
+        loading: state.cocktails.loading,
+        stack: state.learning.stack,
     }
 }
 

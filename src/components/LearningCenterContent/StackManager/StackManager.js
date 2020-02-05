@@ -41,9 +41,18 @@ class StackManager extends Component {
     addAllCocktails = () => {
         console.log('[StackManager] this.props.cocktails: ', this.props.cocktails)
         console.log('[StackManager] this.props.stack: ', this.props.stack)
+        const { cocktails, stack } = this.props
+        const addPool = []
+
+        for (let cocktail in cocktails) {
+            if (stack.pool.indexOf(cocktail) === -1) addPool.push(cocktail)
+        }
+        this.props.onAddToStack(addPool)
     }
 
     render() {
+        console.log('[StackManager] this.stack.pool: ', this.props.stack.pool)
+        console.log('[StackManager] this.stack.count: ', this.props.stack.count)
         const stackManagementAddItems = [
             {
                 text: 'Add Cocktail By Name',
