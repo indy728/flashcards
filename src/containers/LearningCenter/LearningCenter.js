@@ -30,10 +30,10 @@ const CocktailButton = styled.div`
 
 class Flashcards extends Component {
     state = {
-        inSlideshow: false,
-        slideshowIndex: -1,
-        flashcardCount: 0,
-        slideshowFlashcardIDs: []
+        // inSlideshow: false,
+        // slideshowIndex: -1,
+        // flashcardCount: 0,
+        // slideshowFlashcardIDs: []
     }
 
     componentDidMount() {
@@ -42,23 +42,23 @@ class Flashcards extends Component {
         }
     }
 
-    inSlideshowToggle = () => {
-        this.setState(prevState => ({ inSlideshow: !prevState.inSlideshow }))
-    }
+    // inSlideshowToggle = () => {
+    //     this.setState(prevState => ({ inSlideshow: !prevState.inSlideshow }))
+    // }
 
-    startSlideshow = () => {
-        this.setState({
-            inSlideshow: true,
-            slideshowIndex: 0
-        })
-    }
+    // startSlideshow = () => {
+    //     this.setState({
+    //         inSlideshow: true,
+    //         slideshowIndex: 0
+    //     })
+    // }
 
-    endSlideshow = () => {
-        this.setState({
-            inSlideshow: false,
-            slideshowIndex: -1
-        })
-    }
+    // endSlideshow = () => {
+    //     this.setState({
+    //         inSlideshow: false,
+    //         slideshowIndex: -1
+    //     })
+    // }
 
     slideshowFlashcardIDsPushHandler = (id) => {
         let updatedSlideshowFlashcardIDs = [...this.state.slideshowFlashcardIDs]
@@ -87,6 +87,8 @@ class Flashcards extends Component {
         this.setState({ slideshowIndex: updatedIndex})
     }
 
+    launchFlashcards
+
     render() {
         let flashcards = <Spinner />
         let controls = null
@@ -94,12 +96,16 @@ class Flashcards extends Component {
         let addedCocktails = null;
         let nextBackButtons = null;
         let slideshow = null
+        const { pool, count } = this.props.stack
+        const { inSlideshow, slideshowIndex } = this.props.slideshow
+        console.log('[LearningCenter] this.props.slideshow: ', this.props.slideshow)
+        console.log('[LearningCenter] this.props.stack: ', this.props.stack)
         if (!this.props.loading) {
             const { cocktails } = this.props
             let cocktailKeys = Object.keys(cocktails)
 
             cocktailButtons = cocktailKeys.map(key => {
-                const selected = this.state.slideshowFlashcardIDs.findIndex(element => element === key) !== -1
+                const selected = pool.findIndex(element => element === key) !== -1
                 return (
                     <CocktailButton
                         key={key}
@@ -111,22 +117,22 @@ class Flashcards extends Component {
                     </CocktailButton>
                 )
             })
-            addedCocktails = this.state.slideshowFlashcardIDs.map(key => {
+            addedCocktails = pool.map(key => {
                 return (
                     <CocktailButton
                         key={key}
                         onClick={() => this.slideshowFlashcardIDsRemoveHandler(key)}
                         id={key}
-                        // selected={this.state.slideshowFlashcardIDs.findIndex(element => element === key) !== -1}
+                        // selected={pool.findIndex(element => element === key) !== -1}
                         >
                         {cocktails[key].name}
                     </CocktailButton>
                 )
             })
-            if (this.state.inSlideshow)  {
+            if (inSlideshow)  {
                 const slideshowArray = []
 
-                this.state.slideshowFlashcardIDs.forEach(id => {
+                pool.forEach(id => {
                     slideshowArray.push(
                         <Flashcard
                             key={id}
@@ -134,48 +140,52 @@ class Flashcards extends Component {
                             />
                     )
                 })
-                const featureFlashcard = slideshowArray[this.state.slideshowIndex]
+                const featureFlashcard = slideshowArray[slideshowIndex]
                 slideshow = (
                     <Modal show>
                         <Button
-                            clicked={() => this.endSlideshow()}
+                            clicked={() => this.props.endSlideshow()}
                             >
                             X
                         </Button>
                         <Slideshow 
                             // flashcardArray={slideshowArray}
                             feature={featureFlashcard}
-                            index={this.state.slideshowIndex}
-                            slideshowControls={this.slideshowIndexChangeHandler}
+                            index={slideshowIndex}
+                            slideshowControls={this.props.incrementSlideIndex}
                             />
                     </Modal>
                 ) 
             }
-            controls = (
-                <React.Fragment>
-                    <Button
-                        disabled={this.state.flashcardCount < 1}
-                        clicked={() => this.startSlideshow()}
-                        >
-                        Launch Flashcards
-                    </Button>
-                    <CocktailButtons>
-                        {addedCocktails}
-                    </CocktailButtons>
-                        {/* this.state.inSlideshow {this.state.inSlideshow ? "true" : "false"}<br></br>
-                        this.state.flashcardCount {this.state.flashcardCount}<br></br>
-                        this.state.slideshowIndex {this.state.slideshowIndex}<br></br>
-                        this.state.slideshowFlashcardIDs {this.state.slideshowFlashcardIDs.join('+')}<br></br> */}
-                    <CocktailButtons>
-                        {cocktailButtons}
-                    </CocktailButtons>
-                </React.Fragment>
-            )
+            // controls = (
+            //     <React.Fragment>
+            //         <Button
+            //             disabled={this.state.flashcardCount < 1}
+            //             clicked={() => this.startSlideshow()}
+            //             >
+            //             Launch Flashcards
+            //         </Button>
+            //         <CocktailButtons>
+            //             {addedCocktails}
+            //         </CocktailButtons>
+            //             {/* this.state.inSlideshow {this.state.inSlideshow ? "true" : "false"}<br></br>
+            //             this.state.flashcardCount {this.state.flashcardCount}<br></br>
+            //             this.state.slideshowIndex {this.state.slideshowIndex}<br></br>
+            //             pool {pool.join('+')}<br></br> */}
+            //         <CocktailButtons>
+            //             {cocktailButtons}
+            //         </CocktailButtons>
+            //     </React.Fragment>
+            // )
         } 
         return (
-            <LearningCenterContent 
-                flashcardCount={this.props.stack.count}
-                />
+            <React.Fragment>
+                {slideshow}
+                <LearningCenterContent 
+                    flashcardCount={count}
+                    launchFlashcards={this.props.startSlideshow}
+                    />
+            </React.Fragment>
         )
     }
 }
@@ -185,12 +195,16 @@ const mapStateToProps = state => {
         cocktails: state.cocktails.cocktails,
         loading: state.cocktails.loading,
         stack: state.learning.stack,
+        slideshow: state.learning.slideshow,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onInitCocktails: () => dispatch(actions.fetchCocktails())
+        onInitCocktails: () => dispatch(actions.fetchCocktails()),
+        startSlideshow: () => dispatch(actions.startSlideshow()),
+        endSlideshow: () => dispatch(actions.endSlideshow()),
+        incrementSlideIndex: i => dispatch(actions.incrementSlideIndex(i))
     }
 }
 

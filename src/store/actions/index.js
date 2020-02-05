@@ -14,5 +14,8 @@ export {
 } from './cocktails'
 export {
     addToStack,
-    removeFromStack
+    removeFromStack,
+    startSlideshow,
+    endSlideshow,
+    incrementSlideIndex
 } from './learning'

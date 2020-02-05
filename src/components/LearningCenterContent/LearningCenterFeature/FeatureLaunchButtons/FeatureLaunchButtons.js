@@ -21,22 +21,23 @@ const FeatureLaunchButton = styled(Button)`
 `
 
 const featureLaunchButtons = props => {
-  return (
-    <Wrapper
-        className='learning-center--feature__launch-buttons'
-        >
-        <FeatureLaunchButton
-            className='learning-center--feature__launch-button'
+    return (
+        <Wrapper
+            className='learning-center--feature__launch-buttons'
             >
-            View Flashcards
-        </FeatureLaunchButton>
-        <FeatureLaunchButton
-            className='learning-center--feature__launch-button'
-            >
-            Take Quiz
-        </FeatureLaunchButton>
-    </Wrapper>
-  )
+            <FeatureLaunchButton
+                className='learning-center--feature__launch-button'
+                clicked={props.launchFlashcards}
+                >
+                View Flashcards
+            </FeatureLaunchButton>
+            <FeatureLaunchButton
+                className='learning-center--feature__launch-button'
+                >
+                Take Quiz
+            </FeatureLaunchButton>
+        </Wrapper>
+    )
 }
 
 export default featureLaunchButtons

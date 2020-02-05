@@ -20,7 +20,9 @@ const learningCenterFeature = props => {
         <FeatureStackCount
             count={props.flashcardCount}
             />
-        <FeatureLaunchButtons />
+        <FeatureLaunchButtons 
+            launchFlashcards={props.launchFlashcards}
+            />
     </Wrapper>
   )
 }

@@ -80,6 +80,9 @@ const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.ADD_TO_STACK: return addToStack(state, action)
         case actionTypes.REMOVE_FROM_STACK: return removeFromStack(state, action)
+        case actionTypes.START_SLIDESHOW: return startSlideshow(state)
+        case actionTypes.END_SLIDESHOW: return endSlideshow(state)
+        case actionTypes.INCREMENT_SLIDESHOW_INDEX: return incrementSlideIndex(state, action)
         default: return state
     }
 }

@@ -13,3 +13,22 @@ export const removeFromStack = pool => {
         pool
     }
 }
+
+export const startSlideshow = () => {
+    return {
+        type: actionTypes.START_SLIDESHOW,
+    }
+}
+
+export const endSlideshow = () => {
+    return {
+        type: actionTypes.END_SLIDESHOW,
+    }
+}
+
+export const incrementSlideIndex = increment => {
+    return {
+        type: actionTypes.INCREMENT_SLIDESHOW_INDEX,
+        increment
+    }
+}
