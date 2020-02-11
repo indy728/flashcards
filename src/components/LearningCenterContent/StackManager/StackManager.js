@@ -24,7 +24,8 @@ const StackManagementButton = styled(Button)`
     }
 
     &.stack-management-item--view-button,
-    &.stack-management-item--clear-button {
+    &.stack-management-item--clear-button,
+    &.stack-management-item--add-random-button {
         width: 25rem;
     }
 /* 
@@ -40,10 +41,18 @@ const StackManagementAddQty = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+
+    > div {
+        font-family: ${props => props.theme.fonts.script};
+        font-size: 2.4rem;
+
+        padding: 0 2rem;
+    }
 `
 
 const StackManagementAddQtyInput = styled.input`
-    width: 10rem;
+    width: 6rem;
+    text-align: center;
 `
 
 
@@ -118,12 +127,16 @@ class StackManager extends Component {
                     className='stack-management-item'
                     >
                     <StackManagementAddQty>
-                        Add 
+                        <div>
+                            Add 
+                        </div>
                         <StackManagementAddQtyInput
                             className='stack-management-item--add-random-qty__input'
-                            value=''
+                            placeholder='(1 - 100)'
                             />
-                         Random Flashcards
+                        <div>
+                            Random Cocktails
+                        </div>
                     </StackManagementAddQty>
                     <StackManagementButton
                         className='stack-management-item--add-random-button'
