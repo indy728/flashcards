@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import * as actions from '../../../store/actions'
 import styled from 'styled-components'
 import StackManagementItem from './StackManagementItem/StackManagementItem'
-import { Button } from '../../UI'
+import { Button, Spinner } from '../../UI'
 import { updateObject } from '../../../shared/objectUtility'
 
 const Wrapper = styled.div`
@@ -19,6 +19,10 @@ const StackManagementButton = styled(Button)`
     color: ${props => props.theme.palette.white[0]};
     background-color: ${props => props.theme.palette.grayscale[1]};
     border: 4px outset ${props => props.theme.palette.grayscale[5]};
+
+    background-image: ${props => props.disabled 
+    ? props.theme.palette.disabled
+    : 'none'};
 
     &.stack-management-item--search-button {
         width: 100%;
@@ -136,46 +140,52 @@ class StackManager extends Component {
     }
 
     render() {
-        console.log('[StackManager] this.stack.pool: ', this.props.stack.pool)
-        console.log('[StackManager] this.stack.count: ', this.props.stack.count)
-        const stackManagementAddItems = [
-            {
-                text: 'Add Cocktail By Name',
-                launchCocktailSearch: true,
-                searchType: 'name'
-            },
-            {
-                text: 'Add Cocktail By Ingredient',
-                launchCocktailSearch: true,
-                searchType: 'element'
-            },
-            {
-                text: 'Add All Cocktails',
-                launchCocktailSearch: false,
-                searchType: 'all'
-            },
-        ]
-        let addButtons = stackManagementAddItems.map(addItem => {
-            const addFunc = addItem.launchCocktailSearch 
-                ? () => this.launchCocktailSearch(addItem.searchType)
-                : this.addAllCocktails
-            return (
-                <StackManagementItem
-                    className={`stack-management-item--${addItem.searchType}`}
-                    key={addItem.searchType}
-                    >
-                    <StackManagementButton
-                        className='stack-management-item--search-button'
-                        clicked = {addFunc}
+        let stackManagerContent = <Spinner />
+        if (!this.props.loading) {
+            const { cocktails, stack } = this.props
+            const cocktailTotal = Object.keys(cocktails).length
+        
+            // console.log('[StackManager] this.stack.pool: ', this.props.stack.pool)
+            // console.log('[StackManager] this.stack.count: ', this.props.stack.count)
+            const stackManagementAddItems = [
+                {
+                    text: 'Add Cocktail By Name',
+                    launchCocktailSearch: true,
+                    searchType: 'name'
+                },
+                {
+                    text: 'Add Cocktail By Ingredient',
+                    launchCocktailSearch: true,
+                    searchType: 'element'
+                },
+                {
+                    text: 'Add All Cocktails',
+                    launchCocktailSearch: false,
+                    searchType: 'all'
+                },
+            ]
+            let addButtons = stackManagementAddItems.map(addItem => {
+                const addFunc = addItem.launchCocktailSearch 
+                    ? () => this.launchCocktailSearch(addItem.searchType)
+                    : this.addAllCocktails
+                return (
+                    <StackManagementItem
+                        className={`stack-management-item--${addItem.searchType}`}
+                        key={addItem.searchType}
                         >
-                        {addItem.text}
-                    </StackManagementButton>
-                </StackManagementItem>
-            )
-        })
+                        <StackManagementButton
+                            className='stack-management-item--search-button'
+                            clicked = {addFunc}
+                            disabled = {stack.count === cocktailTotal}
+                            >
+                            {addItem.text}
+                        </StackManagementButton>
+                    </StackManagementItem>
+                )
+            })
 
-        return(
-            <Wrapper
+            stackManagerContent = (
+<Wrapper
                 className='learning-center--stack-manager'
                 >
                 {addButtons}
@@ -199,6 +209,7 @@ class StackManager extends Component {
                     <StackManagementButton
                         className='stack-management-item--add-random-button'
                         clicked={() => this.addRandomCocktails(this.state.randomInput.value)}
+                        disabled = {stack.count === cocktailTotal}
                         >
                         Add
                     </StackManagementButton>
@@ -206,17 +217,26 @@ class StackManager extends Component {
                 <StackManagementItem>
                     <StackManagementButton
                         className='stack-management-item--view-button'
+                        disabled={stack.count === 0}
                         >
                         View Stack
                     </StackManagementButton>
                     <StackManagementButton
                         className='stack-management-item--clear-button'
                         clicked={() => this.props.onRemoveFromStack(this.props.stack.pool)}
+                        disabled={stack.count === 0}
                         >
                         Clear Stack
                     </StackManagementButton>
                 </StackManagementItem>
             </Wrapper>
+            )
+        }
+
+        return(
+            <React.Fragment>
+                {stackManagerContent}
+            </React.Fragment>
         )
     } 
 }
@@ -224,6 +244,8 @@ class StackManager extends Component {
 const mapStateToProps = state => {
     return {
         cocktails: state.cocktails.cocktails,
+        loading: state.cocktails.loading,
+        // || state.ingredients.loading,
         stack: state.learning.stack
     }
 }

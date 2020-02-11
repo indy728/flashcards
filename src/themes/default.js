@@ -18,7 +18,8 @@ theme.palette = {
         '#cfd8dc',
         '#eceff1',
     ],
-    transparent: ['rgba(13, 19, 19, 0.5)', 'rgba(13, 19, 19, 0.7)', 'rgba(13, 19, 19, 0.9)']
+    transparent: ['rgba(13, 19, 19, 0.5)', 'rgba(13, 19, 19, 0.7)', 'rgba(13, 19, 19, 0.9)'],
+    disabled: 'repeating-linear-gradient(-60deg, rgba(216, 216, 216, 0.3), rgba(216, 216, 216, 0.3) 1.5rem, rgba(76, 76, 76, 0.68) 1.5rem, rgba(76, 76, 76, 0.68) 3rem)'
 }
 
 theme.reversePalette = reversePalette(theme.palette)

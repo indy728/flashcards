@@ -16,7 +16,7 @@ const FeatureLaunchButton = styled(Button)`
     border: 2px outset ${props => props.theme.palette.grayscale[4]};
 
     background-image: ${props => props.disabled 
-    ? "repeating-linear-gradient(-60deg, rgba(216, 216, 216, 0.3), rgba(216, 216, 216, 0.3) 1.5rem, rgba(76, 76, 76, 0.68) 1.5rem, rgba(76, 76, 76, 0.68) 3rem)"
+    ? props.theme.palette.disabled
     : 'none'};
 
     :hover {
