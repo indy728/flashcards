@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Button } from '../../../UI'
-import { inherits } from 'util'
 
 const Wrapper = styled.div`
     width: 60rem;
@@ -30,9 +29,6 @@ const FeatureLaunchButton = styled(Button)`
 `
 
 const featureLaunchButtons = props => {
-    console.log('[FeatureLaunchButtons] disabled?: ', props.count < 1)
-    console.log('[FeatureLaunchButtons] props.count: ', props.count)
-
     return (
         <Wrapper
             className='learning-center--feature__launch-buttons'

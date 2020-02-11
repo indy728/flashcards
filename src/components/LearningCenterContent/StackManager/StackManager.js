@@ -35,6 +35,17 @@ const StackManagementButton = styled(Button)`
 
 `
 
+const StackManagementAddQty = styled.div`
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+
+const StackManagementAddQtyInput = styled.input`
+    width: 10rem;
+`
+
 
 
 class StackManager extends Component {
@@ -103,11 +114,22 @@ class StackManager extends Component {
                 className='learning-center--stack-manager'
                 >
                 {addButtons}
-                <StackManagementItem>
-                    Add <input></input> Random Flashcards
-                    <Button>
+                <StackManagementItem
+                    className='stack-management-item'
+                    >
+                    <StackManagementAddQty>
+                        Add 
+                        <StackManagementAddQtyInput
+                            className='stack-management-item--add-random-qty__input'
+                            value=''
+                            />
+                         Random Flashcards
+                    </StackManagementAddQty>
+                    <StackManagementButton
+                        className='stack-management-item--add-random-button'
+                        >
                         Add
-                    </Button>
+                    </StackManagementButton>
                 </StackManagementItem>
                 <StackManagementItem>
                     <StackManagementButton
