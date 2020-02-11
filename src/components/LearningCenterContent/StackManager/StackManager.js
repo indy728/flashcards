@@ -23,6 +23,15 @@ const StackManagementButton = styled(Button)`
         width: 100%;
     }
 
+    &.stack-management-item--view-button,
+    &.stack-management-item--clear-button {
+        width: 25rem;
+    }
+/* 
+    &.stack-management-item--clear-button {
+
+    } */
+
 
 `
 
@@ -100,12 +109,19 @@ class StackManager extends Component {
                         Add
                     </Button>
                 </StackManagementItem>
-                <Button>
-                    View Stack
-                </Button>
-                <Button>
-                    Clear Stack
-                </Button>
+                <StackManagementItem>
+                    <StackManagementButton
+                        className='stack-management-item--view-button'
+                        >
+                        View Stack
+                    </StackManagementButton>
+                    <StackManagementButton
+                        className='stack-management-item--clear-button'
+                        clicked={() => this.props.onRemoveFromStack(this.props.stack.pool)}
+                        >
+                        Clear Stack
+                    </StackManagementButton>
+                </StackManagementItem>
             </Wrapper>
         )
     } 

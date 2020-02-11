@@ -62,9 +62,11 @@ const endSlideshow = state => {
 }
 
 const incrementSlideIndex = (state, action) => {
-    let updatedSlideshowIndex = state.slideshow.slideshow + action.increment
+    let updatedSlideshowIndex = state.slideshow.slideshowIndex + action.increment
+    console.log('[learning] action.increment: ', action.increment)
+    console.log('[learning] updatedSlideshowIndex: ', updatedSlideshowIndex)
 
-    if (updatedSlideshowIndex === state.stack.count - 1) {
+    if (updatedSlideshowIndex > state.stack.count - 1) {
         updatedSlideshowIndex = 0
     } else if (updatedSlideshowIndex < 0) {
         updatedSlideshowIndex = state.stack.count - 1

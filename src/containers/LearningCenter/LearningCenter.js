@@ -182,7 +182,7 @@ class Flashcards extends Component {
             <React.Fragment>
                 {slideshow}
                 <LearningCenterContent 
-                    flashcardCount={count}
+                    count={count}
                     launchFlashcards={this.props.startSlideshow}
                     />
             </React.Fragment>
