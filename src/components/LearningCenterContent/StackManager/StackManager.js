@@ -79,6 +79,24 @@ class StackManager extends Component {
         this.props.onAddToStack(addPool)
     }
 
+    addRandomCocktails = qty => {
+        const { cocktails, stack } = this.props
+        const addPool = []
+        const drawPool = Object.keys(cocktails).filter(cocktail => {
+            return !stack.pool.includes(cocktail)
+        })
+        console.log('[StackManager] drawPool: ', drawPool)
+
+        for (let i = qty <= drawPool.length ? qty : drawPool.length ; i > 0; i--) {
+            const j = Math.floor(Math.random() * drawPool.length)
+            addPool.push(drawPool[j])
+            drawPool.splice(j, 1)
+        }
+
+        console.log('[StackManager] addPool: ', addPool)
+        this.props.onAddToStack(addPool)
+    }
+
     render() {
         console.log('[StackManager] this.stack.pool: ', this.props.stack.pool)
         console.log('[StackManager] this.stack.count: ', this.props.stack.count)
@@ -140,6 +158,7 @@ class StackManager extends Component {
                     </StackManagementAddQty>
                     <StackManagementButton
                         className='stack-management-item--add-random-button'
+                        clicked={() => this.addRandomCocktails(1)}
                         >
                         Add
                     </StackManagementButton>
