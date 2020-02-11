@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../../store/actions'
 import styled from 'styled-components'
-import { Button } from '../../UI'
 import StackManagementItem from './StackManagementItem/StackManagementItem'
+import { Button } from '../../UI'
+import { updateObject } from '../../../shared/objectUtility'
 
 const Wrapper = styled.div`
     width: 100%;
@@ -59,7 +60,24 @@ const StackManagementAddQtyInput = styled.input`
 
 class StackManager extends Component {
     state = {
-
+        randomInput: {
+            elementType: 'input',
+            elementConfig: {
+                type: 'text',
+                placeholder: '(1 - 100)',
+            },
+            value: '',
+            validation: {
+                required: true,
+                type: 'integer',
+                value: {
+                    min: 1,
+                    max: 100
+                },
+            },
+            touched: false,
+            valid: false
+        }
     }
 
     launchCocktailSearch = searchType => {
@@ -95,6 +113,26 @@ class StackManager extends Component {
 
         console.log('[StackManager] addPool: ', addPool)
         this.props.onAddToStack(addPool)
+    }
+
+    randomInputChangedHandler = (event) => {
+        const { randomInput } = this.state
+
+        const updatedInput = updateObject(randomInput, {
+            // valid: this.checkValidity(event.target.value, this.state.orderFormrandomInput.validation),
+            value: event.target.value,
+            touched: true,
+        })
+        
+        const updatedRandomInput = updateObject(this.state, {
+            randomInput: updatedInput
+        })
+
+        // let formIsValid = true;
+        // for (let inputIdentifier in updatedRandomInput) {
+        //     formIsValid = updatedRandomInput[inputIdentifier].valid && formIsValid
+        // }
+        this.setState({randomInput: updatedInput})
     }
 
     render() {
@@ -150,7 +188,9 @@ class StackManager extends Component {
                         </div>
                         <StackManagementAddQtyInput
                             className='stack-management-item--add-random-qty__input'
-                            placeholder='(1 - 100)'
+                            placeholder={this.state.randomInput.elementConfig.placeholder}
+                            value={this.state.randomInput.value}
+                            onChange={event => this.randomInputChangedHandler(event, this.state.randomInput)}
                             />
                         <div>
                             Random Cocktails
@@ -158,7 +198,7 @@ class StackManager extends Component {
                     </StackManagementAddQty>
                     <StackManagementButton
                         className='stack-management-item--add-random-button'
-                        clicked={() => this.addRandomCocktails(1)}
+                        clicked={() => this.addRandomCocktails(this.state.randomInput.value)}
                         >
                         Add
                     </StackManagementButton>
