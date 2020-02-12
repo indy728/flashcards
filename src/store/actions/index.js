@@ -15,7 +15,7 @@ export {
 export {
     addToStack,
     removeFromStack,
-    startSlideshow,
-    endSlideshow,
-    incrementSlideIndex
+    startFlashcards,
+    endFlashcards,
+    incrementFlashcardIndex
 } from './learning'

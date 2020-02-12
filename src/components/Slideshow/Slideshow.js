@@ -6,7 +6,7 @@ const Wrapper = styled.div`
     width: 100%;
     height: 50rem;
     max-height: 100%;
-    z-index: 500;
+    /* z-index: 500; */
     top: 50%;
     left: 0%;
     transform: translateY(-50%);

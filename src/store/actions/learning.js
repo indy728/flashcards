@@ -14,21 +14,21 @@ export const removeFromStack = pool => {
     }
 }
 
-export const startSlideshow = () => {
+export const startFlashcards = () => {
     return {
-        type: actionTypes.START_SLIDESHOW,
+        type: actionTypes.START_FLASHCARD,
     }
 }
 
-export const endSlideshow = () => {
+export const endFlashcards = () => {
     return {
-        type: actionTypes.END_SLIDESHOW,
+        type: actionTypes.END_FLASHCARD,
     }
 }
 
-export const incrementSlideIndex = increment => {
+export const incrementFlashcardIndex = increment => {
     return {
-        type: actionTypes.INCREMENT_SLIDESHOW_INDEX,
+        type: actionTypes.INCREMENT_FLASHCARD_INDEX,
         increment
     }
 }

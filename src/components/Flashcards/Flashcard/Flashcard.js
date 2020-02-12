@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import FlashcardFront from './FlashcardFront/FlashcardFront'
 import FlashcardBack from './FlashcardBack/FlashcardBack'
-import { qtyFloatToString, makePlural } from '../../shared/stringUtility'
+import { qtyFloatToString, makePlural } from '../../../shared/stringUtility'
 
 
 

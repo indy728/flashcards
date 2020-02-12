@@ -217,6 +217,7 @@ class StackManager extends Component {
                 <StackManagementItem>
                     <StackManagementButton
                         className='stack-management-item--view-button'
+                        clicked={this.props.viewCocktails}
                         disabled={stack.count === 0}
                         >
                         View Stack

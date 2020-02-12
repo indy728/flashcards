@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import CardFace from '../../UI/CardFace/CardFace'
+import CardFace from '../../../UI/CardFace/CardFace'
 
 const Wrapper = styled(CardFace)`
     height: 100%;

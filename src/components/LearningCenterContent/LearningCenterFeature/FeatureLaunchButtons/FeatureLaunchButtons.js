@@ -42,7 +42,8 @@ const featureLaunchButtons = props => {
             </FeatureLaunchButton>
             <FeatureLaunchButton
                 className='learning-center--feature__launch-button'
-                disabled={props.count < 1}
+                disabled
+                // disabled={props.count < 1}
                 >
                 Take Quiz
             </FeatureLaunchButton>

@@ -2,9 +2,12 @@ import * as actionTypes from '../actions/actionTypes'
 import { updateObject } from '../../shared/objectUtility'
 
 const initialState = {
-    slideshow: {
-        inSlideshow: false,
-        slideshowIndex: -1,
+    flashcards: {
+        inFlashcards: false,
+        flashcardsIndex: -1,
+    },
+    quiz: {
+
     },
     stack: {
         count: 0,
@@ -46,34 +49,34 @@ const removeFromStack = (state, action) => {
     return updateObject(state, updatedState)
 }
 
-const startSlideshow = state => {
+const startFlashcards = state => {
     return updateObject(state, {
-        slideshow: {
-            inSlideshow: true,
-            slideshowIndex: 0
+        flashcards: {
+            inFlashcards: true,
+            flashcardsIndex: 0
         }
     })
 }
 
-const endSlideshow = state => {
+const endFlashcards = state => {
     return updateObject(state, {
-        slideshow: initialState.slideshow
+        flashcards: initialState.flashcards
     })
 }
 
-const incrementSlideIndex = (state, action) => {
-    let updatedSlideshowIndex = state.slideshow.slideshowIndex + action.increment
+const incrementFlashcardIndex = (state, action) => {
+    let updatedFlashcardsIndex = state.flashcards.flashcardsIndex + action.increment
     console.log('[learning] action.increment: ', action.increment)
-    console.log('[learning] updatedSlideshowIndex: ', updatedSlideshowIndex)
+    console.log('[learning] updatedFlashcardsIndex: ', updatedFlashcardsIndex)
 
-    if (updatedSlideshowIndex > state.stack.count - 1) {
-        updatedSlideshowIndex = 0
-    } else if (updatedSlideshowIndex < 0) {
-        updatedSlideshowIndex = state.stack.count - 1
+    if (updatedFlashcardsIndex > state.stack.count - 1) {
+        updatedFlashcardsIndex = 0
+    } else if (updatedFlashcardsIndex < 0) {
+        updatedFlashcardsIndex = state.stack.count - 1
     }
     return updateObject(state, {
-        slideshow: updateObject(state.slideshow, {
-            slideshowIndex: updatedSlideshowIndex
+        flashcards: updateObject(state.flashcards, {
+            flashcardsIndex: updatedFlashcardsIndex
         })
     })
 }
@@ -82,9 +85,9 @@ const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.ADD_TO_STACK: return addToStack(state, action)
         case actionTypes.REMOVE_FROM_STACK: return removeFromStack(state, action)
-        case actionTypes.START_SLIDESHOW: return startSlideshow(state)
-        case actionTypes.END_SLIDESHOW: return endSlideshow(state)
-        case actionTypes.INCREMENT_SLIDESHOW_INDEX: return incrementSlideIndex(state, action)
+        case actionTypes.START_FLASHCARD: return startFlashcards(state)
+        case actionTypes.END_FLASHCARD: return endFlashcards(state)
+        case actionTypes.INCREMENT_FLASHCARD_INDEX: return incrementFlashcardIndex(state, action)
         default: return state
     }
 }

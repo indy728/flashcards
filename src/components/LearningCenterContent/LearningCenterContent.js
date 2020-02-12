@@ -13,9 +13,12 @@ const learningCenterContent = props => {
             Cocktail Learning Center
         </Header>
         <LearningCenterFeature 
-            { ...props }
+            count={props.count}
+            launchFlashcards={props.launchFlashcards}
             />
-        <StackManager />
+        <StackManager
+          viewCocktails={props.viewCocktails}
+          />
     </ContentBlock>
   )
 }
