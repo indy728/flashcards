@@ -16,6 +16,7 @@ export {
     addToStack,
     removeFromStack,
     startFlashcards,
-    endFlashcards,
+    viewerClosed,
+    manageStack,
     incrementFlashcardIndex
 } from './learning'

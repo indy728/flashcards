@@ -20,9 +20,15 @@ export const startFlashcards = () => {
     }
 }
 
-export const endFlashcards = () => {
+export const viewerClosed = () => {
     return {
-        type: actionTypes.END_FLASHCARD,
+        type: actionTypes.VIEWER_CLOSED,
+    }
+}
+
+export const manageStack = () => {
+    return {
+        type: actionTypes.MANAGE_STACK
     }
 }
 

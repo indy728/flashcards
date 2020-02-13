@@ -7,9 +7,11 @@ const initialState = {
         flashcardsIndex: -1,
     },
     quiz: {
-
+        inQuiz: false,
+        quizIndex: -1
     },
     stack: {
+        manager: false,
         count: 0,
         pool: [],
     }
@@ -58,9 +60,27 @@ const startFlashcards = state => {
     })
 }
 
-const endFlashcards = state => {
+const viewerClosed = state => {
+    let updatedStack = { ...state.stack }
+
+    updatedStack = updateObject(updatedStack, {
+        manager: false
+    })
     return updateObject(state, {
-        flashcards: initialState.flashcards
+        flashcards: initialState.flashcards,
+        quiz: initialState.quiz,
+        stack: updatedStack
+    })
+}
+
+const manageStack = state => {
+    let updatedStack = { ...state.stack }
+
+    updatedStack = updateObject(updatedStack, {
+        manager: true
+    })
+    return updateObject(state, {
+        stack: updatedStack
     })
 }
 
@@ -86,7 +106,8 @@ const reducer = (state = initialState, action) => {
         case actionTypes.ADD_TO_STACK: return addToStack(state, action)
         case actionTypes.REMOVE_FROM_STACK: return removeFromStack(state, action)
         case actionTypes.START_FLASHCARD: return startFlashcards(state)
-        case actionTypes.END_FLASHCARD: return endFlashcards(state)
+        case actionTypes.VIEWER_CLOSED: return viewerClosed(state)
+        case actionTypes.MANAGE_STACK: return manageStack(state)
         case actionTypes.INCREMENT_FLASHCARD_INDEX: return incrementFlashcardIndex(state, action)
         default: return state
     }

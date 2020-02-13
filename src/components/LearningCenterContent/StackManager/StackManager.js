@@ -84,6 +84,15 @@ class StackManager extends Component {
         }
     }
 
+    componentDidMount() {
+        if (!this.props.cocktails) {
+            this.props.onInitCocktails()
+        }
+        if (!this.props.ingredients) {
+            this.props.onInitIngredients()
+        }
+    }
+
     launchCocktailSearch = searchType => {
         console.log('[StackManager] searchType: ', searchType)
         return
@@ -185,51 +194,51 @@ class StackManager extends Component {
             })
 
             stackManagerContent = (
-<Wrapper
-                className='learning-center--stack-manager'
-                >
-                {addButtons}
-                <StackManagementItem
-                    className='stack-management-item'
+                <Wrapper
+                    className='learning-center--stack-manager'
                     >
-                    <StackManagementAddQty>
-                        <div>
-                            Add 
-                        </div>
-                        <StackManagementAddQtyInput
-                            className='stack-management-item--add-random-qty__input'
-                            placeholder={this.state.randomInput.elementConfig.placeholder}
-                            value={this.state.randomInput.value}
-                            onChange={event => this.randomInputChangedHandler(event, this.state.randomInput)}
-                            />
-                        <div>
-                            Random Cocktails
-                        </div>
-                    </StackManagementAddQty>
-                    <StackManagementButton
-                        className='stack-management-item--add-random-button'
-                        clicked={() => this.addRandomCocktails(this.state.randomInput.value)}
-                        disabled = {stack.count === cocktailTotal}
+                    {addButtons}
+                    <StackManagementItem
+                        className='stack-management-item'
                         >
-                        Add
-                    </StackManagementButton>
-                </StackManagementItem>
-                <StackManagementItem>
-                    <StackManagementButton
-                        className='stack-management-item--view-button'
-                        clicked={this.props.viewCocktails}
-                        disabled={stack.count === 0}
-                        >
-                        View Stack
-                    </StackManagementButton>
-                    <StackManagementButton
-                        className='stack-management-item--clear-button'
-                        clicked={() => this.props.onRemoveFromStack(this.props.stack.pool)}
-                        disabled={stack.count === 0}
-                        >
-                        Clear Stack
-                    </StackManagementButton>
-                </StackManagementItem>
+                        <StackManagementAddQty>
+                            <div>
+                                Add 
+                            </div>
+                            <StackManagementAddQtyInput
+                                className='stack-management-item--add-random-qty__input'
+                                placeholder={this.state.randomInput.elementConfig.placeholder}
+                                value={this.state.randomInput.value}
+                                onChange={event => this.randomInputChangedHandler(event, this.state.randomInput)}
+                                />
+                            <div>
+                                Random Cocktails
+                            </div>
+                        </StackManagementAddQty>
+                        <StackManagementButton
+                            className='stack-management-item--add-random-button'
+                            clicked={() => this.addRandomCocktails(this.state.randomInput.value)}
+                            disabled = {stack.count === cocktailTotal}
+                            >
+                            Add
+                        </StackManagementButton>
+                    </StackManagementItem>
+                    <StackManagementItem>
+                        <StackManagementButton
+                            className='stack-management-item--view-button'
+                            clicked={() => this.props.onLaunchManager()}
+                            disabled={stack.count === 0}
+                            >
+                            View Stack
+                        </StackManagementButton>
+                        <StackManagementButton
+                            className='stack-management-item--clear-button'
+                            clicked={() => this.props.onRemoveFromStack(this.props.stack.pool)}
+                            disabled={stack.count === 0}
+                            >
+                            Clear Stack
+                        </StackManagementButton>
+                    </StackManagementItem>
             </Wrapper>
             )
         }
@@ -245,8 +254,8 @@ class StackManager extends Component {
 const mapStateToProps = state => {
     return {
         cocktails: state.cocktails.cocktails,
-        loading: state.cocktails.loading,
-        // || state.ingredients.loading,
+        ingredients: state.ingredients.ingredients,
+        loading: state.cocktails.loading || state.ingredients.loading,
         stack: state.learning.stack
     }
 }
@@ -254,7 +263,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onAddToStack: pool => dispatch(actions.addToStack(pool)),
-        onRemoveFromStack: pool => dispatch(actions.removeFromStack(pool))
+        onRemoveFromStack: pool => dispatch(actions.removeFromStack(pool)),
+        onInitCocktails: () => dispatch(actions.fetchCocktails()),
+        onInitIngredients: () => dispatch(actions.fetchIngredients()),
+        onLaunchManager: () => dispatch(actions.manageStack())
     }
 }
 
