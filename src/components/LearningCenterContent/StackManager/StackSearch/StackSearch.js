@@ -33,7 +33,7 @@ const SearchBar = styled.div`
         &:focus {
             outline: none;
             width: 100%;
-            height: 3.6rem;
+            height: q                                                               3.6rem;
         }
     }
 `

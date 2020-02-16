@@ -64,7 +64,7 @@ const listItemProps = {
 class Stack extends Component {
   state = {
     listCocktails: {},
-    editListItems: []
+    editListItems: {}
   }
 
   componentDidMount() {
@@ -87,9 +87,10 @@ class Stack extends Component {
 
   stackManagerInit = () => {
     const { listCocktails } = this.state
+    let stackManagerItems = null
 
-    return (
-      Object.keys(listCocktails).map(id => {
+    if (this.props.stack.manager) {
+      stackManagerItems = Object.keys(listCocktails).map(id => {
         const item = listCocktails[id]
         return (
           <StackListViewItem
@@ -101,11 +102,33 @@ class Stack extends Component {
           </StackListViewItem> 
         )
       })
-    )
+    }
+    return stackManagerItems
+  }
+
+  listEditorItemsInit = () => {
+    const { editListItems } = this.state
+    console.log('[Stack] editListItems: ', editListItems)
+
+    const itemIDs = Object.keys(editListItems)
+
+    return itemIDs.length > 0 
+      ? itemIDs.map(id => {
+        const item = editListItems[id]
+        return (
+          <StackListViewItem
+            key={id}
+            onClick={() => this.listItemClickedSelected(id)}
+            >
+            {item.name}
+          </StackListViewItem> 
+        )
+      })
+      : null
   }
 
   listItemClickedSelected = id => {
-    const editListItems = [ ...this.state.editListItems ]
+    let updatedEditListItems = { ...this.state.editListItems }
     let updatedListCocktails = { ...this.state.listCocktails }
 
     updatedListCocktails = updateObject(updatedListCocktails, {
@@ -114,32 +137,37 @@ class Stack extends Component {
       })
     })
 
-    editListItems.push(updatedListCocktails[id])
+    updatedEditListItems = { ...updatedListCocktails }
 
-    this.setState({ listCocktails: updatedListCocktails, editListItems})
+    for (let id in updatedEditListItems) {
+      if (!updatedEditListItems[id].selected) {
+        delete updatedEditListItems[id]
+      }
+    }
 
+    this.setState({
+      listCocktails: updatedListCocktails,
+      editListItems: updatedEditListItems
+    })
+
+  }
+
+  checkoutButtonHandler = () => {
+    const { adding, editListItems } = this.state
+    const stackEditFunction = adding ? this.props.onAddToStack : this.props.onRemoveFromStack
+    const iDArray = Object.keys(editListItems)
+
+    stackEditFunction(iDArray)
+    this.props.viewerClosed()
   }
 
   render() {
     const { stack, cocktails } = this.props
-    let stackListViewItem= null
-    if (stack.manager) stackListViewItem = this.stackManagerInit()
-    // {
-    //   stackListViewItem = Object.keys(listCocktails).map(id => {
-    //     console.log('[Stack] id: ', id)
-    //     const item = listCocktails[id]
-    //     return (
-    //       <StackListViewItem
-    //         key={id}
-    //         selected={item.selected}
-    //         >
-    //         {item.name}
-    //       </StackListViewItem> 
-    //     )
-    //   })
-    // }
+    let stackListViewItem = this.stackManagerInit()
+    let listEditorItems = this.listEditorItemsInit()
 
-    console.log('[Stack] stackListViewItem: ', stackListViewItem)
+    // console.log('[Stack] this.state: ', this.state)
+    console.log('[Stack] listEditorItems: ', listEditorItems)
     return(
       <Wrapper>
         <StackSearch />
@@ -148,8 +176,12 @@ class Stack extends Component {
             {stackListViewItem}
           </StackListView>
           <ListEditor>
-            <ListEditorItems />
-            <ListEditorCheckout />
+            <ListEditorItems>
+              {listEditorItems}
+            </ListEditorItems>
+            <ListEditorCheckout 
+              onClick={() => this.checkoutButtonHandler()}
+              />
           </ListEditor>
         </StackItemLists>
       </Wrapper>
@@ -168,6 +200,7 @@ const mapDispatchToProps = dispatch => {
   return {
     onAddToStack: pool => dispatch(actions.addToStack(pool)),
     onRemoveFromStack: pool => dispatch(actions.removeFromStack(pool)),
+    viewerClosed: () => dispatch(actions.viewerClosed())
   }
 }
 
