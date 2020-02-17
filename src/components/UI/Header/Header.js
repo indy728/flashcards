@@ -2,23 +2,24 @@ import React from 'react'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
-    width: 80%;
-    height: 8rem;
-    margin: 5px 0;
-    font-size: 3.6rem;
-    font-weight: bold;
-    font-family: ${props => props.theme.fonts.header};
-    display: flex;
-    align-items: center;
+    width: 100%;
+    margin: 1rem;
+    font-family: ${({ theme }) => theme.fonts.header};
     justify-content: center;
     text-transform: uppercase;
+    
+    @media (min-width: ${({ theme }) => theme.media.tablet}) {
+        height: 8rem;
+    }
 `
 
 const header = props => {
     return (
         <Wrapper
-            className={props.className}>
-            {props.children}
+            className={props.className || 'UI_header'}>
+            <h1>
+                {props.children}
+            </h1>
         </Wrapper>
     )
 }

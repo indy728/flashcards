@@ -33,16 +33,32 @@ const GlobalStyle = createGlobalStyle`
 
   body {
     @import url('https://fonts.googleapis.com/css?family=Lobster|Lora|Montserrat:700|Swanky+and+Moo+Moo|Ubuntu&display=swap');
-    font-family: ${props => props.theme.fonts.primary};
-    background-image: ${props => `linear-gradient(to right bottom, ${props.theme.palette.grayscale[5]}, ${props.theme.palette.grayscale[0]})`};
+    background-image: ${({ theme }) => `linear-gradient(to right bottom, ${theme.palette.grayscale[5]}, ${theme.palette.grayscale[0]})`};
     background-size: cover;
     background-repeat: no-repeat;
-
     min-height: 100vh;
+    
+    * {
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+    }
+
+    font-family: ${({ theme }) => theme.fonts.primary};
+    font-size: ${({ theme }) => theme.mobile.base};
+    
+    h1 {
+      font-size: ${({ theme }) => theme.mobile.header};
+      text-align: center;
+    }
+
+    h2 {
+      font-size: ${({ theme }) => theme.mobile.subheader}
+    }
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: ${props => props.theme.fonts.header};
+    font-family: ${({ theme }) => theme.fonts.header};
     font-weight: 300;
     text-transform: uppercase;
   }

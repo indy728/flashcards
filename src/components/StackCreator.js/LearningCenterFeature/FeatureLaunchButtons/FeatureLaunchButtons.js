@@ -3,17 +3,20 @@ import styled from 'styled-components'
 import { Button } from '../../../UI'
 
 const Wrapper = styled.div`
-    width: 60rem;
-    height: 100%;
-    display: flex;
+    
+
+    @media (min-width: ${({ theme }) => theme.media.tablet}) {
+        width: 60rem;
+        height: 100%;
+        justify-content: space-around;
+    }
     /* align-items: flex-start; */
-    justify-content: space-around;
 `
 
 const FeatureLaunchButton = styled(Button)`
     width: 20rem;
     height: 5rem;
-    border: 2px outset ${props => props.theme.palette.grayscale[4]};
+    border: 2px outset ${({ theme }) => theme.palette.grayscale[4]};
 
     background-image: ${props => props.disabled 
     ? props.theme.palette.disabled

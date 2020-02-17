@@ -1,7 +1,10 @@
 import { reversePalette } from 'styled-theme/composer'
+import media from './media'
 
-const theme = {}
-
+const theme = { 
+    media: { ...media }
+}
+    
 theme.palette = {
     primary: ['#0d1113', '#263238', '#37474f', '#455a64'],
     secondary: ['#ec9205', '#ec9d24', '#ecad4c', '#ecbf7a', '#ffe2b5', '#fff7eb'],
@@ -35,8 +38,16 @@ theme.fonts = {
     nameplate: "'Lobster', cursive",
 }
 
+theme.mobile = {
+    base: '1.6rem',
+    subheader: '2.5rem',
+    header:  '3rem'
+}
+
 theme.sizes = {
     maxWidth: '1100px',
 }
+
+console.log('[default] theme: ', theme)
 
 export default theme

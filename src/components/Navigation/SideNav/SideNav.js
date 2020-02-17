@@ -7,13 +7,13 @@ import Backdrop from '../../UI/Backdrop/Backdrop'
 
 const Wrapper = styled.div`
     position: fixed;
-    width: 40rem;
     left: 0;
     top: 0;
-    z-index: 200;
-    background-color: ${props => props.theme.palette.white[2]};
+    z-index: 500;
+    background-color: ${({ theme }) => theme.palette.white[2]};
     box-sizing: border-box;
     transition: transform 0.3s ease-out;
+    width: 100%;
 
     transform: ${props => props.open ? "translateX(0)" : "translateX(-100%)"};
 
@@ -21,10 +21,15 @@ const Wrapper = styled.div`
         width: 28rem;
         max-width: 100%;
     } */
-    @media (min-width: 500px) {
+
+    @media (max-width: ${({ theme }) => theme.media.tablet}) {
+    }
+
+    @media (min-width: ${({ theme }) => theme.media.tablet}) {
         flex: 0 0 18%;
         position: relative;
         transform: translateX(0);
+        width: 40rem;
     }
 `
 
@@ -41,7 +46,7 @@ const SidebarSection = styled.div`
 
     :not(:last-child) {
         /* padding-bottom: 1.5rem; */
-        border-bottom: 1px dotted ${props => props.theme.palette.primary[2]}
+        border-bottom: 1px dotted ${({ theme }) => theme.palette.primary[2]}
     }
 `
 
@@ -73,7 +78,11 @@ const sideNav = (props) => {
     return (
         <React.Fragment>
             <Backdrop show={props.open} clicked={props.close} />
-            <Wrapper open={props.open} onClick={props.close}>
+            <Wrapper
+                className={props.className}
+                open={props.open}
+                onClick={props.close}
+                >
                 <SidebarSection hidden={!props.open}>
                     <SidebarLogo>
                         <Logo />

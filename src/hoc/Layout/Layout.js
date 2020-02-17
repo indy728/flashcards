@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import Header from '../../components/Navigation/Header/Header'
+import NavHeader from '../../components/Navigation/NavHeader/NavHeader'
 import SideNav from '../../components/Navigation/SideNav/SideNav'
 
 const Main = styled.main`
@@ -9,19 +9,34 @@ const Main = styled.main`
     display: flex;
     align-items: center;
     flex-direction: column;
-    /* background: ${props => props.theme.palette.secondary[3]}; */
-    background: ${props => props.theme.palette.white[1]};
+    /* background: ${({ theme }) => theme.palette.secondary[3]}; */
+    background: ${({ theme }) => theme.palette.white[1]};
 `
 
 const Content = styled.div`
     display: flex;
+    flex: 1;
     
 `
 
 const Container = styled.div`
-    max-width: 120rem;
-    margin: 8rem auto;
-    box-shadow: ${props => props.theme.shadow.container};
+    display: flex;
+    flex-flow: column;
+
+    @media (max-width: ${({ theme }) => theme.media.tablet}) {
+        height: 100vh;
+    }
+
+    @media (min-width: ${({ theme }) => theme.media.tablet}) {
+        margin: 8rem auto;
+        box-shadow: ${({ theme }) => theme.shadow.container};
+        
+    }
+    
+    @media (min-width: ${({ theme }) => theme.media.laptop}) {
+        max-width: 120rem;
+
+    }
 `
 
 class Layout extends Component {
@@ -104,27 +119,32 @@ class Layout extends Component {
 
     render() {
         return (
-            <React.Fragment>
-                <Container>
-                    <Header
+            <Container
+                className={'app-container'}
+                >
+                <NavHeader
+                    isAuthenticated={this.props.isAuthenticated}
+                    components={this.state.components}
+                    sideNav={this.state.showSideNav}
+                    toggle={this.sideNavToggleHandler}
+                    />
+                <Content
+                    className={'app-content'}
+                    >
+                    <SideNav
+                        className={'app-content--side-nav'}
                         isAuthenticated={this.props.isAuthenticated}
                         components={this.state.components}
-                        sideNav={this.state.showSideNav}
-                        toggle={this.sideNavToggleHandler}
+                        open={this.state.showSideNav}
+                        close={this.sideNavClosedHandler}
                         />
-                    <Content>
-                        <SideNav
-                            isAuthenticated={this.props.isAuthenticated}
-                            components={this.state.components}
-                            open={this.state.showSideNav}
-                            close={this.sideNavClosedHandler}
-                            />
-                        <Main>
-                            {this.props.children}
-                        </Main>
-                    </Content>
-                </Container>
-            </React.Fragment>
+                    <Main
+                        className={'app-content--main'}
+                        >
+                        {this.props.children}
+                    </Main>
+                </Content>
+            </Container>
         )
     }
 }
