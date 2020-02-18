@@ -4,11 +4,11 @@ import LearningCenterLaunchButton from './LearningCenterLaunchButton/LearningCen
 
 const Wrapper = styled.div`
     width: 100%;
-    height: 20rem;
+    height: 30vh;
     margin-top: 1rem;
     justify-content: space-evenly;
 
-    @media (min-width: ${({ theme }) => theme.media.tablet}) {
+    @media (min-width: ${({ theme }) => theme.media.tabletLandscape}) {
         width: 60rem;
         height: 10rem;
         flex-flow: row;

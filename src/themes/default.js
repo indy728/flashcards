@@ -44,6 +44,18 @@ theme.mobile = {
     header:  '3rem'
 }
 
+theme.tablet = {
+    base: '2.4rem',
+    subheader: '3.5rem',
+    header:  '5rem'
+}
+
+theme.desktop = {
+    base: '1.6rem',
+    subheader: '2.5rem',
+    header:  '3rem'
+}
+
 theme.sizes = {
     maxWidth: '1100px',
 }

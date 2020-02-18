@@ -55,6 +55,32 @@ const GlobalStyle = createGlobalStyle`
     h2 {
       font-size: ${({ theme }) => theme.mobile.subheader}
     }
+
+    @media (min-width: ${({ theme }) => theme.media.tablet}) {
+        font-size: ${({ theme }) => theme.tablet.base};
+    
+        h1 {
+            font-size: ${({ theme }) => theme.tablet.header};
+            text-align: center;
+        }
+
+        h2 {
+            font-size: ${({ theme }) => theme.tablet.subheader}
+        }
+    }
+
+    @media (min-width: ${({ theme }) => theme.media.desktop}) {
+        font-size: ${({ theme }) => theme.desktop.base};
+    
+        h1 {
+            font-size: ${({ theme }) => theme.desktop.header};
+            text-align: center;
+        }
+
+        h2 {
+            font-size: ${({ theme }) => theme.desktop.subheader}
+        }
+    }
   }
 
   h1, h2, h3, h4, h5, h6 {

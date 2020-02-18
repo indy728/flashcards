@@ -23,12 +23,6 @@ const navHeader = (props) => {
             className='nav-header'>
             <DrawerToggle 
                 clicked={props.toggle} />
-            {/* <NavWrapper show={!props.sideDrawer}> */}
-                {/* <NavigationItems
-                    isAuthenticated={props.isAuthenticated}
-                    components={props.components}
-                    sideDrawer={props.sideDrawer} /> */}
-            {/* </NavWrapper> */}
         </Wrapper>
     )
 }

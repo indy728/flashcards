@@ -6,31 +6,48 @@ import SideNav from '../../components/Navigation/SideNav/SideNav'
 
 const Main = styled.main`
     flex: 1;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
     /* background: ${({ theme }) => theme.palette.secondary[3]}; */
     background: ${({ theme }) => theme.palette.white[1]};
-`
-
-const Content = styled.div`
-    display: flex;
-    flex: 1;
     
-`
-
-const Container = styled.div`
-    display: flex;
-    flex-flow: column;
-
-    @media (max-width: ${({ theme }) => theme.media.tablet}) {
-        height: 100vh;
+    @media (max-width: ${({ theme }) => theme.media.tabletLandscape}) {
+        width: 100%;
     }
 
     @media (min-width: ${({ theme }) => theme.media.tablet}) {
+        padding: 5%;
+    }
+
+    @media (min-width: ${({ theme }) => theme.media.tabletLandscape}) {
+        
+    }
+`
+
+const Content = styled.div`
+    flex: 1;
+    width: 100%;
+
+    @media (max-width: ${({ theme }) => theme.media.tabletLandscape}) {
+    }
+
+    
+    @media (min-width: ${({ theme }) => theme.media.tablet}) {
+    }
+    
+    @media (min-width: ${({ theme }) => theme.media.tabletLandscape}) {
+        flex-flow: row;
+    }
+`
+
+const Container = styled.div`
+    width: 100%;
+
+    @media (max-width: ${({ theme }) => theme.media.tabletLandscape}) {
+        height: 100vh;
+    }
+
+    @media (min-width: ${({ theme }) => theme.media.tabletLandscape}) {
         margin: 8rem auto;
         box-shadow: ${({ theme }) => theme.shadow.container};
-        
     }
     
     @media (min-width: ${({ theme }) => theme.media.laptop}) {
@@ -49,13 +66,6 @@ class Layout extends Component {
                 usage: "basic",
                 isAuth: false,
             },
-            // quiz: {
-            //     key: "quiz",
-            //     link: "/quiz",
-            //     title: "Quiz",
-            //     usage: "basic",
-            //     isAuth: true,
-            // },
             learningCenter: {
                 key: "learning_center",
                 link: "/learning_center",
@@ -132,7 +142,6 @@ class Layout extends Component {
                     className={'app-content'}
                     >
                     <SideNav
-                        className={'app-content--side-nav'}
                         isAuthenticated={this.props.isAuthenticated}
                         components={this.state.components}
                         open={this.state.showSideNav}

@@ -2,61 +2,45 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Logo from '../../Logo/Logo'
+import SidebarSection from './SidebarSection/SidebarSection'
 import SideNavItems from './SideNavItems/SideNavItems'
 import Backdrop from '../../UI/Backdrop/Backdrop'
 
 const Wrapper = styled.div`
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0 2rem;
+
     position: fixed;
     left: 0;
     top: 0;
     z-index: 500;
+
     background-color: ${({ theme }) => theme.palette.white[2]};
-    box-sizing: border-box;
-    transition: transform 0.3s ease-out;
-    width: 100%;
-
+    
     transform: ${props => props.open ? "translateX(0)" : "translateX(-100%)"};
-
-    /* @media (max-width: 500px) {
-        width: 28rem;
-        max-width: 100%;
-    } */
-
-    @media (max-width: ${({ theme }) => theme.media.tablet}) {
-    }
+    transition: transform 0.3s ease-out;
 
     @media (min-width: ${({ theme }) => theme.media.tablet}) {
+        width: 47.5rem
+    }
+
+    @media (min-width: ${({ theme }) => theme.media.tabletLandscape}) {
         flex: 0 0 18%;
         position: relative;
+        padding: 0;
         transform: translateX(0);
         width: 40rem;
-    }
-`
-
-const SidebarSection = styled.div`
-    /* height: 20%; */
-    /* width: 100%; */
-    /* margin-bottom: 3rem; */
-    position: relative;
-    display: ${props => props.hidden ? 'none' : 'inherit'};
-
-    :not(:first-child) {
-        /* padding-top: 1.5rem; */
-    }
-
-    :not(:last-child) {
-        /* padding-bottom: 1.5rem; */
-        border-bottom: 1px dotted ${({ theme }) => theme.palette.primary[2]}
     }
 `
 
 const SidebarLogo = styled.div`
     width: 100%;
     height: 15rem;
-    display: flex;
-    align-items: center;
     justify-content: center;
 `
+
 // Creates sub-objects based on category
 const objReducer = (obj, keys, filter) => {
     const reducedObj = keys.filter(key => obj[key].usage === filter)
@@ -79,7 +63,7 @@ const sideNav = (props) => {
         <React.Fragment>
             <Backdrop show={props.open} clicked={props.close} />
             <Wrapper
-                className={props.className}
+                className='app-content--side-nav'
                 open={props.open}
                 onClick={props.close}
                 >
