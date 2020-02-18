@@ -8,27 +8,8 @@ export const authStart = () => {
     }
 }
 
-export const authSuccess = (email, uid) => {
-    return {
-        type: actionTypes.AUTH_SUCCESS,
-        email,
-        uid
-    }
-    console.log('[auth] email: ', email)
-    console.log('[auth] uid: ', uid)
-
-    // return database.ref().child('users').child(uid).once('value', snapshot => {
-    //     return {
-    //         type: actionTypes.AUTH_SUCCESS,
-    //         email,
-    //         uid,
-    //         userInfo: snapshot.val()
-    //     }
-    // }, errorObject => {
-    //         // ERROR FOR THIS SPECIFIC INSTANCE
-    //         return 
-    // })
-    
+const authSuccess = () => {
+    return { type: actionTypes.AUTH_SUCCESS }
 }
 
 export const authFail = error => {
@@ -38,37 +19,53 @@ export const authFail = error => {
     }
 }
 
-const newUser = (authInfo, user) => {
-    const { username } = authInfo
-    const { email, uid } = user
-    const newUser = {
-        [uid]: {
-            email,
-            username
-        }
-    }
-    const usersRef = database.ref().child('users')
+export const newUserStart = () => {
+    return { type: actionTypes.NEW_USER_START }
+}
 
-    // return dispatch => {
-    //     usersRef.update(newUser, error => {
-    //         if (error) {
-    //             return dispatch(authFail(error))
-    //         } else {
-    //             console.log('[auth] newUser: ', newUser)
-    //             // return dispatch(authSuccess(email, uid))
-    //         }
-    //     })
-    // }
+export const newUserFail = error => {
+    return {
+        type: actionTypes.NEW_USER_FAIL,
+        error
+    }
+}
+
+const newUserSuccess = () => {
+    return { type: actionTypes.NEW_USER_SUCCESS }
+}
+
+const newUser = (authInfo, user) => {
+    const { uid } = user
+    const usersRef = database.ref().child('users')
+    const newUser = {
+        [uid]: { ...authInfo.userInfo }
+    }
+    console.log('[auth] newUser: ', newUser)
+    
+    return dispatch => {
+        dispatch(newUserStart())
+
+        usersRef.update(newUser, error => {
+            if (error) {
+                dispatch(newUserFail(error))
+                dispatch(logout())
+            } else {
+                dispatch(newUserSuccess())
+                dispatch(setUserInfo(uid, newUser.uid))
+            }
+        })
+    }
 }
 
 // function for authenticating the user
 export const auth = authInfo => {
+    console.log('[auth] authInfo: ', authInfo)
     return dispatch => {
         dispatch(authStart())
         if (authInfo.isSignUp) {
             firebaseAuth.createUserWithEmailAndPassword(authInfo.email, authInfo.password)
                 .then(res => {
-                    console.log('[auth] authInfo: ', authInfo)
+                    dispatch(authSuccess())
                     dispatch(newUser(authInfo, res.user))
                 })
                 .catch(er => {
@@ -77,9 +74,8 @@ export const auth = authInfo => {
         } else {
             firebaseAuth.signInWithEmailAndPassword(authInfo.email, authInfo.password)
                 .then(res => {
-                    console.log('[auth] res: ', res)
-                    // dispatch(authSuccess(res.user))
-                    dispatch(authSuccess(authInfo.email, res.user.uid))
+                    dispatch(authSuccess())
+                    dispatch(fetchUserInfo(res.user.uid))
                 })
                 .catch(error => {
                     dispatch(authFail(error))
@@ -108,10 +104,45 @@ export const authCheckState = () => {
     return dispatch => {
         firebaseAuth.onAuthStateChanged(user => {
             if (user) {
-                dispatch(authSuccess(user.email, user.uid))
+                dispatch(authSuccess())
+                dispatch(fetchUserInfo(user.uid))
             } else {
                 dispatch(logout())
             }
+        })
+    }
+}
+
+export const setUserInfo = (uid, userInfo) => {
+    return {
+        type: actionTypes.SET_USER_INFO,
+        uid,
+        userInfo
+    }
+}
+
+const fetchUserInfoSuccess = () => {
+    return {
+        type: actionTypes.FETCH_USER_INFO_SUCCESS,
+    }
+}
+
+const fetchUserInfoFail = error => {
+    return {
+        type: actionTypes.FETCH_USER_INFO_FAIL,
+        error
+    }
+}
+
+export const fetchUserInfo = uid => {
+    const userRef = database.ref().child('users').child(uid)
+    return dispatch => {
+        userRef.once('value', snapshot => {
+            dispatch(fetchUserInfoSuccess())
+            return dispatch(setUserInfo(uid, snapshot.val()))
+        }, errorObject => {
+            console.log('[auth] errorObject: ', errorObject)
+            return dispatch(fetchUserInfoFail(errorObject.code))
         })
     }
 }

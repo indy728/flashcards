@@ -63,7 +63,7 @@ export const addCocktail = cocktail => {
 
         const rootRef = database.ref()
         const indexRef = rootRef.child("cocktailIndex")
-        
+
         indexRef.update(cocktail, error => {
             if (error) {
                 return dispatch(addCocktailFail(error))
@@ -84,7 +84,7 @@ export const removeCocktail = cocktail => {
 export const setCocktails = cocktails => {
     return {
         type: actionTypes.SET_COCKTAILS,
-        cocktails: cocktails,
+        cocktails
     }
 }
 

@@ -40,15 +40,21 @@ const Content = styled.div`
 
 const Container = styled.div`
     width: 100%;
+    height: 100vh;
 
     @media (max-width: ${({ theme }) => theme.media.tabletLandscape}) {
-        height: 100vh;
     }
 
     @media (min-width: ${({ theme }) => theme.media.tabletLandscape}) {
-        margin: 8rem auto;
+        margin: 5vh auto;
+        height: 90vh;
         box-shadow: ${({ theme }) => theme.shadow.container};
-        max-width: 120rem;
+        width: ${({ theme }) => theme.media.tabletLandscape};
+    }
+    
+    @media (min-width: ${({ theme }) => theme.media.laptop}) {
+        
+        width: ${({ theme }) => theme.media.laptop};
     }
 `
 
@@ -156,7 +162,7 @@ class Layout extends Component {
 
 const mapStateToProps = state => {
     return {
-        isAuthenticated: state.auth.email !== null
+        isAuthenticated: state.auth.uid !== null
     }
 }
 

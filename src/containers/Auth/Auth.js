@@ -1,49 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import styled from 'styled-components'
-import Button from '../../components/UI/Button/Button'
-import Input from '../../components/UI/Input/Input'
-import ContentBlock from '../../components/UI/ContentBlock/ContentBlock'
+import AuthPage from '../../components/AuthPage/AuthPage'
 import * as actions from '../../store/actions'
 import { updateObject } from '../../shared/objectUtility'
-
-const Wrapper = styled(ContentBlock)`
-    width: 50rem;
-    padding: 3rem;
-`
-
-const AuthForm = styled.form`
-    width: 40rem;
-    margin: 1rem 0;
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-`
-
-const AuthInput = styled(Input)`
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`
-
-const AuthHeader = styled.h1`
-    font-weight: bold;
-`
-
-const FormButton = styled(Button)`
-    width: 18rem;
-    font-size: 1.6rem;
-    font-weight: bold;
-    margin-top: 2rem;
-`
-
-const SwitchButton = styled(Button)`
-    text-decoration: underline;
-    background-color: inherit;
-    border: none;
-`
 
 class Auth extends Component {
     state = {
@@ -258,45 +217,15 @@ class Auth extends Component {
     }
 
     render() {
-        const formElementsArray = []
-        const formElementsObj = this.state.isSignUp ? this.state.signUpControls : this.state.loginControls
-            
-        for (let key in formElementsObj) {
-            formElementsArray.push({
-                id: key,
-                config: formElementsObj[key],
-            })
-        }
-        let form = formElementsArray.map(formElement => (
-            <AuthInput 
-                key={formElement.id}
-                autocomplete={formElement.config.elementConfig.autocomplete}
-                className="AuthInput"
-                elementType={formElement.config.elementType}
-                elementConfig={formElement.config.elementConfig}
-                value={formElement.config.value}
-                invalid={!formElement.config.valid}
-                shouldValidate={formElement.config.validation}
-                touched={formElement.config.touched}
-                changed={(event) => this.inputChangedHandler(event, formElement.id)} 
-                />
-        ))
         return (
-            <Wrapper className="Auth">
-                <AuthHeader>
-                    {this.state.isSignUp ? "SIGN UP" : "LOG IN"}
-                </AuthHeader>
-                <AuthForm 
-                    onSubmit={this.submitHandler}>
-                    {form}
-                    <FormButton disabled={!this.state.formIsValid}>SUBMIT</FormButton>
-                </AuthForm>
-                <SwitchButton
-                    className="SwitchButton"
-                    clicked={this.switchAuthModeHandler}>
-                    {this.state.isSignUp ? "Already registered? Sign in!" : "First time here? Sign up!"}
-                </SwitchButton>
-            </Wrapper>
+            <AuthPage
+                isSignUp={this.state.isSignUp}
+                formSubmit={this.submitHandler}
+                formIsValid={this.state.formIsValid}
+                formElementsObj={this.state.isSignUp ? this.state.signUpControls : this.state.loginControls}
+                inputChanged={this.inputChangedHandler}
+                switchAuthMode={this.switchAuthModeHandler}
+                />
         )
     }
 }
@@ -305,7 +234,7 @@ const mapStateToProps = state => {
     return {
         loading: state.auth.loading,
         error: state.auth.error,
-        isAuthenticated: state.auth.email !== null,
+        isAuthenticated: state.auth.uid !== null,
         authRedirectPath: state.auth.authRedirectPath
     }
 }

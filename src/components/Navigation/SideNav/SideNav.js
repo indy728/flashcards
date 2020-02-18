@@ -10,28 +10,28 @@ const Wrapper = styled.div`
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    padding: 0 2rem;
-
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 500;
-
+    
     background-color: ${({ theme }) => theme.palette.white[2]};
     
-    transform: ${props => props.open ? "translateX(0)" : "translateX(-100%)"};
-    transition: transform 0.3s ease-out;
+    
+    @media (max-width: ${({ theme }) => theme.media.tabletLandscape}) {
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 500;
+        padding: 0 2rem;
+        transform: ${props => props.open ? "translateX(0)" : "translateX(-100%)"};
+        transition: transform 0.3s ease-out;
+    }
 
     @media (min-width: ${({ theme }) => theme.media.tablet}) {
-        width: 47.5rem
+        width: 47.5rem;
     }
 
     @media (min-width: ${({ theme }) => theme.media.tabletLandscape}) {
         flex: 0 0 18%;
-        position: relative;
-        padding: 0;
-        transform: translateX(0);
-        width: 40rem;
+        justify-content: stretch;
+        /* transform: translateX(0); */
     }
 `
 

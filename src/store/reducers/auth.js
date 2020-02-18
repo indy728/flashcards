@@ -3,7 +3,6 @@ import { updateObject } from '../../shared/objectUtility'
 
 const initialState = {
     userInfo: null,
-    email: null,
     uid: null,
     error: null,
     loading: false,
@@ -15,9 +14,11 @@ const authStart = state => {
 }
 
 const authSuccess = (state, action) => {
-    
+    const { email, uid, userInfo } = action
     return updateObject(state, {
-        email: action.email,
+        email,
+        uid,
+        userInfo,
         error: null,
         loading: false,
     })
@@ -40,13 +41,25 @@ const setAuthRedirectPath = (state, action) => {
     })
 }
 
+const setUserInfo = (state, action) => {
+    const updatedState = {
+        uid: action.uid,
+        userInfo: action.userInfo,
+        error: false,
+        loading: false
+    }
+    return updateObject(state, updatedState)
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.AUTH_START: return authStart(state)
-        case actionTypes.AUTH_SUCCESS: return authSuccess(state, action)
         case actionTypes.AUTH_FAIL: return authFail(state, action)
         case actionTypes.AUTH_LOGOUT: return authLogout(state)
         case actionTypes.SET_AUTH_REDIRECT_PATH: return setAuthRedirectPath(state, action)
+        case actionTypes.SET_USER_INFO: return setUserInfo(state, action)
+        case actionTypes.FETCH_USER_INFO_FAIL: return authFail(state, action)
+        // case actionTypes.NEW_USER_FAIL: return authFail(state, action)
         default: return state
     }
 }
