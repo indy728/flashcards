@@ -10,11 +10,11 @@ const Wrapper = styled.header`
     border-bottom: ${props => props.theme.palette.grayscale[1]};
     align-items: flex-start;
 
-    @media (max-width: ${({ theme }) => theme.media.tablet}) {
+    /* @media (max-width: ${({ theme }) => theme.media.tablet}) {
         position: fixed;
         top: 0;
         left: 0;
-    }
+    } */
 `
 
 const navHeader = (props) => {

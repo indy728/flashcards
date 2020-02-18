@@ -63,14 +63,12 @@ export const addCocktail = cocktail => {
 
         const rootRef = database.ref()
         const indexRef = rootRef.child("cocktailIndex")
-        // if it's broken, go back to what's commented out
-        // cocktailElementTwoWayReferenceUpdate(cocktail)
+        
         indexRef.update(cocktail, error => {
             if (error) {
                 return dispatch(addCocktailFail(error))
             } else {
                 return dispatch(cocktailElementTwoWayReferenceUpdate(cocktail))
-                // return dispatch(fetchCocktails())
             }
         })
     }

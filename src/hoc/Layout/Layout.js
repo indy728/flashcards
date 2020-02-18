@@ -18,7 +18,7 @@ const Main = styled.main`
     }
 
     @media (min-width: ${({ theme }) => theme.media.tabletLandscape}) {
-        
+        height: 100%;
     }
 `
 
@@ -48,11 +48,7 @@ const Container = styled.div`
     @media (min-width: ${({ theme }) => theme.media.tabletLandscape}) {
         margin: 8rem auto;
         box-shadow: ${({ theme }) => theme.shadow.container};
-    }
-    
-    @media (min-width: ${({ theme }) => theme.media.laptop}) {
         max-width: 120rem;
-
     }
 `
 
