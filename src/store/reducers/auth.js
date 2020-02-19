@@ -13,22 +13,12 @@ const authStart = state => {
     return updateObject(state, {error: null, loading: true})
 }
 
-const authSuccess = (state, action) => {
-    const { email, uid, userInfo } = action
-    return updateObject(state, {
-        email,
-        uid,
-        userInfo,
-        error: null,
-        loading: false,
-    })
-}
-
 const authFail = (state, action) => {
-    return updateObject(state, {
-        error: action.error,
-        loading: false
+    const failState = updateObject(initialState, {
+        error: action.error
     })
+
+    return updateObject(state, failState)
 }
 
 const authLogout = (state) => {
@@ -45,7 +35,7 @@ const setUserInfo = (state, action) => {
     const updatedState = {
         uid: action.uid,
         userInfo: action.userInfo,
-        error: false,
+        error: null,
         loading: false
     }
     return updateObject(state, updatedState)
@@ -59,7 +49,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.SET_AUTH_REDIRECT_PATH: return setAuthRedirectPath(state, action)
         case actionTypes.SET_USER_INFO: return setUserInfo(state, action)
         case actionTypes.FETCH_USER_INFO_FAIL: return authFail(state, action)
-        // case actionTypes.NEW_USER_FAIL: return authFail(state, action)
+        case actionTypes.NEW_USER_FAIL: return authFail(state, action)
         default: return state
     }
 }

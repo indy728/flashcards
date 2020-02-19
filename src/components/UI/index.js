@@ -20,6 +20,9 @@ export {
     default as Input
 } from './Input/Input'
 export {
+    default as LinkDiv
+} from './LinkDiv/LinkDiv'
+export {
     default as Modal
 } from './Modal/Modal'
 export {

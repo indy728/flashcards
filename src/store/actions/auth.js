@@ -48,7 +48,6 @@ const newUser = (authInfo, user) => {
         usersRef.update(newUser, error => {
             if (error) {
                 dispatch(newUserFail(error))
-                dispatch(logout())
             } else {
                 dispatch(newUserSuccess())
                 dispatch(setUserInfo(uid, newUser.uid))
@@ -59,7 +58,6 @@ const newUser = (authInfo, user) => {
 
 // function for authenticating the user
 export const auth = authInfo => {
-    console.log('[auth] authInfo: ', authInfo)
     return dispatch => {
         dispatch(authStart())
         if (authInfo.isSignUp) {
@@ -139,10 +137,9 @@ export const fetchUserInfo = uid => {
     return dispatch => {
         userRef.once('value', snapshot => {
             dispatch(fetchUserInfoSuccess())
-            return dispatch(setUserInfo(uid, snapshot.val()))
+            dispatch(setUserInfo(uid, snapshot.val()))
         }, errorObject => {
-            console.log('[auth] errorObject: ', errorObject)
-            return dispatch(fetchUserInfoFail(errorObject.code))
+            dispatch(fetchUserInfoFail(errorObject.code))
         })
     }
 }
