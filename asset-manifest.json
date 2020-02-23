@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.js": "/flashcards/static/js/main.57409792.chunk.js",
+    "main.js.map": "/flashcards/static/js/main.57409792.chunk.js.map",
+    "runtime-main.js": "/flashcards/static/js/runtime-main.409684ea.js",
+    "runtime-main.js.map": "/flashcards/static/js/runtime-main.409684ea.js.map",
+    "static/js/2.39db46d3.chunk.js": "/flashcards/static/js/2.39db46d3.chunk.js",
+    "static/js/2.39db46d3.chunk.js.map": "/flashcards/static/js/2.39db46d3.chunk.js.map",
+    "static/js/3.f08dd6d5.chunk.js": "/flashcards/static/js/3.f08dd6d5.chunk.js",
+    "static/js/3.f08dd6d5.chunk.js.map": "/flashcards/static/js/3.f08dd6d5.chunk.js.map",
+    "static/js/4.68b61d85.chunk.js": "/flashcards/static/js/4.68b61d85.chunk.js",
+    "static/js/4.68b61d85.chunk.js.map": "/flashcards/static/js/4.68b61d85.chunk.js.map",
+    "index.html": "/flashcards/index.html",
+    "precache-manifest.29a5b33e2e12ca919ca83ff5aabcb445.js": "/flashcards/precache-manifest.29a5b33e2e12ca919ca83ff5aabcb445.js",
+    "service-worker.js": "/flashcards/service-worker.js",
+    "static/media/drink1.svg": "/flashcards/static/media/drink1.c04a1212.svg",
+    "static/media/nofile-picture.jpg": "/flashcards/static/media/nofile-picture.5f9bc2b7.jpg",
+    "static/media/sprite.svg": "/flashcards/static/media/sprite.9928130a.svg"
+  }
+}
