@@ -28,7 +28,7 @@ const Hamburger = styled.div`
         background-color: ${props => props.theme.palette.white[1]};
     }
 
-    @media (min-width: 500px) {
+    @media (min-width: ${({ theme }) => theme.media.tabletLandscape}) {
         display: none;
     }
 `

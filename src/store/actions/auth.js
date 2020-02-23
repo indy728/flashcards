@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes'
-import { firebaseAuth } from './firebase'
+import { firebaseAuth, database } from './firebase'
 
 // Use this function to set 'loading' state and potentially promp Spinner
 export const authStart = () => {
@@ -8,55 +8,72 @@ export const authStart = () => {
     }
 }
 
-export const authSuccess = (displayName, email) => {
-    return {
-        type: actionTypes.AUTH_SUCCESS,
-        username: displayName,
-        email: email
-    }
+const authSuccess = () => {
+    return { type: actionTypes.AUTH_SUCCESS }
 }
 
 export const authFail = error => {
     return {
         type: actionTypes.AUTH_FAIL,
-        error: error
+        error
+    }
+}
+
+export const newUserStart = () => {
+    return { type: actionTypes.NEW_USER_START }
+}
+
+export const newUserFail = error => {
+    return {
+        type: actionTypes.NEW_USER_FAIL,
+        error
+    }
+}
+
+const newUserSuccess = () => {
+    return { type: actionTypes.NEW_USER_SUCCESS }
+}
+
+const newUser = (authInfo, user) => {
+    const { uid } = user
+    const usersRef = database.ref().child('users')
+    const newUser = {
+        [uid]: { ...authInfo.userInfo }
+    }
+    console.log('[auth] newUser: ', newUser)
+    
+    return dispatch => {
+        dispatch(newUserStart())
+
+        usersRef.update(newUser, error => {
+            if (error) {
+                dispatch(newUserFail(error))
+            } else {
+                dispatch(newUserSuccess())
+                dispatch(setUserInfo(uid, newUser.uid))
+            }
+        })
     }
 }
 
 // function for authenticating the user
-export const auth = (authInfo) => {
+export const auth = authInfo => {
     return dispatch => {
         dispatch(authStart())
         if (authInfo.isSignUp) {
             firebaseAuth.createUserWithEmailAndPassword(authInfo.email, authInfo.password)
                 .then(res => {
-                    // const user = res.user
-                    // TO DOs
-                    // Fix this shit below
-                    // 
-                    // user.updateProfile({displayName: authInfo.username})
-                    //     .then(res => {
-                    //         console.log('[actions/auth] signUp update success', res)
-                    //     })
-                    //     .catch(er => {
-                    //         console.log('[actions/auth] signUp update fail')
-                    //     })
-                    dispatch(authSuccess(res.user.displayName, res.user.email))
+                    dispatch(authSuccess())
+                    dispatch(newUser(authInfo, res.user))
                 })
                 .catch(er => {
-                    dispatch(authFail(er.response.data.error))
+                    dispatch(authFail(er.message))
                 })
         } else {
             firebaseAuth.signInWithEmailAndPassword(authInfo.email, authInfo.password)
                 .then(res => {
-                    // const user = res.user
-                    // const userObj = {
-                    //     name: user.displayName,
-                    //     email: user.email,
-                    //     photo: user.photoURL,
-                    // }
-                    // console.log(userObj)
-                    dispatch(authSuccess(res.user.displayName, res.user.email))
+                    dispatch(authSuccess())
+                    dispatch(fetchUserInfo(res.user.uid))
                 })
                 .catch(error => {
                     dispatch(authFail(error))
@@ -85,10 +102,44 @@ export const authCheckState = () => {
     return dispatch => {
         firebaseAuth.onAuthStateChanged(user => {
             if (user) {
-                dispatch(authSuccess(user.displayName, user.email))
+                dispatch(authSuccess())
+                dispatch(fetchUserInfo(user.uid))
             } else {
                 dispatch(logout())
             }
+        })
+    }
+}
+
+export const setUserInfo = (uid, userInfo) => {
+    return {
+        type: actionTypes.SET_USER_INFO,
+        uid,
+        userInfo
+    }
+}
+
+const fetchUserInfoSuccess = () => {
+    return {
+        type: actionTypes.FETCH_USER_INFO_SUCCESS,
+    }
+}
+
+const fetchUserInfoFail = error => {
+    return {
+        type: actionTypes.FETCH_USER_INFO_FAIL,
+        error
+    }
+}
+
+export const fetchUserInfo = uid => {
+    const userRef = database.ref().child('users').child(uid)
+    return dispatch => {
+        userRef.once('value', snapshot => {
+            dispatch(fetchUserInfoSuccess())
+            dispatch(setUserInfo(uid, snapshot.val()))
+        }, errorObject => {
+            dispatch(fetchUserInfoFail(errorObject.code))
         })
     }
 }

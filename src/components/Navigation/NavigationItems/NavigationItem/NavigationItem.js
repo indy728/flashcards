@@ -9,6 +9,8 @@ const Wrapper = styled.li`
     font-size: 2rem;
     color: ${props => props.theme.palette.white[0]};
     border-bottom: 4px solid transparent;
+    text-align: center;
+
                 
     :hover,
     :active {
@@ -30,13 +32,12 @@ const Wrapper = styled.li`
         background-color: ${props => props.theme.palette.white[0]};
     }
 
-    @media (min-width: 500px) {
+    @media (min-width: ${({ theme }) => theme.media.tablet}) {
         display: flex;
         height: 100%;
         width: auto;
         align-items: center;
         min-width: 12rem;
-        text-align: center;
         
         a {
             color: ${props => props.theme.palette.white[0]};

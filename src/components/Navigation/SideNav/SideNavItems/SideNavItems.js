@@ -8,6 +8,7 @@ const Wrapper = styled.ul`
     padding: 1.5rem 0;
 `
 
+
 const NavItem = styled(NavigationItem)`
     width: 100%;
     color: ${props => props.theme.palette.primary[2]};
@@ -37,12 +38,11 @@ const NavItem = styled(NavigationItem)`
 `
 
 const navigationItems = props => {
-    const components = {...props.components}
-    const componentKeys = Object.keys(components)
-    const navItems = componentKeys.map(key => {
+    const { components } = props
+    const navItems = Object.keys(components).map(key => {
         return (
             <NavItem
-                className="Sidedrawer__NavItem"
+                className="side-drawer--navigation-items__item"
                 key={components[key].key}
                 link={components[key].link}>
                 {components[key].title}
@@ -51,11 +51,13 @@ const navigationItems = props => {
     })
 
     return (
-        <nav>
-            <Wrapper>
-                {navItems}
-            </Wrapper>
-        </nav>
+        // <nav>
+        <Wrapper
+            className='side-drawer--navigation-items'
+            >
+            {navItems}
+        </Wrapper>
+        // </nav>
     )
 }
 

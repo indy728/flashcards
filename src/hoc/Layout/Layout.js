@@ -1,27 +1,61 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import Header from '../../components/Navigation/Header/Header'
+import NavHeader from '../../components/Navigation/NavHeader/NavHeader'
 import SideNav from '../../components/Navigation/SideNav/SideNav'
 
 const Main = styled.main`
     flex: 1;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    /* background: ${props => props.theme.palette.secondary[3]}; */
-    background: ${props => props.theme.palette.white[1]};
+    /* background: ${({ theme }) => theme.palette.secondary[3]}; */
+    background: ${({ theme }) => theme.palette.white[1]};
+    
+    @media (max-width: ${({ theme }) => theme.media.tabletLandscape}) {
+        width: 100%;
+    }
+
+    @media (min-width: ${({ theme }) => theme.media.tablet}) {
+        padding: 5%;
+    }
+
+    @media (min-width: ${({ theme }) => theme.media.tabletLandscape}) {
+        height: 100%;
+    }
 `
 
 const Content = styled.div`
-    display: flex;
+    flex: 1;
+    width: 100%;
+
+    @media (max-width: ${({ theme }) => theme.media.tabletLandscape}) {
+    }
+
     
+    @media (min-width: ${({ theme }) => theme.media.tablet}) {
+    }
+    
+    @media (min-width: ${({ theme }) => theme.media.tabletLandscape}) {
+        flex-flow: row;
+    }
 `
 
 const Container = styled.div`
-    max-width: 120rem;
-    margin: 8rem auto;
-    box-shadow: ${props => props.theme.shadow.container};
+    width: 100%;
+    height: 100vh;
+
+    @media (max-width: ${({ theme }) => theme.media.tabletLandscape}) {
+    }
+
+    @media (min-width: ${({ theme }) => theme.media.tabletLandscape}) {
+        margin: 5vh auto;
+        height: 90vh;
+        box-shadow: ${({ theme }) => theme.shadow.container};
+        width: ${({ theme }) => theme.media.tabletLandscape};
+    }
+    
+    @media (min-width: ${({ theme }) => theme.media.laptop}) {
+        
+        width: ${({ theme }) => theme.media.laptop};
+    }
 `
 
 class Layout extends Component {
@@ -34,13 +68,6 @@ class Layout extends Component {
                 usage: "basic",
                 isAuth: false,
             },
-            // quiz: {
-            //     key: "quiz",
-            //     link: "/quiz",
-            //     title: "Quiz",
-            //     usage: "basic",
-            //     isAuth: true,
-            // },
             learningCenter: {
                 key: "learning_center",
                 link: "/learning_center",
@@ -104,34 +131,38 @@ class Layout extends Component {
 
     render() {
         return (
-            <React.Fragment>
-                <Container>
-                    <Header
+            <Container
+                className={'app-container'}
+                >
+                <NavHeader
+                    isAuthenticated={this.props.isAuthenticated}
+                    components={this.state.components}
+                    sideNav={this.state.showSideNav}
+                    toggle={this.sideNavToggleHandler}
+                    />
+                <Content
+                    className={'app-content'}
+                    >
+                    <SideNav
                         isAuthenticated={this.props.isAuthenticated}
                         components={this.state.components}
-                        sideNav={this.state.showSideNav}
-                        toggle={this.sideNavToggleHandler}
+                        open={this.state.showSideNav}
+                        close={this.sideNavClosedHandler}
                         />
-                    <Content>
-                        <SideNav
-                            isAuthenticated={this.props.isAuthenticated}
-                            components={this.state.components}
-                            open={this.state.showSideNav}
-                            close={this.sideNavClosedHandler}
-                            />
-                        <Main>
-                            {this.props.children}
-                        </Main>
-                    </Content>
-                </Container>
-            </React.Fragment>
+                    <Main
+                        className={'app-content--main'}
+                        >
+                        {this.props.children}
+                    </Main>
+                </Content>
+            </Container>
         )
     }
 }
 
 const mapStateToProps = state => {
     return {
-        isAuthenticated: state.auth.email !== null
+        isAuthenticated: state.auth.uid !== null
     }
 }
 

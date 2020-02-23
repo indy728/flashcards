@@ -1,24 +1,26 @@
 import React from 'react'
-import LearningCenterFeature from './LearningCenterFeature/LearningCenterFeature'
-import StackManager from './StackManager/StackManager'
-
+import LearningCenterStacks from './LearningCenterStacks/LearningCenterStacks'
+import LearningCenterLaunchButtons from './LearningCenterLaunchButtons/LearningCenterLaunchButtons'
 import { ContentBlock, Header } from '../UI'
 
 const learningCenterContent = props => {
   return (
-    <ContentBlock>
+    <ContentBlock
+      className={'learning-center--content'}
+      >
         <Header
             className='learning-center--header'
             >
             Cocktail Learning Center
         </Header>
-        <LearningCenterFeature 
-            count={props.count}
+        <LearningCenterStacks
+            className='learning-center--stacks'
             launchFlashcards={props.launchFlashcards}
             />
-        <StackManager
-          viewCocktails={props.viewCocktails}
-          />
+        <LearningCenterLaunchButtons
+            className='learning-center--launch-buttons'
+            launchFlashcards={props.launchFlashcards}
+            />
     </ContentBlock>
   )
 }

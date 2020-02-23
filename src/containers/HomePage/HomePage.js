@@ -2,69 +2,59 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import ContentBlock from '../../components/UI/ContentBlock/ContentBlock'
+import Profile from '../../components/Profile/Profile'
+import { LinkDiv } from '../../components/UI'
 
-const Wrapper = styled(ContentBlock)`
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    padding: 3rem;
-
-    /* @media (min-width: 900px) {
-        width: 80rem;
-    } */
-`
-
-const Intro = styled.div`
-    width: 80%;
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-
-    h1 {
-        text-align: center;
-        margin: 1rem;
-    }
-`
-
-const FunctionalComponents = styled.div`
-    font-size: 2.8rem;
-    text-align: center;
-    font-weight: bold;
-    text-transform: uppercase;
-    margin: 1.5rem;
+const MyLinks = styled(LinkDiv)`
+    font-size: 3.5rem;
+    font-family: ${({ theme }) => theme.fonts.script};
 `
 
 class HomePage extends Component {
-
+    
     render() {
-        const functionalComponents = ["Logout", "Add Ingredient"]
+        const links = {
+            myAccount: {
+                name: 'My Account Info',
+                component: null
+            },
+            myStacks: {
+                name: 'My Study Stacks',
+                component: null
+            },
+            myGroups: {
+                name: 'My Groups',
+                component: null
+            }
+        }
 
-        const funcCompList = functionalComponents.map(component => {
+        const linkDivs = Object.keys(links).map(link => {
+            const linkObj = links[link]
             return (
-                <FunctionalComponents key={component}>
-                    {component}
-                </FunctionalComponents>
+                <MyLinks
+                    className={'profile--' + link}
+                    component={linkObj.component}
+                    >
+                    {linkObj.name}
+                </MyLinks>
             )
         })
+
         return (
-            <React.Fragment>
-                <Wrapper className="HomePage">
-                    <Intro>
-                        <h1>Welcome, <span style={{"fontWeight": "bold"}}>{this.props.email}</span>! And congratulations!</h1>
-                        <h2>Now that you are logged in, you can do <span style={{"fontWeight": "bold"}}>{functionalComponents.length}</span> things:</h2>
-                    </Intro>
-                    {funcCompList}
-                </Wrapper>
-            </React.Fragment>
+            <ContentBlock
+                className='profile'>
+                <Profile 
+                    userInfo={this.props.userInfo}
+                    />
+                {linkDivs}
+            </ContentBlock>
         )
     }
 }
 
 const mapStateToProps = state => {
     return {
-        userId: state.username,
-        email: state.email
+        userInfo: state.auth.userInfo,
     }
 }
 
