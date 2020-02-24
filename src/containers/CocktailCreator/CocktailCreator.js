@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
+import styled from 'styled-components'
 import { connect } from 'react-redux'
-import ContentBlock from '../../components/UI/ContentBlock/ContentBlock'
-import Header from '../../components/UI/Header/Header'
 import Dashboard from '../../components/Dashboard/Dashboard'
-import Modal from '../../components/UI/Modal/Modal'
+import { ContentBlock, Header, Modal } from '../../components/UI'
 import IngredientForm from '../../components/IngredientForm/IngredientForm'
 import { updateObject } from '../../shared/objectUtility'
 import { idTransform, nameTransform, qtyStringToFloat } from '../../shared/stringUtility'
@@ -14,6 +13,10 @@ const attributesInit = {
     label: 'Drink Name',
     type: 'name'
 }
+
+const Wrapper = styled(ContentBlock)`
+    padding: 0 2rem;
+`
 
 class CocktailCreator extends Component {
     state = {
@@ -306,10 +309,11 @@ class CocktailCreator extends Component {
                 <Modal show={this.state.adding} modalClosed={this.addingCanceled}>
                     {form}
                 </Modal>
-                <ContentBlock>
-                    <Header>Add A New Cocktail</Header>
+                <Wrapper
+                    className='dashboard'
+                    >
+                    <Header className='dashboard--header'>Add A New Cocktail</Header>
                     <Dashboard
-                        className='dashboard'
                         ingredients={this.props.ingredients}
                         addIngredient={this.addingTrue}
                         attributes={this.state.attributes}
@@ -320,7 +324,7 @@ class CocktailCreator extends Component {
                         formIsValid={this.state.formIsValid}
                         cocktailSubmitHandler={this.cocktailSubmitHandler}
                         />
-                </ContentBlock>
+                </Wrapper>
             </React.Fragment>
         )
     }

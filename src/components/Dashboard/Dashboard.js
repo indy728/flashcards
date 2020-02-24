@@ -4,16 +4,13 @@ import DashboardControls from './DashboardControls/DashboardControls'
 import CocktailForm from './CocktailForm/CocktailForm'
 
 const Wrapper = styled.div`
-    width: 100%;
-    min-height: 10rem;
-    margin-bottom: 3rem;
-    display: flex;
-    justify-content: space-between;
 `
 
 const dashboard = props => {
     return (
-        <Wrapper>
+        <Wrapper
+            className='dashboard--content'
+            >
             <DashboardControls 
                 ingredients={props.ingredients}
                 addIngredient={props.addIngredient}

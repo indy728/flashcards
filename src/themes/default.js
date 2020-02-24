@@ -28,7 +28,8 @@ theme.palette = {
 theme.reversePalette = reversePalette(theme.palette)
 
 theme.shadow = {
-    container: '0 2rem 6rem rgba(0,0,0,.3)'
+    container: '0 2rem 6rem rgba(0,0,0,.3)',
+    component: '0 1rem 3rem rgba(0,0,0,.3)'
 }
 
 theme.fonts = {

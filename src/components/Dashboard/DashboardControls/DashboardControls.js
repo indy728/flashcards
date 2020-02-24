@@ -1,19 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
-
 import ParentControl from './ParentControl/ParentControl'
 import DashboardControl from './DashboardControl/DashboardControl'
 
-
 const Wrapper = styled.div`
-    width: 25rem;
-    border-right: 1px solid ${props => props.theme.palette.grayscale[2]};
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    width: 100%;
+
+    @media (min-width: ${({ theme }) => theme.media.tabletLandscape}) {
+        border-right: 1px solid ${props => props.theme.palette.grayscale[2]};
+    }
 `
 
-const AddElementControl = styled(DashboardControl)`
+const CreateElementControl = styled(DashboardControl)`
     text-transform: uppercase;
     font-weight: normal;
     
@@ -35,17 +33,12 @@ const dashboardControls = props => {
             const categoryDivs = []
             const groupLabel = ingredients[group].name
             let groupRank = ingredients[group].rank
-            // console.log('[DashboardControls] group: ', group)
-
 
             for (let category in categories) {
                 if (ignored.indexOf(category) !== -1) continue
                 const items = ingredients[group][category]
                 const itemButtons = []
                 const catLabel = categories[category].name
-                // console.log('[DashboardControls] category: ', category)
-                // console.log('[DashboardControls] categories[category]: ', categories[category])
-                // console.log('[DashboardControls] categories[category].name: ', categories[category].name)
 
                 for (let item in items) {
                     if (ignored.indexOf(item) !== -1) continue
@@ -59,7 +52,7 @@ const dashboardControls = props => {
                         }
                         itemButtons.push(
                             <DashboardControl
-                                className='dashboardControl'
+                                className='dashboard--controls__add-element'
                                 key={item}
                                 level={2}
                                 label={items[item].name}
@@ -68,8 +61,8 @@ const dashboardControls = props => {
                     )}
                 }
                 itemButtons.push(
-                    <AddElementControl
-                                className='addElementControl'
+                    <CreateElementControl
+                                className='dashboard--controls__create-element'
                                 labelClassName='addElementLabel'
                                 selectors={[group, category]}
                                 key={"add" + category}
@@ -83,6 +76,7 @@ const dashboardControls = props => {
                         key={category}
                         label={catLabel}
                         level={1}
+                        className={'dashboard--controls__parent-level-' + 1}
                         addIngredient={props.addIngredient}
                         >
                         {itemButtons}
@@ -90,8 +84,8 @@ const dashboardControls = props => {
                 )
             }
             categoryDivs.push(
-                <AddElementControl
-                    className='addElementControl'
+                <CreateElementControl
+                    className='dashboard--controls__create-element'
                     labelClassName='addElementLabel'
                     selectors={[group]}
                     key={"add" + group}
@@ -103,6 +97,7 @@ const dashboardControls = props => {
             const newCategory = (
                 <ParentControl
                     key={group} 
+                    className={'dashboard--controls__parent-level-' + 0}
                     label={groupLabel}
                     addIngredient={props.addIngredient}
                     >
@@ -119,6 +114,7 @@ const dashboardControls = props => {
             <DashboardControl
                 label='Instructions'
                 key='instructions'
+                className='dashboard--controls__add-instructions'
                 clicked={()=> props.addAttribute({
                         subTier: 99,
                         label: 'Instructions',
@@ -128,24 +124,12 @@ const dashboardControls = props => {
         )
         
         return (
-            <Wrapper>
+            <Wrapper
+                className='dashboard--controls'
+                >
                 {buttons}
             </Wrapper>
         )
 }
 
-// const mapStateToProps = state => {
-//     return {
-//         ingredients: state.ingredients.ingredients,
-//         loading: state.ingredients.loading
-//     }
-// }
-
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         onInitIngredients: () => dispatch(actions.fetchIngredients())
-//     }
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(DashboardControls)
 export default dashboardControls
