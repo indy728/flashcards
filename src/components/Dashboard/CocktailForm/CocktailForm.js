@@ -1,18 +1,31 @@
 import React from 'react'
 import styled from 'styled-components'
 import Attribute from './Attribute/Attribute'
-import Button from '../../UI/Button/Button'
+import { Button } from '../../UI'
 
 const Wrapper = styled.form`
-    width: 55rem;
-    padding: 2rem 4rem;
+    width: 100%;
+    padding: 0 5%;
+`
+
+const ShowControlsButton = styled(Button)`
+    display: none;
+
+    @media (max-width: ${({ theme }) => theme.media.laptop}) {
+        display: ${props => props.controlsOpen ? 'none' : 'block' };
+    }
 `
 
 const SubmitButtonDiv = styled.div`
     width: 100%;
-    padding-top: 2rem;
-    display: flex;
     justify-content: center;
+    margin-top: 2rem;
+
+    button {
+        width: 100%;
+        background-color: ${({ theme }) => theme.palette.secondary[2]};
+        border: 2px outset ${({ theme }) => theme.palette.secondary[0]};
+    }
 `
 
 const cocktailForm = props => {
@@ -35,18 +48,28 @@ const cocktailForm = props => {
     })
 
     return (
-        <Wrapper
-            className='cocktailForm' 
-            onSubmit={props.cocktailSubmitHandler}
-            >
-            {transformedAttributes}
-            <SubmitButtonDiv>
-                <Button
-                    disabled={!props.formIsValid}>
+        <React.Fragment>
+            <Wrapper
+                className='cocktail-form' 
+                onSubmit={props.cocktailSubmitHandler}
+                >
+                {transformedAttributes}
+                <ShowControlsButton
+                    className='cocktail-form--show-controls-button'
+                    controlsOpen={props.controlsOpen}
+                    clicked={props.toggleControls}
+                    >
+                    add element
+                </ShowControlsButton>
+                <SubmitButtonDiv>
+                    <Button
+                        disabled={!props.formIsValid}
+                        >
                         SUBMIT NEW COCKTAIL
-                </Button>
-            </SubmitButtonDiv>
-        </Wrapper>
+                    </Button>
+                </SubmitButtonDiv>
+            </Wrapper>
+        </React.Fragment>
     )
 }
 

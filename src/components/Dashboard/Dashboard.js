@@ -5,21 +5,48 @@ import CocktailForm from './CocktailForm/CocktailForm'
 
 const Wrapper = styled.div`
     width: 100%;
-    min-height: 10rem;
-    margin-bottom: 3rem;
-    display: flex;
-    justify-content: space-between;
+    flex: 1;
+
+    @media (min-width: ${({ theme }) => theme.media.laptop}) {
+        flex-flow: row;
+    }
+`
+
+const DashboardForm = styled.div`
+    flex: 1;
+    height: 100%;
+    justify-content: flex-start;
+
+    @media (max-width: ${({ theme }) => theme.media.laptop}) {
+        width: 100%;
+    }
 `
 
 const dashboard = props => {
     return (
-        <Wrapper>
-            <DashboardControls 
+        <Wrapper
+            className='dashboard--content'
+            >
+            <DashboardControls
+                open={props.controlsOpen}
+                toggleControls={props.toggleControls}
                 ingredients={props.ingredients}
                 addIngredient={props.addIngredient}
-                addAttribute={props.addAttribute} />
-            <CocktailForm 
-                {...props}/>
+                addAttribute={props.addAttribute}
+                />
+            <DashboardForm
+                className='dashbvoard--form'
+                >
+                <CocktailForm
+                    attributes={props.attributes}
+                    open={props.controlsOpen}
+                    inputChanged={props.inputChanged}
+                    selectChanged={props.selectChanged}
+                    removeAttribute={props.removeAttribute}
+                    formIsValid={props.formIsValid}
+                    toggleControls={props.toggleControls}
+                    />
+            </DashboardForm>
         </Wrapper>
     )
 }

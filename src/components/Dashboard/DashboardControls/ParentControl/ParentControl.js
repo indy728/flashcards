@@ -4,7 +4,7 @@ import Sprite from '../../../UI/Sprite/Sprite'
 import AddItemButton from '../AddItemButton/AddItemButton'
 
 const Wrapper = styled.div`
-
+    width: 100%;
 `
 
 const AddItemParent = styled(AddItemButton)`
@@ -32,13 +32,13 @@ class ParentControl extends Component {
                 className={this.props.className}
                 >
                 <AddItemParent 
-                    className='addItemParent--header'
+                    className='add-item--header'
                     level={this.props.level}
                     onClick={() => this.toggleShowHide()}
                     >
                     <span>{this.props.label}</span>
                     <Sprite 
-                        className='addItemParent--chevron'
+                        className='add-item--chevron'
                         height='1.8rem'
                         spriteName={hideChildren ? 'chevron-right' : 'chevron-down'}
                         />

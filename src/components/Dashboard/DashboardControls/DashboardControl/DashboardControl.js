@@ -5,13 +5,7 @@ import { titleCase } from '../../../../shared/stringUtility'
 
 const Wrapper = styled.div`
     width: 100%;
-    display: flex;
     flex-wrap: wrap;
-    align-items: center;
-`
-
-const DashboardControl = styled(AddItemButton)`
-  
 `
 
 const DashboardControlLabel = styled.span`
@@ -27,7 +21,7 @@ const dashboardControl = props => {
     <Wrapper
         className={props.className}
         >
-        <DashboardControl
+        <AddItemButton
             className='dashboardControl--header'
             onClick={props.clicked}
             level={props.level}
@@ -35,7 +29,7 @@ const dashboardControl = props => {
             <DashboardControlLabel
               className={props.labelClassName}>{titleCase(props.label)}</DashboardControlLabel>
             <span style={{'fontSize':'1.8rem'}}>+</span>
-        </DashboardControl>
+        </AddItemButton>
     </Wrapper>
   )
 }

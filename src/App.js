@@ -116,7 +116,7 @@ class App extends Component {
                 <Route path="/add_element" component={IngredientCreator} />
                 <Route path="/learning_center" component={asyncLearningCenter} />
                 <Route path="/" exact component={HomePage}/>
-                <Redirect to="/" />
+                <Redirect to="/add_cocktail" />
             </Switch>
         )
     }

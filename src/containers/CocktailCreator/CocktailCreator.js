@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
+import styled from 'styled-components'
 import { connect } from 'react-redux'
-import ContentBlock from '../../components/UI/ContentBlock/ContentBlock'
-import Header from '../../components/UI/Header/Header'
 import Dashboard from '../../components/Dashboard/Dashboard'
-import Modal from '../../components/UI/Modal/Modal'
+import { ContentBlock, Header, Modal } from '../../components/UI'
 import IngredientForm from '../../components/IngredientForm/IngredientForm'
 import { updateObject } from '../../shared/objectUtility'
 import { idTransform, nameTransform, qtyStringToFloat } from '../../shared/stringUtility'
@@ -15,12 +14,21 @@ const attributesInit = {
     type: 'name'
 }
 
+const Wrapper = styled(ContentBlock)`
+    justify-content: flex-start;
+
+    div.dashboard--header {
+        margin: 4rem 0;
+    }
+`
+
 class CocktailCreator extends Component {
     state = {
         attributes: [],
         count: 1,
         adding: false,
         selectorInit: null,
+        controlsOpen: false,
         drinkControls: {
             name: {
                 tier: 0,
@@ -110,6 +118,18 @@ class CocktailCreator extends Component {
         this.setState({adding: true, selectorInit: selectors})
         // ADD FORM ATTRIBUTES
     }
+
+    toggleControlsHandler = event => {
+        event.preventDefault()
+
+        this.setState(prevState => { 
+            return { controlsOpen: !prevState.controlsOpen }
+        })
+    }
+
+    // closeControlsHandler = () => {
+    //     this.setState({ controlsOpen: true })
+    // }
 
 
     addAttributeHandler = newAttribute => {
@@ -306,21 +326,24 @@ class CocktailCreator extends Component {
                 <Modal show={this.state.adding} modalClosed={this.addingCanceled}>
                     {form}
                 </Modal>
-                <ContentBlock>
-                    <Header>Add A New Cocktail</Header>
+                <Wrapper
+                    className='dashboard'
+                    >
+                    <Header className='dashboard--header'>Add A New Cocktail</Header>
                     <Dashboard
-                        className='dashboard'
                         ingredients={this.props.ingredients}
-                        addIngredient={this.addingTrue}
                         attributes={this.state.attributes}
+                        formIsValid={this.state.formIsValid}
+                        controlsOpen={this.state.controlsOpen}
+                        addIngredient={this.addingTrue}
                         addAttribute={this.addAttributeHandler}
                         removeAttribute={this.removeAttributeHandler}
                         inputChanged={this.inputChangedHandler}
                         selectChanged={this.qtyTypeChangedHandler}
-                        formIsValid={this.state.formIsValid}
                         cocktailSubmitHandler={this.cocktailSubmitHandler}
+                        toggleControls={this.toggleControlsHandler}
                         />
-                </ContentBlock>
+                </Wrapper>
             </React.Fragment>
         )
     }

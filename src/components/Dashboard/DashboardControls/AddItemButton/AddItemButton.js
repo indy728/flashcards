@@ -9,9 +9,12 @@ const Wrapper = styled.div`
     font-size: 1.4rem;
     border-radius: 3px;
     background-color: ${props => props.theme.palette.white[2]};
-    display: flex;
-    align-items: center;
+    flex-flow: row;
     justify-content: space-between;
+
+    @media (max-width: ${({ theme }) => theme.media.tabletLandscape}) {
+        
+    }
 `
 
 const addItemButton = props => {

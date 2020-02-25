@@ -5,7 +5,7 @@ const Wrapper = styled.div`
     width: 90%;
     max-width: 60rem;
     height: 7rem;
-    box-shadow: ${({ theme }) => theme.shadow.container};
+    box-shadow: ${({ theme }) => theme.shadow.component};
     justify-content: center;
     background-color: ${({ theme }) => theme.palette.white[0]};
 
