@@ -9,7 +9,7 @@ const Wrapper = styled.div`
     z-index: 499;
     left: 0;
     top: 0;
-    background-color: rgba(13 ,17 ,19 , 0.5);
+    background-color: ${({ theme }) => theme.palette.transparent[0]};
 `
 
 const backdrop = (props) => props.show ? <Wrapper onClick={props.clicked} /> : null

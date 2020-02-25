@@ -4,6 +4,7 @@ import DashboardControls from './DashboardControls/DashboardControls'
 import CocktailForm from './CocktailForm/CocktailForm'
 
 const Wrapper = styled.div`
+    width: 100%;
 `
 
 const dashboard = props => {
@@ -11,12 +12,22 @@ const dashboard = props => {
         <Wrapper
             className='dashboard--content'
             >
-            <DashboardControls 
+            <DashboardControls
+                open={props.controlsOpen}
+                toggleControls={props.toggleControls}
                 ingredients={props.ingredients}
                 addIngredient={props.addIngredient}
-                addAttribute={props.addAttribute} />
-            <CocktailForm 
-                {...props}/>
+                addAttribute={props.addAttribute}
+                />
+            <CocktailForm
+                attributes={props.attributes}
+                open={props.controlsOpen}
+                inputChanged={props.inputChanged}
+                selectChanged={props.selectChanged}
+                removeAttribute={props.removeAttribute}
+                formIsValid={props.formIsValid}
+                toggleControls={props.toggleControls}
+                />
         </Wrapper>
     )
 }

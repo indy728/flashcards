@@ -15,7 +15,13 @@ const attributesInit = {
 }
 
 const Wrapper = styled(ContentBlock)`
-    padding: 0 2rem;
+    padding: 0 5%;
+    justify-content: flex-start;
+
+    /* > &.dashboard--header { */
+    div.dashboard--header {
+        margin: 4rem 0;
+    }
 `
 
 class CocktailCreator extends Component {
@@ -24,6 +30,7 @@ class CocktailCreator extends Component {
         count: 1,
         adding: false,
         selectorInit: null,
+        controlsOpen: false,
         drinkControls: {
             name: {
                 tier: 0,
@@ -113,6 +120,18 @@ class CocktailCreator extends Component {
         this.setState({adding: true, selectorInit: selectors})
         // ADD FORM ATTRIBUTES
     }
+
+    toggleControlsHandler = event => {
+        event.preventDefault()
+
+        this.setState(prevState => { 
+            return { controlsOpen: !prevState.controlsOpen }
+        })
+    }
+
+    // closeControlsHandler = () => {
+    //     this.setState({ controlsOpen: true })
+    // }
 
 
     addAttributeHandler = newAttribute => {
@@ -315,14 +334,16 @@ class CocktailCreator extends Component {
                     <Header className='dashboard--header'>Add A New Cocktail</Header>
                     <Dashboard
                         ingredients={this.props.ingredients}
-                        addIngredient={this.addingTrue}
                         attributes={this.state.attributes}
+                        formIsValid={this.state.formIsValid}
+                        controlsOpen={this.state.controlsOpen}
+                        addIngredient={this.addingTrue}
                         addAttribute={this.addAttributeHandler}
                         removeAttribute={this.removeAttributeHandler}
                         inputChanged={this.inputChangedHandler}
                         selectChanged={this.qtyTypeChangedHandler}
-                        formIsValid={this.state.formIsValid}
                         cocktailSubmitHandler={this.cocktailSubmitHandler}
+                        toggleControls={this.toggleControlsHandler}
                         />
                 </Wrapper>
             </React.Fragment>
