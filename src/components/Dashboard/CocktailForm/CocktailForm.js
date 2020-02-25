@@ -4,21 +4,28 @@ import Attribute from './Attribute/Attribute'
 import { Button } from '../../UI'
 
 const Wrapper = styled.form`
-    padding: 2rem 4rem;
+    width: 100%;
+    padding: 0 5%;
 `
 
 const ShowControlsButton = styled(Button)`
     display: none;
 
-    @media (max-width: ${({ theme }) => theme.media.tabletLandscape}) {
+    @media (max-width: ${({ theme }) => theme.media.laptop}) {
         display: ${props => props.controlsOpen ? 'none' : 'block' };
     }
 `
 
 const SubmitButtonDiv = styled.div`
     width: 100%;
-    padding-top: 2rem;
     justify-content: center;
+    margin-top: 2rem;
+
+    button {
+        width: 100%;
+        background-color: ${({ theme }) => theme.palette.secondary[2]};
+        border: 2px outset ${({ theme }) => theme.palette.secondary[0]};
+    }
 `
 
 const cocktailForm = props => {
@@ -47,17 +54,18 @@ const cocktailForm = props => {
                 onSubmit={props.cocktailSubmitHandler}
                 >
                 {transformedAttributes}
+                <ShowControlsButton
+                    className='cocktail-form--show-controls-button'
+                    controlsOpen={props.controlsOpen}
+                    clicked={props.toggleControls}
+                    >
+                    add element
+                </ShowControlsButton>
                 <SubmitButtonDiv>
-                    <ShowControlsButton
-                        className='coctail-form--show-controls-button'
-                        controlsOpen={props.controlsOpen}
-                        clicked={props.toggleControls}
-                        >
-                            show controls
-                    </ShowControlsButton>
                     <Button
-                        disabled={!props.formIsValid}>
-                            SUBMIT NEW COCKTAIL
+                        disabled={!props.formIsValid}
+                        >
+                        SUBMIT NEW COCKTAIL
                     </Button>
                 </SubmitButtonDiv>
             </Wrapper>

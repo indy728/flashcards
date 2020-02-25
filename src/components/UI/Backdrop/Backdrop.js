@@ -12,7 +12,7 @@ const Wrapper = styled.div`
     background-color: ${({ theme }) => theme.palette.transparent[0]};
 `
 
-const backdrop = (props) => props.show ? <Wrapper onClick={props.clicked} /> : null
+const backdrop = (props) => props.show ? <Wrapper className={props.className} onClick={props.clicked} /> : null
 
 backdrop.propTypes = {
     clicked: PropTypes.func,

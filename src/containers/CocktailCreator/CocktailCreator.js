@@ -15,10 +15,8 @@ const attributesInit = {
 }
 
 const Wrapper = styled(ContentBlock)`
-    padding: 0 5%;
     justify-content: flex-start;
 
-    /* > &.dashboard--header { */
     div.dashboard--header {
         margin: 4rem 0;
     }

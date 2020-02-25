@@ -6,19 +6,20 @@ import { Backdrop } from '../../UI'
 
 const Wrapper = styled.div`
     width: 100%;
+    height: 100%;
 
-    @media (max-width: ${({ theme }) => theme.media.tabletLandscape}) {
+    @media (max-width: ${({ theme }) => theme.media.laptop}) {
         position: fixed;
         left: 0;
         top: 0;
-        z-index: 498;
-        height: 100%;
+        z-index: 398;
         transform: ${props => props.open ? "translateY(0)" : "translateY(-100%)"};
         transition: transform 0.3s ease-out;
     }
 
-    @media (min-width: ${({ theme }) => theme.media.tabletLandscape}) {
+    @media (min-width: ${({ theme }) => theme.media.laptop}) {
         border-right: 1px solid ${props => props.theme.palette.grayscale[2]};
+        max-width: 25rem;
     }
 `
 
@@ -32,13 +33,21 @@ const CreateElementControl = styled(DashboardControl)`
 `
 
 const DashboardControlButtons = styled.div`
-    width: calc(100% - 4rem);
-    margin: 2rem;
-    padding: 1rem;
     background-color: ${props => props.theme.palette.white[2]};
-    z-index: 500;
     max-height: 100%;
-    overflow: scroll;
+    
+    @media (max-width: ${({ theme }) => theme.media.laptop}) {
+        width: calc(100% - 4rem);
+        margin: 2rem;
+        padding: 1rem;
+        z-index: 400;
+        overflow: scroll;
+    }
+
+    @media (min-width: ${({ theme }) => theme.media.laptop}) {
+        width: 100%;
+        flex: 1;
+    }
 `
 
 const ControlsCloseButton = styled.div`
@@ -53,16 +62,25 @@ const ControlsCloseButton = styled.div`
     box-shadow: ${({ theme }) => theme.shadow.component};
     text-align: center;
     cursor: pointer;
-    display: flex;
-    align-items: center;
     justify-content: center;
+
+    @media (min-width: ${({ theme }) => theme.media.laptop}) {
+        display: none;
+    }
 `
 
 const ClosedX = styled.div`
     width: 1.5rem;
     height: 2px;
     background-color: ${({ theme }) => theme.palette.grayscale[0]};
-    /* display: inline-block; */
+`
+
+const ControlsBackdrop = styled(Backdrop)`
+    z-index: 399;
+
+    @media (min-width: ${({ theme }) => theme.media.laptop}) {
+        display: none;
+    }
 `
 
 const ignored = ["name", "rank"]
@@ -181,18 +199,20 @@ const dashboardControls = props => {
             className='dashboard--controls'
             open={props.open}
             >
-                <Backdrop 
-                    className='dashboard--controls__backdrop'
-                    show={props.open}
-                    clicked={props.toggleControls}
-                    />
+            <ControlsBackdrop 
+                className='dashboard--controls__backdrop'
+                show={props.open}
+                clicked={props.toggleControls}
+                />
             <ControlsCloseButton 
                 onClick={props.toggleControls}
                 className='dashboard--controls__close-button'
                 >
                 <ClosedX />
-                </ControlsCloseButton>
-            <DashboardControlButtons>
+            </ControlsCloseButton>
+            <DashboardControlButtons
+                className='dashboard--control-buttons'
+                >
                 {buttons}
             </DashboardControlButtons>
         </Wrapper>

@@ -1,75 +1,68 @@
 import React from 'react'
 import styled from 'styled-components'
-import Button from '../../../UI/Button/Button'
 import AttributeInput from './AttributeInput/AttributeInput'
+import { Button } from '../../../UI'
 
 const Wrapper = styled.div`
     width: 100%;
-    display: flex;
-    flex-direction: column;
     align-items: flex-start;
     justify-content: space-around;
 
     :not(:first-child) {
-        padding-top: 1.5rem;
+        /* padding-top: 1.5rem; */
     }
 
     :not(:last-child) {
         padding-bottom: 1.5rem;
+        margin-bottom: 1.5rem;
         border-bottom: 1px solid ${props => props.theme.palette.grayscale[2]};
     }
 
     > div {
-        padding: 1rem 0;
+        /* padding: 1rem 0; */
     }
 `
 
 const AttributeHeader = styled.div`
-    font-size: 2rem;
     text-transform: uppercase;
-    font-family: ${props => props.theme.fonts.header};
+    flex: 1;
+    padding-right: 1.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    align-items: flex-start;
 `
 
 const TopDiv = styled.div`
     width: 100%;
-    display: flex;
-    align-items: center;
     justify-content: space-between;
+    flex-flow: row;
+    
+    @media (max-width: ${({ theme }) => theme.media.tabletLandscape}) {
+    }
+
+    @media (min-width: ${({ theme }) => theme.media.tabletLandscape}) {
+    }
 `
 
 const BottomDiv = styled.div`
     width: 100%;
-    display: flex;
-    flex-flow: column;
-
-    > *:not(:first-child) {
-        margin-top: 2rem;
-    }
 `
 
 const QtyDiv = styled.div`
-    display: flex;
-    align-items: center;
+    width: 100%;
+    flex-flow: row;
     justify-content: flex-start;
-
-    > div {
-        font-size: 1.6rem;
-    }
 `
 
 const InstructionsText = styled.textarea`
     width: 100%;
     height: 6rem;
+    margin-top: 1rem;
     padding: .8rem 1.2rem;
-    font-size: 1.4rem;
+    border: 1px solid ${({ theme }) => theme.palette.grayscale[3]};
 `
 
 const RemoveDiv = styled.div`
-    width: 20%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-
 `
 
 const qtyArray = [
@@ -86,10 +79,13 @@ const attribute = props => {
 
     if (props.remove) {
         remove = (
-            <Button
-                clicked={(event) => props.removeAttribute(event, props.index)}>
-                REMOVE
-            </Button>
+            <RemoveDiv
+                className='cocktail-form--attribute__remove'>
+                <Button
+                    clicked={(event) => props.removeAttribute(event, props.index)}>
+                    REMOVE
+                </Button>
+            </RemoveDiv>
         )
     }
     if (props.attributes && props.attributes.qty) {
@@ -97,10 +93,10 @@ const attribute = props => {
             <option key={measurement + i}>{measurement}</option>
         ))
         qty = (
-            <QtyDiv className='attributeQty'>
+            <QtyDiv className='cocktail-form--attributes__qty'>
                 <div>Quantity:</div>
                 <AttributeInput
-                    className='qtyInput' 
+                    className='cocktail-form--attributes__qty-input' 
                     width='7rem'
                     margin='0 0 0 1rem'
                     value={props.qty}
@@ -119,7 +115,7 @@ const attribute = props => {
     // if (props.type === 'instructions') {
         text = (
             <InstructionsText
-                className='instructionsText'
+                className='cocktail-form--attributes__instructions-text'
                 value={props.instruction}
                 placeholder="Instructions Text (optional)"
                 onChange={(event) => props.changed(event, props.index, "text")}
@@ -130,7 +126,7 @@ const attribute = props => {
         name = (
             <AttributeInput 
                     {...props}
-                    className={'attribute' + props.type}
+                    className={'cocktail-form--attribute__' + props.type}
                     changed={(event) => props.changed(event, props.index)}/> 
         )
     }
@@ -139,14 +135,18 @@ const attribute = props => {
     // const suggestions = Object.keys(props.ingredients[props.category])
 
     return (
-        <Wrapper className='attribute'>
+        <Wrapper className='cocktail-form--attribute'>
             <TopDiv className="attributeTop">
-                <AttributeHeader className="attributeHeader">{props.header}</AttributeHeader>
-                <RemoveDiv className="attributeRemove">
-                    {remove}
-                </RemoveDiv>  
+                <AttributeHeader
+                    className="attributeHeader"
+                    >
+                    <h2>{props.header}</h2>
+                </AttributeHeader>
+                {remove}
             </TopDiv>
-            <BottomDiv className="attributeBottom">
+            <BottomDiv
+                className='cocktail-form--attributes__bottom'
+                >
                 {name}
                 {qty}
                 {text}
