@@ -1,68 +1,47 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Bartender Flashcards
 
-## Available Scripts
+A React application to help users can customize drink elements and create flashcards for learning cocktails.
 
-In the project directory, you can run:
+## Motivation
 
-### `npm start`
+Transitioning from a wine and beer bartender to a cocktail bartender, there are many drinks and magnitudes more elements of those drinks—from glassware to liquor to garnish and more—that must be learned in order to serve guests with consistent quality and restaurant flow. Creating flashcards is a classic memory training exercise. I figured why just handwrite flashcards for myself and potentially re-write the same ingredient tens to hundreds of times when I could make an app that catalogues ingredients, details what they are and potentially include their history, and make them available instantly in creating flashcard drinks.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Basic Functionality
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+- User login
+- User actions
+  - Create and persist categories
+  - Create and persist drink elements
+  - Use drink elements to create and persist cocktails
+- Load random or selected array of drinks as flashcards
+  - Display drink name on the front
+  - Display drink makeup on the back
+  - Mouse hover or click to flip the card
 
-### `npm test`
+## Advanced Functionality
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Register elements and drinks either public or private
+- Add company or group affiliation to share private elements
+- Quizzes
+  - Several quiz types
+    - Match recipes to cocktail names
+    - Fill-in or pick from dropdown for recipe quantities and elements
+  - Maintain user records of quiz scores and cocktails tested
 
-### `npm run build`
+## Visualization
+<img src="/public/gif/sign-in-or-sign-up.gif" alt="Start" width="500">
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<img src="/public/gif/sign-in.gif" alt="Play & Swap" width="500">
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+<img src="/public/gif/nav.gif" alt="Slap Fail" width="500">
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<img src="/public/gif/new-cocktail-name.gif" alt="Slap Success" width="500">
 
-### `npm run eject`
+<img src="/public/gif/new-cocktail-liquor.gif" alt="Slap Success" width="500">
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+<img src="/public/gif/create-new-cocktail-element.gif" alt="Tap" width="500">
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+<img src="/public/gif/new-cocktail-submit.gif" alt="Slap Success" width="500">
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+<!-- <img src="/Users/kylemurray/indy-react-spa-template/public/img/mobile.gif" alt="Mobile GIF" width="300"> -->

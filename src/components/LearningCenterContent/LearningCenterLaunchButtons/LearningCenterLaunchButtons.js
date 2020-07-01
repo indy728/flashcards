@@ -21,7 +21,7 @@ const learningCenterLaunchButtons = props => {
             className='learning-center--launch-buttons'
             >
             <LearningCenterLaunchButton
-                disabled={!props.listReady}
+                // disabled={!props.listReady}
                 clicked={props.launchFlashcards}
                 >
                 View Flashcards
