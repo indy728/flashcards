@@ -144,15 +144,15 @@ class Layout extends Component {
                     className={'app-content'}
                     >
                     <SideNav
-                        isAuthenticated={this.props.isAuthenticated}
-                        components={this.state.components}
-                        open={this.state.showSideNav}
-                        close={this.sideNavClosedHandler}
-                        />
+                      isAuthenticated={this.props.isAuthenticated}
+                      components={this.state.components}
+                      open={this.state.showSideNav}
+                      close={this.sideNavClosedHandler}
+                      />
                     <Main
-                        className={'app-content--main'}
-                        >
-                        {this.props.children}
+                      className={'app-content--main'}
+                      >
+                      {this.props.children}
                     </Main>
                 </Content>
             </Container>

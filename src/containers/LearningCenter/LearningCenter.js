@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions'
 import LearningCenterContent from '../../components/LearningCenterContent/LearningCenterContent'
+// import LearningCenterContent from '../../components/StackCreator/LearningCenterContent'
 import Flashcards from '../../components/Flashcards/Flashcards'
 import Stack from '../Stack/Stack'
 

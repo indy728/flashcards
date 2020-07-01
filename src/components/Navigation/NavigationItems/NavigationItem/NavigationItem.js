@@ -47,23 +47,25 @@ const Wrapper = styled.li`
 `
 
 const navigationItem = (props) => {
-    return (
-        <Wrapper className={props.className}>
-            <NavLink
-                to={props.link}
-                exact
-                activeClassName="active"
-            >
-                {props.children}
-            </NavLink>
-        </Wrapper>
-    )
+  return (
+    <Wrapper className={props.className}>
+        <NavLink
+            to={props.link}
+            exact
+            activeClassName="active"
+        >
+            {props.children}
+        </NavLink>
+    </Wrapper>
+  )
 }
-
 
 navigationItem.propTypes = {
     link: PropTypes.string.isRequired,
-    active: PropTypes.bool
+    exact: PropTypes.bool
+}
+navigationItem.defaultProps = {
+  exact: false
 }
 
 export default navigationItem
