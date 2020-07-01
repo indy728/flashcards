@@ -28,6 +28,23 @@ Transitioning from a wine and beer bartender to a cocktail bartender, there are 
     - Fill-in or pick from dropdown for recipe quantities and elements
   - Maintain user records of quiz scores and cocktails tested
 
+## Utilizations
+### Languages
+- JavaScript (ES6)
+- HTML
+- CSS
+
+### Framework
+- React
+
+### Libraries
+- Redux
+- Firebase
+- React styled-components
+
+### Database
+- Firebase
+
 ## Visualization
 <img src="/public/gif/sign-in-or-sign-up.gif" alt="Start" width="500">
 
@@ -42,6 +59,5 @@ Transitioning from a wine and beer bartender to a cocktail bartender, there are 
 <img src="/public/gif/create-new-cocktail-element.gif" alt="Tap" width="500">
 
 <img src="/public/gif/new-cocktail-submit.gif" alt="Slap Success" width="500">
-
 
 <!-- <img src="/Users/kylemurray/indy-react-spa-template/public/img/mobile.gif" alt="Mobile GIF" width="300"> -->
