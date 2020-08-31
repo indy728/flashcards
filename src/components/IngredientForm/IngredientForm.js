@@ -411,9 +411,6 @@ class IngredientCreator extends Component {
         if (!this.props.loading) {
             let dropdownMenus = this.props.selectorInit ? null : this.dropdownMenuCreator()
             let newItemForm = this.state.formType === 'add' ? this.addItemForm() : null
-            // console.log('[IngredientForm] this.state.formControls: ', this.state.formControls)
-            // console.log('[IngredientForm] this.state', this.state)
-            // console.log('[IngredientForm] this.state.groupControls[2]: ', this.state.groupControls[2])
             
             ingredientForm = (
                 <ContentBlock>
